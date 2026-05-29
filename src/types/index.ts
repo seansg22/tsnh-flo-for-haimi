@@ -50,7 +50,7 @@ export interface Milestone {
   id: string;
   weekRange: [number, number];
   label: string;
-  category: 'motor' | 'cognitive' | 'social' | 'sensory';
+  category: 'motor' | 'cognitive' | 'social' | 'sensory' | 'vaccination';
   description?: string;
 }
 

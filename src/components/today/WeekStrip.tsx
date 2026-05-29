@@ -86,9 +86,11 @@ export function WeekStrip({ currentWeek, selectedWeek, onSelectWeek }: WeekStrip
               onClick={() => { if (dragDistance.current < 6) onSelectWeek(i); }}
               className={`flex-shrink-0 h-11 rounded-full text-xs font-bold transition-all px-3 min-w-[44px] active:scale-95 active:opacity-80 ${
                 i === selectedWeek
-                  ? 'bg-peach text-white shadow-md scale-110'
+                  ? `bg-peach text-white shadow-md scale-110${i < currentWeek ? ' line-through' : ''}`
                   : i === currentWeek
                   ? 'bg-peachLight text-peachDark ring-2 ring-peach'
+                  : i < currentWeek
+                  ? 'bg-warm/40 text-textMuted/50 line-through'
                   : 'bg-warm text-textMuted'
               }`}
             >

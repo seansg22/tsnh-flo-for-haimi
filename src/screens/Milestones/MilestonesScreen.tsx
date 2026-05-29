@@ -21,7 +21,7 @@ export function MilestonesScreen() {
   const { state, dispatch } = useApp();
   const [filter, setFilter] = useState<CategoryFilter>('all');
 
-  const categories: CategoryFilter[] = ['all', 'motor', 'cognitive', 'social', 'sensory'];
+  const categories: CategoryFilter[] = ['all', 'motor', 'cognitive', 'social', 'sensory', 'vaccination'];
   const filtered = filter === 'all' ? milestones : milestones.filter(m => m.category === filter);
   const achieved = new Set(state.achievedMilestones);
   const achievedCount = milestones.filter(m => achieved.has(m.id)).length;

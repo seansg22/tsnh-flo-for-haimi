@@ -22,7 +22,7 @@ export function OnboardingScreen() {
 
   function handleFinish() {
     if (!name.trim() || !birthDate) return;
-    dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate } });
+    dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate, gender: 'girl' } });
     navigate('/today');
   }
 
@@ -34,7 +34,7 @@ export function OnboardingScreen() {
             <div className="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-4">
               <Baby size={40} strokeWidth={1.5} className="text-peachDark" />
             </div>
-            <h1 className="text-3xl font-extrabold text-app-text">Baby Day</h1>
+            <h1 className="text-3xl font-extrabold text-app-text">Flo For Hai Mi</h1>
             <p className="text-textMuted mt-2 font-medium">Your baby's first year, day by day</p>
           </div>
           <div className="bg-white rounded-3xl p-6 shadow-lg">

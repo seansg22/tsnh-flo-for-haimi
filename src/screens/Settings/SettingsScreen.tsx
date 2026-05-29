@@ -72,7 +72,7 @@ export function SettingsScreen() {
 
       <div className="bg-white rounded-2xl p-5 shadow-sm mb-4">
         <p className="font-bold text-app-text mb-1">About</p>
-        <p className="text-sm text-textMuted">Baby Day v1.0</p>
+        <p className="text-sm text-textMuted">Flo For Hai Mi v1.0</p>
         <p className="text-sm text-textMuted">Track your baby's first year, day by day</p>
       </div>
 

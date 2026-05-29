@@ -46,7 +46,7 @@ function loadState(): AppState {
     const growth = localStorage.getItem('baby-day:growth-entries');
     return {
       babyProfile: profile
-        ? { gender: 'girl', ...(JSON.parse(profile) as BabyProfile) }
+        ? { ...defaultProfile, ...(JSON.parse(profile) as BabyProfile) }
         : defaultProfile,
       achievedMilestones: milestones ? (JSON.parse(milestones) as string[]) : [],
       selectedWeek: 0,

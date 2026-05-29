@@ -2,6 +2,19 @@ import { useState } from 'react';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Milestone } from '../../types';
 
+function fmtWeek(w: number): string {
+  if (w <= 52) return `Week ${w}`;
+  const months = Math.round(w * 7 / 30.44);
+  const yrs = Math.floor(months / 12);
+  const mos = months % 12;
+  return mos === 0 ? `${yrs}y` : `${yrs}y${mos}m`;
+}
+
+function fmtWeekRange(start: number, end: number): string {
+  if (start <= 52) return `Week ${start}–${end}`;
+  return `${fmtWeek(start)} – ${fmtWeek(end)}`;
+}
+
 interface MilestoneItemProps {
   milestone: Milestone;
   achieved: boolean;
@@ -29,7 +42,7 @@ export function MilestoneItem({ milestone, achieved, onToggle }: MilestoneItemPr
           </p>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-xs text-textMuted">
-              week {milestone.weekRange[0]}–{milestone.weekRange[1]}
+              {fmtWeekRange(milestone.weekRange[0], milestone.weekRange[1])}
             </span>
           </div>
         </div>
