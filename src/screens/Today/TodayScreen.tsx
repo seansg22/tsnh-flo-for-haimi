@@ -28,7 +28,7 @@ export function TodayScreen() {
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-6 pb-2">
         <div>
-          <h1 className="text-xl font-extrabold text-app-text">{state.babyProfile?.name}</h1>
+          <h1 className="text-2xl font-extrabold text-app-text">{state.babyProfile?.name}</h1>
         </div>
         <div className="w-10 h-10 rounded-full bg-peachLight flex items-center justify-center text-peachDark">
           <Baby size={22} strokeWidth={1.8} />

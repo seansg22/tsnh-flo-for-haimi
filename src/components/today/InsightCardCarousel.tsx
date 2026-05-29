@@ -1,5 +1,5 @@
 import { Sparkles, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useApp } from '../../context/AppContext';
 import type { WeekData } from '../../types';
 import { InsightCard } from './InsightCard';
 
@@ -9,6 +9,7 @@ interface InsightCardCarouselProps {
 }
 
 export function InsightCardCarousel({ data }: InsightCardCarouselProps) {
+  const { dispatch } = useApp();
   return (
     <div>
       <div className="px-4 flex items-center justify-between mb-3">
@@ -16,9 +17,12 @@ export function InsightCardCarousel({ data }: InsightCardCarouselProps) {
           <Sparkles size={16} strokeWidth={2} className="text-peachDark" />
           <p className="text-base font-extrabold text-app-text">Daily Insights</p>
         </div>
-        <Link to="/insights" className="flex items-center gap-0.5 text-xs font-semibold text-peachDark">
+        <button
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'insights' })}
+          className="flex items-center gap-0.5 text-xs font-semibold text-peachDark"
+        >
           See all <ChevronRight size={14} strokeWidth={2.5} />
-        </Link>
+        </button>
       </div>
       <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-2">
         <InsightCard variant="motor"     data={data} />

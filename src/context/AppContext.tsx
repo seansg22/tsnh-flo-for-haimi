@@ -1,11 +1,12 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
-import type { AppState, AppAction, BabyProfile } from '../types';
+import type { AppState, AppAction, BabyProfile, Page } from '../types';
 
 const initialState: AppState = {
   babyProfile: null,
   achievedMilestones: [],
   selectedWeek: 0,
   growthEntries: [],
+  currentPage: 'onboarding',
 };
 
 function reducer(state: AppState, action: AppAction): AppState {
@@ -28,6 +29,8 @@ function reducer(state: AppState, action: AppAction): AppState {
     }
     case 'DELETE_GROWTH_ENTRY':
       return { ...state, growthEntries: state.growthEntries.filter(e => e.id !== action.payload) };
+    case 'SET_PAGE':
+      return { ...state, currentPage: action.payload };
     default:
       return state;
   }
@@ -44,13 +47,16 @@ function loadState(): AppState {
     const profile = localStorage.getItem('baby-day:profile');
     const milestones = localStorage.getItem('baby-day:achieved-milestones');
     const growth = localStorage.getItem('baby-day:growth-entries');
+    const savedPage = localStorage.getItem('baby-day:current-page') as Page | null;
+    const babyProfile = profile
+      ? { ...defaultProfile, ...(JSON.parse(profile) as BabyProfile) }
+      : defaultProfile;
     return {
-      babyProfile: profile
-        ? { ...defaultProfile, ...(JSON.parse(profile) as BabyProfile) }
-        : defaultProfile,
+      babyProfile,
       achievedMilestones: milestones ? (JSON.parse(milestones) as string[]) : [],
       selectedWeek: 0,
       growthEntries: growth ? (JSON.parse(growth) as import('../types').GrowthEntry[]) : [],
+      currentPage: savedPage && babyProfile ? savedPage : (babyProfile ? 'today' : 'onboarding'),
     };
   } catch {
     return { ...initialState, babyProfile: defaultProfile };
@@ -80,6 +86,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('baby-day:growth-entries', JSON.stringify(state.growthEntries));
   }, [state.growthEntries]);
+
+  useEffect(() => {
+    localStorage.setItem('baby-day:current-page', state.currentPage);
+  }, [state.currentPage]);
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 }

@@ -1,4 +1,3 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { AppShell } from './components/layout/AppShell';
@@ -9,49 +8,42 @@ import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
-  return null;
-}
+function AppContent() {
+  const { state, dispatch } = useApp();
 
-function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { state } = useApp();
-  if (!state.babyProfile) return <Navigate to="/onboarding" replace />;
-  return <>{children}</>;
-}
+  useEffect(() => {
+    if (!state.babyProfile && state.currentPage !== 'onboarding') {
+      dispatch({ type: 'SET_PAGE', payload: 'onboarding' });
+    }
+  }, [state.babyProfile]);
 
-function AppRoutes() {
-  const { state } = useApp();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [state.currentPage]);
+
+  if (!state.babyProfile || state.currentPage === 'onboarding') {
+    return <OnboardingScreen />;
+  }
+
+  const pages: Record<string, React.ReactNode> = {
+    today: <TodayScreen />,
+    milestones: <MilestonesScreen />,
+    insights: <InsightsScreen />,
+    growth: <GrowthScreen />,
+    settings: <SettingsScreen />,
+  };
+
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to={state.babyProfile ? '/today' : '/onboarding'} replace />} />
-      <Route path="/onboarding" element={<OnboardingScreen />} />
-      <Route
-        element={
-          <AuthGuard>
-            <AppShell />
-          </AuthGuard>
-        }
-      >
-        <Route path="/today" element={<TodayScreen />} />
-        <Route path="/milestones" element={<MilestonesScreen />} />
-        <Route path="/insights" element={<InsightsScreen />} />
-        <Route path="/growth" element={<GrowthScreen />} />
-        <Route path="/settings" element={<SettingsScreen />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <AppShell>
+      {pages[state.currentPage] ?? <TodayScreen />}
+    </AppShell>
   );
 }
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppProvider>
-        <ScrollToTop />
-        <AppRoutes />
-      </AppProvider>
-    </BrowserRouter>
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }

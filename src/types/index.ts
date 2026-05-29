@@ -62,11 +62,14 @@ export interface GrowthEntry {
   head?: number;   // cm
 }
 
+export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings';
+
 export interface AppState {
   babyProfile: BabyProfile | null;
   achievedMilestones: string[];
   selectedWeek: number;
   growthEntries: GrowthEntry[];
+  currentPage: Page;
 }
 
 export type AppAction =
@@ -74,4 +77,5 @@ export type AppAction =
   | { type: 'TOGGLE_MILESTONE'; payload: string }
   | { type: 'SET_SELECTED_WEEK'; payload: number }
   | { type: 'ADD_GROWTH_ENTRY'; payload: GrowthEntry }
-  | { type: 'DELETE_GROWTH_ENTRY'; payload: string };
+  | { type: 'DELETE_GROWTH_ENTRY'; payload: string }
+  | { type: 'SET_PAGE'; payload: Page };

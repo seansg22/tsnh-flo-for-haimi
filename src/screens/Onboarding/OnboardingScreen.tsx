@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Baby, Cake } from 'lucide-react';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
@@ -7,7 +6,6 @@ import { useApp } from '../../context/AppContext';
 
 export function OnboardingScreen() {
   const { dispatch } = useApp();
-  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [birthDate, setBirthDate] = useState('');
@@ -23,7 +21,7 @@ export function OnboardingScreen() {
   function handleFinish() {
     if (!name.trim() || !birthDate) return;
     dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate, gender: 'girl' } });
-    navigate('/today');
+    dispatch({ type: 'SET_PAGE', payload: 'today' });
   }
 
   return (
