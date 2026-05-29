@@ -7,6 +7,7 @@ type Tab = 'feeding' | 'sleep' | 'soothing' | 'health';
 interface CareTipsSectionProps {
   tips: CareTips;
   soothingLabel: string;
+  parentTip?: string;
 }
 
 const tabConfig: {
@@ -22,7 +23,7 @@ const tabConfig: {
   { key: 'health',   label: () => 'Health',    Icon: ShieldCheck, color: 'text-green-500',  activeBg: 'bg-green-50 border-green-200'   },
 ];
 
-export function CareTipsSection({ tips, soothingLabel }: CareTipsSectionProps) {
+export function CareTipsSection({ tips, soothingLabel, parentTip }: CareTipsSectionProps) {
   const [activeTab, setActiveTab] = useState<Tab>('feeding');
 
   const active = tabConfig.find(t => t.key === activeTab)!;
@@ -63,6 +64,17 @@ export function CareTipsSection({ tips, soothingLabel }: CareTipsSectionProps) {
             </div>
           ))}
         </div>
+
+        {/* Parent tip */}
+        {parentTip && (
+          <div className="mt-4 bg-orange-100 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <Heart size={13} strokeWidth={2} className="text-peachDark" />
+              <p className="text-xs font-bold uppercase tracking-wide text-peachDark">Tip</p>
+            </div>
+            <p className="text-sm text-app-text leading-relaxed">{parentTip}</p>
+          </div>
+        )}
       </div>
     </div>
   );

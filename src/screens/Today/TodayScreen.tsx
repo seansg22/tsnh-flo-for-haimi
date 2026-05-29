@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Baby } from 'lucide-react';
+import { Baby, Lightbulb } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { getWeekData } from '../../data/weeklyDevelopment';
@@ -49,7 +49,7 @@ export function TodayScreen() {
       {/* Age display */}
       <AgeDisplay name={state.babyProfile?.name ?? ''} weeks={weeks} days={days} years={years} remainingMonths={remainingMonths} totalMonths={totalMonths} selectedWeek={selectedWeek} currentWeek={currentWeek} />
 
-      {/* Insight cards */}
+      {/* Daily insights */}
       <div className="mt-4">
         <InsightCardCarousel week={selectedWeek} data={weekData} />
       </div>
@@ -58,7 +58,18 @@ export function TodayScreen() {
       <WhatToExpectSection week={selectedWeek} data={weekData} />
 
       {/* Care guide */}
-      <CareTipsSection tips={careTips} soothingLabel={soothingLabel} />
+      <CareTipsSection tips={careTips} soothingLabel={soothingLabel} parentTip={weekData.parentTip} />
+
+      {/* Did you know */}
+      {weekData.funFact && (
+        <div className="px-4 pt-2 pb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Lightbulb size={16} strokeWidth={2} className="text-amber-500" />
+            <p className="text-base font-extrabold text-app-text">Did you know?</p>
+          </div>
+          <p className="text-sm text-textMuted leading-relaxed">{weekData.funFact}</p>
+        </div>
+      )}
     </div>
   );
 }

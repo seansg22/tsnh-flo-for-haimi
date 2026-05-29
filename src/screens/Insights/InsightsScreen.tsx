@@ -78,6 +78,7 @@ export function InsightsScreen() {
         <p className="text-textMuted text-xs leading-relaxed">{data.summary}</p>
       </div>
 
+
       {/* Category tabs */}
       <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
         {categoryConfig.map(({ key, label, Icon, color }) => (
@@ -95,7 +96,7 @@ export function InsightsScreen() {
       </div>
 
       {/* Detail cards */}
-      <div className="px-4 space-y-3 pb-6">
+      <div className="px-4 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-3 items-start bg-white rounded-xl p-3 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-peach mt-2 flex-shrink-0" />
@@ -103,6 +104,8 @@ export function InsightsScreen() {
           </div>
         ))}
       </div>
+
+      <div className="pb-6" />
     </div>
   );
 }

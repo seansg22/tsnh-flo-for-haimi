@@ -6,7 +6,7 @@ export default {
       colors: {
         cream: '#FFF8F2',
         peach: '#FFAB76',
-        peachLight: '#FFD4B8',
+        peachLight: '#FFE3CC',
         peachDark: '#E8875A',
         warm: '#F5E6D3',
         'app-text': '#3D2B1F',

@@ -34,6 +34,8 @@ export interface WeekData {
   sleep: SleepNorm;
   feeding: FeedingNorm;
   comingUpMilestone: string;
+  funFact?: string;
+  parentTip?: string;
 }
 
 export interface CareTips {
@@ -48,6 +50,7 @@ export interface Milestone {
   weekRange: [number, number];
   label: string;
   category: 'motor' | 'cognitive' | 'social' | 'sensory';
+  description?: string;
 }
 
 export interface AppState {
