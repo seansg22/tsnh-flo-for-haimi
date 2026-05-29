@@ -7,6 +7,7 @@ import { TodayScreen } from './screens/Today/TodayScreen';
 import { MilestonesScreen } from './screens/Milestones/MilestonesScreen';
 import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
+import { GrowthScreen } from './screens/Growth/GrowthScreen';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -36,6 +37,7 @@ function AppRoutes() {
         <Route path="/today" element={<TodayScreen />} />
         <Route path="/milestones" element={<MilestonesScreen />} />
         <Route path="/insights" element={<InsightsScreen />} />
+        <Route path="/growth" element={<GrowthScreen />} />
         <Route path="/settings" element={<SettingsScreen />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

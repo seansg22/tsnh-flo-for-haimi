@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Star, Sparkles, Settings } from 'lucide-react';
+import { Home, Star, Sparkles, TrendingUp, Settings } from 'lucide-react';
 
 const tabs = [
-  { path: '/today', icon: Home, label: 'Today' },
-  { path: '/milestones', icon: Star, label: 'Milestones' },
-  { path: '/insights', icon: Sparkles, label: 'Insights' },
-  { path: '/settings', icon: Settings, label: 'Settings' },
+  { path: '/today',      icon: Home,       label: 'Today'      },
+  { path: '/insights',   icon: Sparkles,   label: 'Insights'   },
+  { path: '/milestones', icon: Star,       label: 'Milestones' },
+  { path: '/growth',     icon: TrendingUp, label: 'Growth'     },
+  { path: '/settings',   icon: Settings,   label: 'Settings'   },
 ];
 
 export function BottomNav() {

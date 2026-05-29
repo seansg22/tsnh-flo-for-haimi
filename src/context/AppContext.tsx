@@ -5,6 +5,7 @@ const initialState: AppState = {
   babyProfile: null,
   achievedMilestones: [],
   selectedWeek: 0,
+  growthEntries: [],
 };
 
 function reducer(state: AppState, action: AppAction): AppState {
@@ -20,6 +21,13 @@ function reducer(state: AppState, action: AppAction): AppState {
       };
     case 'SET_SELECTED_WEEK':
       return { ...state, selectedWeek: action.payload };
+    case 'ADD_GROWTH_ENTRY': {
+      const updated = [...state.growthEntries, action.payload]
+        .sort((a, b) => a.date.localeCompare(b.date));
+      return { ...state, growthEntries: updated };
+    }
+    case 'DELETE_GROWTH_ENTRY':
+      return { ...state, growthEntries: state.growthEntries.filter(e => e.id !== action.payload) };
     default:
       return state;
   }
@@ -28,16 +36,21 @@ function reducer(state: AppState, action: AppAction): AppState {
 const defaultProfile: BabyProfile = {
   name: 'Hải Mi',
   birthDate: '2026-04-16',
+  gender: 'girl',
 };
 
 function loadState(): AppState {
   try {
     const profile = localStorage.getItem('baby-day:profile');
     const milestones = localStorage.getItem('baby-day:achieved-milestones');
+    const growth = localStorage.getItem('baby-day:growth-entries');
     return {
-      babyProfile: profile ? (JSON.parse(profile) as BabyProfile) : defaultProfile,
+      babyProfile: profile
+        ? { gender: 'girl', ...(JSON.parse(profile) as BabyProfile) }
+        : defaultProfile,
       achievedMilestones: milestones ? (JSON.parse(milestones) as string[]) : [],
       selectedWeek: 0,
+      growthEntries: growth ? (JSON.parse(growth) as import('../types').GrowthEntry[]) : [],
     };
   } catch {
     return { ...initialState, babyProfile: defaultProfile };
@@ -63,6 +76,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('baby-day:achieved-milestones', JSON.stringify(state.achievedMilestones));
   }, [state.achievedMilestones]);
+
+  useEffect(() => {
+    localStorage.setItem('baby-day:growth-entries', JSON.stringify(state.growthEntries));
+  }, [state.growthEntries]);
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 }

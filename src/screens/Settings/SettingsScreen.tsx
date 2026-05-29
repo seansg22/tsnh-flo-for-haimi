@@ -7,13 +7,14 @@ export function SettingsScreen() {
   const { state, dispatch } = useApp();
   const [name, setName] = useState(state.babyProfile?.name ?? '');
   const [birthDate, setBirthDate] = useState(state.babyProfile?.birthDate ?? '');
+  const [gender, setGender] = useState<'girl' | 'boy'>(state.babyProfile?.gender ?? 'girl');
   const [saved, setSaved] = useState(false);
 
   const today = new Date().toISOString().split('T')[0];
 
   function handleSave() {
     if (!name.trim() || !birthDate) return;
-    dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate } });
+    dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate, gender } });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -22,6 +23,7 @@ export function SettingsScreen() {
     if (!confirm('Reset all app data? This cannot be undone.')) return;
     localStorage.removeItem('baby-day:profile');
     localStorage.removeItem('baby-day:achieved-milestones');
+    localStorage.removeItem('baby-day:growth-entries');
     window.location.href = '/';
   }
 
@@ -34,6 +36,24 @@ export function SettingsScreen() {
         <div>
           <p className="text-xs font-semibold text-textMuted mb-1.5 uppercase tracking-wide">Name</p>
           <TextInput value={name} onChange={setName} placeholder="Baby's name" />
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-textMuted mb-1.5 uppercase tracking-wide">Gender</p>
+          <div className="flex gap-2">
+            {(['girl', 'boy'] as const).map(g => (
+              <button
+                key={g}
+                onClick={() => setGender(g)}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold capitalize transition-all border-2 ${
+                  gender === g
+                    ? 'bg-peach text-white border-peach'
+                    : 'bg-cream text-textMuted border-peachLight'
+                }`}
+              >
+                {g === 'girl' ? '♀ Girl' : '♂ Boy'}
+              </button>
+            ))}
+          </div>
         </div>
         <div>
           <p className="text-xs font-semibold text-textMuted mb-1.5 uppercase tracking-wide">Birth date</p>

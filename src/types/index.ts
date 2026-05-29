@@ -1,6 +1,7 @@
 export interface BabyProfile {
   name: string;
   birthDate: string; // ISO "YYYY-MM-DD"
+  gender: 'girl' | 'boy';
 }
 
 export interface Activity {
@@ -53,13 +54,24 @@ export interface Milestone {
   description?: string;
 }
 
+export interface GrowthEntry {
+  id: string;
+  date: string;    // "YYYY-MM-DD"
+  weight?: number; // kg
+  length?: number; // cm
+  head?: number;   // cm
+}
+
 export interface AppState {
   babyProfile: BabyProfile | null;
   achievedMilestones: string[];
   selectedWeek: number;
+  growthEntries: GrowthEntry[];
 }
 
 export type AppAction =
   | { type: 'SET_BABY_PROFILE'; payload: BabyProfile }
   | { type: 'TOGGLE_MILESTONE'; payload: string }
-  | { type: 'SET_SELECTED_WEEK'; payload: number };
+  | { type: 'SET_SELECTED_WEEK'; payload: number }
+  | { type: 'ADD_GROWTH_ENTRY'; payload: GrowthEntry }
+  | { type: 'DELETE_GROWTH_ENTRY'; payload: string };
