@@ -28,7 +28,6 @@ export function TodayScreen() {
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-6 pb-2">
         <div>
-          <p className="text-xs text-textMuted font-semibold uppercase tracking-wider">Flo For Hai Mi</p>
           <h1 className="text-xl font-extrabold text-app-text">{state.babyProfile?.name}</h1>
         </div>
         <div className="w-10 h-10 rounded-full bg-peachLight flex items-center justify-center text-peachDark">

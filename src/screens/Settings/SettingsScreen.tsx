@@ -70,12 +70,6 @@ export function SettingsScreen() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-2xl p-5 shadow-sm mb-4">
-        <p className="font-bold text-app-text mb-1">About</p>
-        <p className="text-sm text-textMuted">Flo For Hai Mi v1.0</p>
-        <p className="text-sm text-textMuted">Track your baby's first year, day by day</p>
-      </div>
-
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-red-100">
         <p className="font-bold text-red-500 mb-1">Danger zone</p>
         <p className="text-sm text-textMuted mb-3">This will erase all data including milestones</p>

@@ -34,23 +34,26 @@ const careTipsData: CareTipsEntry[] = [
     feeding: [
       'A feeding is complete when baby pulls off voluntarily, looks satisfied, and has wet diapers regularly.',
       'Growth spurts (common at 3–4 weeks) mean more frequent feeds for 2–3 days. Follow baby\'s cues.',
-      'If bottle feeding, use paced feeding: hold bottle horizontal and let baby control the flow.',
+      'Reflux (spitting up) peaks around 4–6 weeks — the stomach valve is still maturing. Reduce it: hold baby upright 20–30 min after each feed, burp mid-feed with baby sitting upright (supporting the head — not over the shoulder), and try smaller, more frequent feeds.',
+      'Call your doctor if baby: isn\'t gaining weight, has projectile vomiting, spits up green or bloody fluid, resists feedings, or has blood in the stool. These may indicate GERD rather than normal reflux.',
     ],
     sleep: [
       'Watch for tired cues before crying: yawning, zoning out, rubbing eyes, losing interest in surroundings.',
       'Cap awake windows at 45–75 minutes. Overtiredness makes falling asleep harder, not easier.',
       'A consistent sleep environment (same place, same white noise) helps baby understand where sleep happens.',
+      'Start practising "drowsy but awake": lay baby down while sleepy but still conscious. Babies who learn to fall asleep independently are more likely to resettle on their own between sleep cycles at night.',
     ],
     soothing: [
       'Baby wearing in a carrier keeps baby calm and your hands free. The warmth and motion are very soothing.',
       'For a fussy baby who has fed and been changed: try a warm bath, skin-to-skin, or a gentle car ride.',
       'It\'s safe to respond quickly to crying at this age. You cannot spoil a baby under 6 months.',
+      'For gas pain: try the "tummy hold" — baby face-down along your forearm, cheek in your palm. Or gently bicycle baby\'s legs and massage the tummy in small clockwise circles. Steady motion (rocking, stroller, car) and white noise help most with colic.',
     ],
     health: [
       'First vaccines are typically given at 6–8 weeks. Check your local schedule and book the appointment now.',
       'Fever rule changes at 8 weeks: 38°C+ still needs a same-day doctor call, but is less automatically an emergency.',
       'Cradle cap (flaky scalp) is harmless. Massage with baby oil, leave 20 minutes, then brush gently with a soft brush.',
-      'If baby has reflux signs (arching back, spitting up frequently, crying after feeds), mention it at the 6-week checkup.',
+      'Normal stools vary widely at this age: breastfed babies may go after every feed or only every few days — both are normal. Mustard-yellow, seedy stools are healthy. Formula-fed babies tend to have firmer, more regular, yellow-green stools.',
     ],
   },
   {
@@ -64,6 +67,7 @@ const careTipsData: CareTipsEntry[] = [
       'Start a simple bedtime routine: feed → bath → song → sleep. Consistency matters more than length.',
       'Try putting baby down drowsy but awake — this is the first step toward self-settling.',
       'The 4th trimester ends soon. Expect some improvement around 12 weeks, but every baby is different.',
+      'During sleep, babies often grunt, twitch, and squirm — this is normal active (REM) sleep, not waking. Wait a moment before responding to night stirrings; many will resettle without any help.',
     ],
     soothing: [
       'Evening fussiness ("witching hour") often peaks around 6–8 weeks and typically resolves by 12 weeks.',
@@ -88,6 +92,7 @@ const careTipsData: CareTipsEntry[] = [
       'Consider a 3-nap schedule: morning nap, midday nap, late afternoon catnap. Watch wake windows of 90 min.',
       'If baby wakes in the night, wait 1–2 minutes before responding — they may resettle on their own.',
       'Room temperature 18–20°C is ideal for sleep. Use a sleep sack instead of blankets.',
+      'Now is the ideal time to solidify the habits that make sleep training shorter: consistent bedtime routine, same sleep environment for every nap and night, and always placing baby down drowsy-but-awake.',
     ],
     soothing: [
       'Baby is becoming more social and responsive. Sustained eye contact and talking are powerful calming tools.',
@@ -109,9 +114,10 @@ const careTipsData: CareTipsEntry[] = [
       'If introducing a bottle, 4 months is a good window — earlier is easier than later for bottle acceptance.',
     ],
     sleep: [
-      'The 4-month sleep regression is real. Baby\'s sleep cycles have matured — they now wake between cycles like adults.',
+      'The 4-month sleep regression is real. Baby\'s sleep cycles have permanently matured — they now wake fully between cycles like adults do.',
       'If baby wakes frequently, check: overtiredness, undertiredness, hungry, too hot/cold, or developmental leap.',
-      'Avoid rocking or feeding to sleep every time if you can — teaching self-settling will pay dividends now.',
+      'Avoid rocking or feeding to sleep every time — these become sleep associations baby needs to repeat at every wake-up.',
+      'The fix for the regression is teaching independent sleep onset. After your bedtime routine, put baby down awake. If they cry, wait a few minutes before a brief check-in (soothing pat, calm voice — no picking up). Repeat, increasing the wait each time.',
     ],
     soothing: [
       'Babies this age love standing on your lap. The leg press activates calming proprioceptive input.',
@@ -134,7 +140,7 @@ const careTipsData: CareTipsEntry[] = [
     ],
     sleep: [
       'Most 5-month-olds do 2–3 naps. Transition to 2 naps usually happens between 6–9 months.',
-      'If sleep has improved since the 4-month regression — enjoy it. If not, consistent sleep training is now appropriate.',
+      'If sleep has not improved since the regression, sleep training is now safe and appropriate. Graduated method: after routine, put baby down awake and leave. If crying, wait a few minutes, do a brief check-in (soothing pat, a few words — do not pick up), leave. Increase the wait each time. Most babies self-settle within 3–5 nights.',
       'Establish a wind-down ritual: dim lights 30 min before bed, quiet play, warm bath, feed, song.',
     ],
     soothing: [
@@ -157,9 +163,9 @@ const careTipsData: CareTipsEntry[] = [
       'Never force feed. Turning away, closing mouth, or crying are clear "I\'m done" signals.',
     ],
     sleep: [
-      'Most 6-month-olds can sleep 6–8 hours without a feed. Longer night feeds may now be habit rather than hunger.',
-      'If needed, sleep training methods like Ferber, chair method, or fading are effective and safe at 6 months.',
-      'Introduce a comfort object (lovey) now if you like — a small stuffed animal that always goes to sleep with them.',
+      'Most 6-month-olds can sleep 5–8 hours without a feed. If baby still wakes to feed multiple times, try feeding 1 hour before bedtime rather than as the last step — this breaks the feed-to-sleep association.',
+      'Graduated extinction (Ferber): put baby down awake after routine and leave. If crying, wait a few minutes, enter briefly (soothing pat, calm words — no picking up, stay under 1–2 min), leave. Increase the wait each time. Note your last wait; start there the next night. Repeat over several nights.',
+      'Introduce a comfort object (lovey) now — a small stuffed animal that always goes to sleep with them. Once baby is over 12 months, it becomes a powerful self-soothing anchor you don\'t have to provide.',
     ],
     soothing: [
       'Teething pain peaks around 6–8 months (lower front teeth). Chilled teether, cold washcloth, or teething gel helps.',

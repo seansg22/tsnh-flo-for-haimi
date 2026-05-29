@@ -125,9 +125,10 @@ export const weeklyData: WeekData[] = [
       { id: 'w6-a3', title: 'Hanging mobile', description: 'Position a colorful mobile where baby can see it during wake windows. Encourages visual tracking.', icon: '🎠' },
     ],
     sleep: { totalHoursRange: '14–16', nightSleepHours: '5–7 hours', naps: '3–4 naps' },
-    feeding: { method: 'Breastmilk or formula', frequency: 'Every 3 hours', notes: '6-week growth spurt common — more frequent feeds for 2–3 days' },
+    feeding: { method: 'Breastmilk or formula', frequency: 'Every 3 hours', notes: '6-week growth spurt common — more frequent feeds for 2–3 days. Gas and spitting up often peak this week; burp mid-feed and keep baby upright after.' },
     comingUpMilestone: 'Rolling from side to back around week 8–10',
     funFact: 'Cooing sounds don\'t come from the chest like crying — they come from the larynx, using completely different muscles. These are baby\'s first deliberate attempts at speech production, not just emotional sounds.',
+    parentTip: 'Gas and spitting up peak around 6 weeks as the digestive system matures. Burp baby mid-feed — not just after — and hold upright for 20 minutes after each feed. For trapped gas, gently bicycle baby\'s legs or massage the tummy in small clockwise circles. Colic is not your fault and typically resolves by 4 months.',
   },
   {
     week: 7,
@@ -292,7 +293,7 @@ export const weeklyData: WeekData[] = [
     feeding: { method: 'Breastmilk or formula', frequency: 'Every 4 hours', notes: 'Not ready for solids yet — 6 months is recommended' },
     comingUpMilestone: 'Sitting independently expected around weeks 20–26',
     funFact: 'Flavor preferences start forming in the womb. Flavors from amniotic fluid and breast milk prime baby\'s palate — mothers who ate vegetables during pregnancy tend to have babies more willing to eat vegetables when solids begin.',
-    parentTip: 'The 4-month sleep regression is temporary and means your baby\'s brain is maturing normally. It\'s harder, not permanent.',
+    parentTip: 'The 4-month sleep regression means sleep cycles have permanently matured — baby now wakes fully between cycles like an adult. The fix is teaching independent sleep onset: put baby down drowsy-but-awake, wait a few minutes before responding to crying, and do brief check-ins without picking up. Consistency over 3–5 nights makes a real difference.',
   },
   {
     week: 20,
