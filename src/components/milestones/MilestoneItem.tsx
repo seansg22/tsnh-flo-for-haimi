@@ -1,12 +1,6 @@
 import { Check } from 'lucide-react';
 import type { Milestone } from '../../types';
 
-const categoryColors: Record<Milestone['category'], string> = {
-  motor: 'bg-orange-100 text-orange-600',
-  cognitive: 'bg-blue-100 text-blue-600',
-  social: 'bg-pink-100 text-pink-600',
-  sensory: 'bg-purple-100 text-purple-600',
-};
 
 interface MilestoneItemProps {
   milestone: Milestone;

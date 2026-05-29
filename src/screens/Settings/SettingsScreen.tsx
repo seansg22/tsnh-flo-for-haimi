@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
 
 export function SettingsScreen() {
   const { state, dispatch } = useApp();
-  const navigate = useNavigate();
   const [name, setName] = useState(state.babyProfile?.name ?? '');
   const [birthDate, setBirthDate] = useState(state.babyProfile?.birthDate ?? '');
   const [saved, setSaved] = useState(false);

@@ -38,7 +38,6 @@ export function InsightsScreen() {
   }
 
   const items = data[activeCategory];
-  const activeCat = categoryConfig.find(c => c.key === activeCategory)!;
 
   return (
     <div className="fade-in">
