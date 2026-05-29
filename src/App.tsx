@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { AppShell } from './components/layout/AppShell';
 import { OnboardingScreen } from './screens/Onboarding/OnboardingScreen';
@@ -6,6 +7,12 @@ import { TodayScreen } from './screens/Today/TodayScreen';
 import { MilestonesScreen } from './screens/Milestones/MilestonesScreen';
 import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { state } = useApp();
@@ -40,6 +47,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppProvider>
+        <ScrollToTop />
         <AppRoutes />
       </AppProvider>
     </BrowserRouter>

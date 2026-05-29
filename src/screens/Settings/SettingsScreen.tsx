@@ -26,7 +26,7 @@ export function SettingsScreen() {
   }
 
   return (
-    <div className="fade-in px-4 pt-10">
+    <div className="fade-in px-4 pt-6">
       <h1 className="text-2xl font-extrabold text-app-text mb-6">Settings</h1>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm mb-4 space-y-4">

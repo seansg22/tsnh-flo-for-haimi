@@ -26,7 +26,7 @@ export function TodayScreen() {
   return (
     <div className="fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-10 pb-2">
+      <div className="flex items-center justify-between px-4 pt-6 pb-2">
         <div>
           <p className="text-xs text-textMuted font-semibold uppercase tracking-wider">Baby Day</p>
           <h1 className="text-xl font-extrabold text-app-text">{state.babyProfile?.name}</h1>

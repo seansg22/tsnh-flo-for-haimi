@@ -28,7 +28,7 @@ export function MilestonesScreen() {
 
   return (
     <div className="fade-in">
-      <div className="px-4 pt-10 pb-4">
+      <div className="px-4 pt-6 pb-4">
         <h1 className="text-2xl font-extrabold text-app-text">Milestones</h1>
         <p className="text-textMuted text-sm font-medium mt-1">
           {achievedCount} of {milestones.length} achieved
