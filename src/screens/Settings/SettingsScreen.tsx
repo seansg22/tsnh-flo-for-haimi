@@ -106,10 +106,10 @@ export function SettingsScreen() {
           disabled={updateStatus === 'checking' || updateStatus === 'updated'}
           className="text-app-text text-sm font-bold border-2 border-peachLight rounded-xl px-4 py-2 active:bg-cream disabled:opacity-60 transition-all"
         >
-          {updateStatus === 'checking' && '⏳ Checking…'}
-          {updateStatus === 'updated' && '✓ Updated! Reloading…'}
-          {updateStatus === 'error' && '⚠️ Update failed — try again'}
-          {updateStatus === 'idle' && '🔄 Update app'}
+          {updateStatus === 'checking' && 'Checking…'}
+          {updateStatus === 'updated' && 'Updated! Reloading…'}
+          {updateStatus === 'error' && 'Update failed — try again'}
+          {updateStatus === 'idle' && 'Update app'}
         </button>
       </div>
 
