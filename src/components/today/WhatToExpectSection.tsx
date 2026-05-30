@@ -1,9 +1,63 @@
-import { Moon, Milk, Zap, CirclePlay, Star } from 'lucide-react';
-import type { WeekData } from '../../types';
+import { Moon, Milk, Zap, CirclePlay, Star, ExternalLink } from 'lucide-react';
+import type { Activity, WeekData } from '../../types';
 
 interface WhatToExpectSectionProps {
   week: number;
   data: WeekData;
+}
+
+const ACTIVITY_SEARCH_TERMS: Record<string, string> = {
+  'Talk softly': 'talking to newborn baby',
+  'Show your face': 'face to face newborn interaction',
+  'Slow dance': 'dancing with baby bonding',
+  'Coo back and forth': 'baby cooing communication',
+  'Bicycle legs': 'baby bicycle legs gas relief',
+  'Outdoor air': 'taking newborn outside',
+  'Smile game': 'baby social smile game',
+  'Narrate everything': 'talking to baby language development',
+  'Coo conversation': 'baby cooing conversation',
+  'Window gazing': 'baby visual stimulation',
+  'Make them laugh': 'make baby laugh',
+  'Name game': 'baby name recognition',
+  'Roll practice': 'baby rolling exercises',
+  'Sound imitation': 'baby sound imitation',
+  'Foot discovery': 'baby discovering feet',
+  'Scarf magic': 'baby peekaboo scarf play',
+  'Object grab': 'baby reaching grasping activity',
+  'Sit practice': 'baby sitting practice',
+  'Object hide': 'baby object permanence game',
+  'Food exposure': 'baby food exposure before solids',
+  'Object in container': 'baby container play',
+  'First words game': 'baby first words activities',
+  'Walking practice': 'baby walking practice',
+  'Board book library': 'reading board books baby',
+  'Birthday adventure': 'toddler birthday activity ideas',
+  'Baby book': 'baby memory book ideas',
+  'Push toy walk': 'toddler push toy walking',
+  'Naming walk': 'toddler vocabulary walk',
+  'Body part game': 'toddler body parts game',
+  'Emotion naming': 'toddler emotion naming',
+  'Parallel household tasks': 'toddler helping household chores',
+  'Word labeling': 'toddler language labeling',
+  'Choice architecture': 'offering choices toddler',
+  'Expand their sentences': 'expanding toddler sentences',
+  'Answer why with why': 'toddler why questions',
+  'Letter exposure': 'letter recognition toddler activities',
+  'Name writing': 'preschool name writing activity',
+  'Photo journey': 'family photo memory activity toddler',
+};
+
+function getActivityAgeContext(week: number): string {
+  if (week < 4) return 'newborn baby';
+  if (week < 52) return 'baby';
+  return 'toddler';
+}
+
+function getActivityYoutubeUrl(activity: Activity, week: number): string {
+  const searchTerm = ACTIVITY_SEARCH_TERMS[activity.title] ?? activity.title.toLowerCase();
+  const hasAgeContext = /\b(newborn|baby|toddler|preschool|child|children)\b/i.test(searchTerm);
+  const query = hasAgeContext ? searchTerm : `${searchTerm} ${getActivityAgeContext(week)}`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 }
 
 export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
@@ -51,9 +105,19 @@ export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
               {data.activities.map(a => (
                 <div key={a.id} className="flex gap-3 items-start">
                   <CirclePlay size={22} strokeWidth={1.5} className="text-peachDark flex-shrink-0 mt-0.5" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-app-text text-sm">{a.title}</p>
                     <p className="text-textMuted text-xs leading-relaxed">{a.description}</p>
+                    <a
+                      href={getActivityYoutubeUrl(a, week)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-500"
+                      aria-label={`Open YouTube videos for ${a.title}`}
+                    >
+                      YouTube
+                      <ExternalLink size={12} strokeWidth={2.2} />
+                    </a>
                   </div>
                 </div>
               ))}
