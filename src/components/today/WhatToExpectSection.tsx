@@ -53,11 +53,25 @@ function getActivityAgeContext(week: number): string {
   return 'toddler';
 }
 
-function getActivityYoutubeUrl(activity: Activity, week: number): string {
+function getActivitySearchQuery(activity: Activity, week: number): string {
   const searchTerm = ACTIVITY_SEARCH_TERMS[activity.title] ?? activity.title.toLowerCase();
   const hasAgeContext = /\b(newborn|baby|toddler|preschool|child|children)\b/i.test(searchTerm);
-  const query = hasAgeContext ? searchTerm : `${searchTerm} ${getActivityAgeContext(week)}`;
+  return hasAgeContext ? searchTerm : `${searchTerm} ${getActivityAgeContext(week)}`;
+}
+
+function getActivityYoutubeUrl(activity: Activity, week: number): string {
+  const query = getActivitySearchQuery(activity, week);
   return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+
+function getActivityInstagramUrl(activity: Activity, week: number): string {
+  const query = getActivitySearchQuery(activity, week);
+  return `https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(query)}`;
+}
+
+function getActivityTikTokUrl(activity: Activity, week: number): string {
+  const query = getActivitySearchQuery(activity, week);
+  return `https://www.tiktok.com/search?q=${encodeURIComponent(query)}`;
 }
 
 export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
@@ -108,16 +122,38 @@ export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
                   <div className="min-w-0">
                     <p className="font-semibold text-app-text text-sm">{a.title}</p>
                     <p className="text-textMuted text-xs leading-relaxed">{a.description}</p>
-                    <a
-                      href={getActivityYoutubeUrl(a, week)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-500"
-                      aria-label={`Open YouTube videos for ${a.title}`}
-                    >
-                      YouTube
-                      <ExternalLink size={12} strokeWidth={2.2} />
-                    </a>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      <a
+                        href={getActivityYoutubeUrl(a, week)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-extrabold text-red-500"
+                        aria-label={`Open YouTube videos for ${a.title}`}
+                      >
+                        YouTube
+                        <ExternalLink size={12} strokeWidth={2.2} />
+                      </a>
+                      <a
+                        href={getActivityInstagramUrl(a, week)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-pink-50 px-2.5 py-1 text-[11px] font-extrabold text-pink-500"
+                        aria-label={`Open Instagram posts for ${a.title}`}
+                      >
+                        Instagram
+                        <ExternalLink size={12} strokeWidth={2.2} />
+                      </a>
+                      <a
+                        href={getActivityTikTokUrl(a, week)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-extrabold text-slate-700"
+                        aria-label={`Open TikTok videos for ${a.title}`}
+                      >
+                        TikTok
+                        <ExternalLink size={12} strokeWidth={2.2} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
