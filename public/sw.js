@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'flo-for-haimi-v2'
+const CACHE_VERSION = 'flo-for-haimi-v4'
 const STATIC_CACHE = `${CACHE_VERSION}-static`
 const PAGE_CACHE = `${CACHE_VERSION}-pages`
 
@@ -8,7 +8,16 @@ const STATIC_FILE_PATTERN = /\.(?:avif|css|gif|ico|jpe?g|js|png|svg|webp|woff2?)
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(CORE_ASSETS)),
+    caches.open(STATIC_CACHE).then(async (cache) => {
+      // Cache small critical assets — must succeed for install to complete.
+      await cache.addAll(CORE_ASSETS)
+
+      // Pre-cache the PDF separately so a failure (e.g. slow network / large
+      // file) doesn't roll back the entire SW install.
+      await cache.add('/book.pdf').catch(() => {
+        // Will be cached on first access via the fetch handler instead.
+      })
+    }),
   )
   self.skipWaiting()
 })
@@ -41,6 +50,14 @@ self.addEventListener('fetch', (event) => {
   }
 
   const url = new URL(request.url)
+
+  // Explicitly cache-first the book PDF regardless of request destination
+  // (pdfjs fetches it with destination '' which wouldn't match STATIC_DESTINATIONS).
+  if (url.origin === self.location.origin && url.pathname === '/book.pdf') {
+    event.respondWith(cacheFirst(request))
+    return
+  }
+
   const isBuiltAsset = url.pathname.startsWith('/assets/')
   const isPublicAsset =
     STATIC_DESTINATIONS.has(request.destination) && !url.pathname.startsWith('/src/')

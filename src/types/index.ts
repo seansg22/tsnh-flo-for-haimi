@@ -62,7 +62,7 @@ export interface GrowthEntry {
   head?: number;   // cm
 }
 
-export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings';
+export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings' | 'book';
 
 export interface AppState {
   babyProfile: BabyProfile | null;
