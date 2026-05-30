@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../../context/appStateContext';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
+import { DateInput } from '../../components/shared/DateInput';
 
 type UpdateStatus = 'idle' | 'checking' | 'updated' | 'error';
 
@@ -71,11 +72,10 @@ export function SettingsScreen() {
               <button
                 key={g}
                 onClick={() => setGender(g)}
-                className={`flex-1 py-2 rounded-xl text-sm font-bold capitalize transition-all border-2 ${
-                  gender === g
-                    ? 'bg-peach text-white border-peach'
-                    : 'bg-cream text-textMuted border-peachLight'
-                }`}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold capitalize transition-all border-2 ${gender === g
+                  ? 'bg-peach text-white border-peach'
+                  : 'bg-cream text-textMuted border-peachLight'
+                  }`}
               >
                 {g === 'girl' ? '♀ Girl' : '♂ Boy'}
               </button>
@@ -84,12 +84,10 @@ export function SettingsScreen() {
         </div>
         <div>
           <p className="text-xs font-semibold text-textMuted mb-1.5 uppercase tracking-wide">Birth date</p>
-          <input
-            type="date"
+          <DateInput
             value={birthDate}
             max={today}
-            onChange={e => setBirthDate(e.target.value)}
-            className="rounded-xl border-2 border-peachLight focus:border-peach outline-none px-4 py-3 w-full max-w-full min-w-0 box-border text-app-text bg-cream text-base font-medium transition-colors block"
+            onChange={setBirthDate}
           />
         </div>
         <Button onClick={handleSave} disabled={!name.trim() || !birthDate} className="w-full">

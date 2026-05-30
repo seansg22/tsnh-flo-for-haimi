@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Baby, Cake } from 'lucide-react';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
+import { DateInput } from '../../components/shared/DateInput';
 import { useApp } from '../../context/appStateContext';
 
 export function OnboardingScreen() {
@@ -61,13 +62,11 @@ export function OnboardingScreen() {
             <p className="text-textMuted mt-2 font-medium text-sm">We'll track their development from day one</p>
           </div>
           <div className="bg-white rounded-3xl p-6 shadow-lg">
-            <input
-              type="date"
+            <DateInput
               value={birthDate}
               max={today}
               min={minDate}
-              onChange={e => setBirthDate(e.target.value)}
-              className="rounded-xl border-2 border-peachLight focus:border-peach outline-none px-4 py-3 w-full max-w-full min-w-0 box-border text-app-text bg-cream text-base font-medium transition-colors block"
+              onChange={setBirthDate}
             />
             <Button
               className="w-full mt-4"
