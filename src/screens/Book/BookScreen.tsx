@@ -185,6 +185,7 @@ export function BookScreen() {
   const nextCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const viewerRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [pageNumber, setPageNumber] = useLocalStorage<number>('baby-day:book-page', 1);
@@ -192,6 +193,7 @@ export function BookScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const zoomedRenderCancelRef = useRef<(() => void) | null>(null);
   const [query, setQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchEntries, setSearchEntries] = useState<BookSearchEntry[]>(getFallbackSearchEntries);
@@ -229,6 +231,16 @@ export function BookScreen() {
     if (!normalizedQuery) return searchEntries.filter(({ kind }) => kind !== 'section');
     return searchEntries.filter(({ searchText }) => searchText.includes(normalizedQuery));
   }, [normalizedQuery, searchEntries]);
+
+  // Find which chapter the current page belongs to (last chapter whose start page ≤ current page)
+  const currentChapter = useMemo(() => {
+    let result: { chapter: number; title: string } | null = null;
+    for (const c of bookChapters) {
+      if (c.page <= pageNumber) result = c;
+      else break;
+    }
+    return result;
+  }, [pageNumber]);
 
   // Load PDF document
   useEffect(() => {
@@ -309,6 +321,9 @@ export function BookScreen() {
 
   // Reset zoom when page changes
   useEffect(() => {
+    // Cancel any in-flight zoomed render
+    zoomedRenderCancelRef.current?.();
+    zoomedRenderCancelRef.current = null;
     scaleRef.current = 1;
     panRef.current = { x: 0, y: 0 };
     setZoomLevel(1);
@@ -319,10 +334,58 @@ export function BookScreen() {
   // Page navigation helpers
   // -------------------------------------------------------------------------
   function resetZoom() {
+    zoomedRenderCancelRef.current?.();
+    zoomedRenderCancelRef.current = null;
     scaleRef.current = 1;
     panRef.current = { x: 0, y: 0 };
     setZoomLevel(1);
     zoomApi.start({ scale: 1, x: 0, y: 0 });
+    // Re-render the center canvas back at normal resolution
+    if (pdfDoc && viewerWidthRef.current > 0 && currCanvasRef.current) {
+      const availableWidth = Math.max(viewerWidthRef.current - 32, 280);
+      let cancelled = false;
+      const result = renderSlot(pdfDoc, pageNumberRef.current, currCanvasRef.current, availableWidth, () => cancelled);
+      zoomedRenderCancelRef.current = () => { cancelled = true; result.task?.cancel(); };
+    }
+  }
+
+  // Re-render the center canvas at the zoomed resolution so text stays crisp.
+  function renderAtZoom(scale: number) {
+    if (!pdfDoc || viewerWidthRef.current === 0 || !currCanvasRef.current) return;
+
+    // Cancel any previous zoomed render
+    zoomedRenderCancelRef.current?.();
+    zoomedRenderCancelRef.current = null;
+
+    const canvas = currCanvasRef.current;
+    const availableWidth = Math.max(viewerWidthRef.current - 32, 280);
+    const zoomedWidth = availableWidth * scale;
+    let cancelled = false;
+
+    const result = renderSlot(
+      pdfDoc,
+      pageNumberRef.current,
+      canvas,
+      zoomedWidth,
+      () => cancelled,
+    );
+    zoomedRenderCancelRef.current = () => {
+      cancelled = true;
+      result.task?.cancel();
+    };
+
+    result.promise.then(() => {
+      if (cancelled || !canvas) return;
+      // renderSlot sets canvas CSS size to `availableWidth * scale` px (the zoomed size).
+      // We need to reset it to the original display size so the layout doesn't jump.
+      // The spring `scale` transform still applies the visual zoom — we just give the
+      // canvas more backing pixels so text is crisp instead of blurry.
+      const displayW = parseFloat(canvas.style.width) / scale;
+      const displayH = parseFloat(canvas.style.height) / scale;
+      canvas.style.width = `${Math.round(displayW)}px`;
+      canvas.style.height = `${Math.round(displayH)}px`;
+      // Do NOT touch zoomApi — the transform is unchanged, only the pixel density improved.
+    });
   }
 
   function navigatePage(direction: 1 | -1) {
@@ -374,8 +437,9 @@ export function BookScreen() {
 
   function selectSearchEntry(entry: BookSearchEntry) {
     goToPage(entry.page);
-    setQuery(entry.chapter ? `Chapter ${entry.chapter}: ${entry.title}` : entry.title);
+    setQuery('')
     setIsSearchOpen(false);
+    inputRef.current?.blur();
   }
 
   function getEntryBadge(entry: BookSearchEntry) {
@@ -445,9 +509,14 @@ export function BookScreen() {
           resetZoom();
         } else {
           zoomApi.start({ scale: newScale, immediate: active });
-          if (!active && newScale <= 1) {
-            panRef.current = { x: 0, y: 0 };
-            zoomApi.start({ x: 0, y: 0 });
+          if (!active) {
+            if (newScale <= 1) {
+              panRef.current = { x: 0, y: 0 };
+              zoomApi.start({ x: 0, y: 0 });
+            } else {
+              // Pinch ended at zoom > 1 — re-render at high res for crisp text
+              renderAtZoom(newScale);
+            }
           }
         }
       },
@@ -494,6 +563,7 @@ export function BookScreen() {
             />
             <input
               type="text"
+              ref={inputRef}
               value={query}
               onChange={(event) => { setQuery(event.target.value); setIsSearchOpen(true); }}
               onFocus={() => setIsSearchOpen(true)}
@@ -631,25 +701,43 @@ export function BookScreen() {
       </main>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <footer className="flex-shrink-0 border-t border-peachLight bg-white px-4 py-3">
+      <footer
+        className="flex-shrink-0 border-t border-peachLight bg-white px-4 py-3"
+        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+      >
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => goToPage(pageNumber - 1)}
             disabled={pageNumber <= 1 || isLoading}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-cream text-peachDark transition-opacity disabled:opacity-40"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-cream text-peachDark transition-opacity disabled:opacity-40"
             aria-label="Previous page"
           >
             <ChevronLeft size={22} strokeWidth={2.5} />
           </button>
-          <span className="text-sm font-extrabold text-textMuted">
-            {totalPages ? `${pageNumber} / ${totalPages}` : 'Loading'}
-          </span>
+
+          {/* Center: chapter + page stacked */}
+          <div className="flex min-w-0 flex-1 flex-col items-center gap-0.5">
+            {currentChapter && (
+              <span className="flex items-center gap-1.5 w-full justify-center">
+                <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-peachLight px-1 text-[9px] font-extrabold text-peachDark flex-shrink-0">
+                  {currentChapter.chapter}
+                </span>
+                <span className="truncate text-[11px] font-semibold text-textMuted">
+                  {currentChapter.title}
+                </span>
+              </span>
+            )}
+            <span className="text-sm font-extrabold text-app-text">
+              {totalPages ? `${pageNumber} / ${totalPages}` : 'Loading…'}
+            </span>
+          </div>
+
           <button
             type="button"
             onClick={() => goToPage(pageNumber + 1)}
             disabled={!totalPages || pageNumber >= totalPages || isLoading}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-peach text-white shadow-md transition-opacity disabled:opacity-40"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-peach text-white shadow-md transition-opacity disabled:opacity-40"
             aria-label="Next page"
           >
             <ChevronRight size={22} strokeWidth={2.5} />

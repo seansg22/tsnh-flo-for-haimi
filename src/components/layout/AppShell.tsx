@@ -4,7 +4,7 @@ import { BottomNav } from './BottomNav';
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="relative w-full max-w-[430px] mx-auto min-h-screen bg-cream">
-      <div className="pb-20">
+      <div style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
         {children}
       </div>
       <BottomNav />

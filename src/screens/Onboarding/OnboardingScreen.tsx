@@ -67,7 +67,7 @@ export function OnboardingScreen() {
               max={today}
               min={minDate}
               onChange={e => setBirthDate(e.target.value)}
-              className="rounded-xl border-2 border-peachLight focus:border-peach outline-none px-4 py-3 w-full text-app-text bg-cream text-base font-medium transition-colors"
+              className="rounded-xl border-2 border-peachLight focus:border-peach outline-none px-4 py-3 w-full max-w-full min-w-0 box-border text-app-text bg-cream text-base font-medium transition-colors block"
             />
             <Button
               className="w-full mt-4"
