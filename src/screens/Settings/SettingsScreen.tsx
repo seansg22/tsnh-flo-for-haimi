@@ -3,12 +3,15 @@ import { useApp } from '../../context/appStateContext';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
 
+type UpdateStatus = 'idle' | 'checking' | 'updated' | 'error';
+
 export function SettingsScreen() {
   const { state, dispatch } = useApp();
   const [name, setName] = useState(state.babyProfile?.name ?? '');
   const [birthDate, setBirthDate] = useState(state.babyProfile?.birthDate ?? '');
   const [gender, setGender] = useState<'girl' | 'boy'>(state.babyProfile?.gender ?? 'girl');
   const [saved, setSaved] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -17,6 +20,30 @@ export function SettingsScreen() {
     dispatch({ type: 'SET_BABY_PROFILE', payload: { name: name.trim(), birthDate, gender } });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  }
+
+  async function handleUpdate() {
+    if (!('serviceWorker' in navigator)) return;
+    setUpdateStatus('checking');
+    try {
+      // Unregister all existing SWs so the browser fetches a fresh sw.js
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map(r => r.unregister()));
+
+      // Delete all caches so assets are re-fetched after the new SW activates
+      const cacheKeys = await caches.keys();
+      await Promise.all(cacheKeys.map(key => caches.delete(key)));
+
+      // Re-register so the new SW installs immediately on reload
+      await navigator.serviceWorker.register('/sw.js');
+
+      setUpdateStatus('updated');
+      // Reload after a short delay so the user sees the feedback
+      setTimeout(() => window.location.reload(), 1200);
+    } catch {
+      setUpdateStatus('error');
+      setTimeout(() => setUpdateStatus('idle'), 3000);
+    }
   }
 
   function handleReset() {
@@ -68,6 +95,22 @@ export function SettingsScreen() {
         <Button onClick={handleSave} disabled={!name.trim() || !birthDate} className="w-full">
           {saved ? '✓ Saved!' : 'Save changes'}
         </Button>
+      </div>
+
+      <div className="bg-white rounded-2xl p-5 shadow-sm mb-4">
+        <p className="font-bold text-app-text mb-1">App</p>
+        <p className="text-sm text-textMuted mb-3">Get the latest version of the app</p>
+        <button
+          id="update-app-btn"
+          onClick={handleUpdate}
+          disabled={updateStatus === 'checking' || updateStatus === 'updated'}
+          className="text-app-text text-sm font-bold border-2 border-peachLight rounded-xl px-4 py-2 active:bg-cream disabled:opacity-60 transition-all"
+        >
+          {updateStatus === 'checking' && '⏳ Checking…'}
+          {updateStatus === 'updated' && '✓ Updated! Reloading…'}
+          {updateStatus === 'error' && '⚠️ Update failed — try again'}
+          {updateStatus === 'idle' && '🔄 Update app'}
+        </button>
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-red-100">
