@@ -73,7 +73,7 @@ export function TodayScreen() {
 
       </div>
 
-      <div className="fixed bottom-32 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 pointer-events-none">
+      <div className="fixed bottom-40 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 pointer-events-none">
         <button
           type="button"
           onClick={() => dispatch({ type: 'SET_PAGE', payload: 'book' })}
