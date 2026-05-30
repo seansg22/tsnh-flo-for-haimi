@@ -14,7 +14,7 @@ const careTipsData: CareTipsEntry[] = [
     ],
     sleep: [
       'Safe sleep every time: firm flat surface, on their back, alone — no pillows, blankets, or bumpers.',
-      'Swaddling mimics the womb and prevents the startle reflex from waking them. Wrap snugly but not too tight around the hips.',
+      'If you swaddle, always place baby on their back, keep hips loose, skip weighted swaddles, and stop swaddling as soon as baby shows signs of rolling.',
       'Newborns can\'t distinguish day from night. Keep daytime bright and social; nights dark, quiet, and boring.',
     ],
     soothing: [
@@ -23,7 +23,7 @@ const careTipsData: CareTipsEntry[] = [
       'If you\'re stressed, baby senses it. Put them down safely and take 5 minutes to breathe — it will help both of you.',
     ],
     health: [
-      'Fever in a newborn under 8 weeks (38°C / 100.4°F or higher) is a medical emergency — go to the ER immediately.',
+      'Fever in a baby 3 months or younger (38°C / 100.4°F or higher, rectal) needs immediate pediatric guidance — call your doctor or urgent care right away.',
       'Jaundice (yellow skin/eyes) is common at days 2–5. Mild jaundice resolves on its own; severe jaundice needs treatment.',
       'Umbilical cord stump: keep dry, fold nappy below it, and let it fall off naturally (1–3 weeks). Never pull it.',
       'Watch for: fewer than 6 wet nappies per day, no stool in 48h, difficulty breathing, extreme lethargy — call your doctor.',
@@ -51,7 +51,7 @@ const careTipsData: CareTipsEntry[] = [
     ],
     health: [
       'First vaccines are typically given at 6–8 weeks. Check your local schedule and book the appointment now.',
-      'Fever rule changes at 8 weeks: 38°C+ still needs a same-day doctor call, but is less automatically an emergency.',
+      'Fever rule: if baby is 3 months or younger and has a rectal temperature of 38°C / 100.4°F or higher, call a pediatric clinician immediately.',
       'Cradle cap (flaky scalp) is harmless. Massage with baby oil, leave 20 minutes, then brush gently with a soft brush.',
       'Normal stools vary widely at this age: breastfed babies may go after every feed or only every few days — both are normal. Mustard-yellow, seedy stools are healthy. Formula-fed babies tend to have firmer, more regular, yellow-green stools.',
     ],
@@ -91,7 +91,7 @@ const careTipsData: CareTipsEntry[] = [
     sleep: [
       'Consider a 3-nap schedule: morning nap, midday nap, late afternoon catnap. Watch wake windows of 90 min.',
       'If baby wakes in the night, wait 1–2 minutes before responding — they may resettle on their own.',
-      'Room temperature 18–20°C is ideal for sleep. Use a sleep sack instead of blankets.',
+      'Room temperature 18–20°C is a useful target. Use an unweighted sleep sack instead of loose blankets.',
       'Now is the ideal time to solidify the habits that make sleep training shorter: consistent bedtime routine, same sleep environment for every nap and night, and always placing baby down drowsy-but-awake.',
     ],
     soothing: [
@@ -165,7 +165,7 @@ const careTipsData: CareTipsEntry[] = [
     sleep: [
       'Most 6-month-olds can sleep 5–8 hours without a feed. If baby still wakes to feed multiple times, try feeding 1 hour before bedtime rather than as the last step — this breaks the feed-to-sleep association.',
       'Graduated extinction (Ferber): put baby down awake after routine and leave. If crying, wait a few minutes, enter briefly (soothing pat, calm words — no picking up, stay under 1–2 min), leave. Increase the wait each time. Note your last wait; start there the next night. Repeat over several nights.',
-      'Introduce a comfort object (lovey) now — a small stuffed animal that always goes to sleep with them. Once baby is over 12 months, it becomes a powerful self-soothing anchor you don\'t have to provide.',
+      'You can build a comfort-object association during awake cuddles, but keep stuffed toys, blankets, and loveys out of the sleep space until after 12 months.',
     ],
     soothing: [
       'Teething pain peaks around 6–8 months (lower front teeth). Chilled teether, cold washcloth, or teething gel helps.',
@@ -222,7 +222,7 @@ const careTipsData: CareTipsEntry[] = [
     ],
     health: [
       '9-month checkup due: developmental screening, iron levels, and lead screening in some areas.',
-      'Know infant choking first aid: 5 back blows + 5 chest thrusts for babies under 1 year. Save the video now.',
+      'Know infant choking first aid before you need it. Use certified first-aid training or pediatrician-recommended resources, and save local emergency numbers.',
       'Baby teeth: brush morning and night with a smear of fluoride toothpaste. Avoid sugary drinks, even juice.',
       'Cold and flu season: hand washing is the most effective prevention. Keep hand sanitiser at every entry point.',
     ],
@@ -493,22 +493,160 @@ const careTipsData: CareTipsEntry[] = [
   },
 ];
 
+interface CareTipsEnrichment {
+  weekRange: [number, number];
+  tips: Partial<CareTips>;
+}
+
+const careTipsEnrichments: CareTipsEnrichment[] = [
+  {
+    weekRange: [0, 3],
+    tips: {
+      feeding: [
+        'Newborn first weeks: feed on demand and track wet diapers, stool pattern, and whether baby wakes enough to feed.',
+      ],
+      sleep: [
+        'Newborn first weeks: expect irregular sleep and short wake windows; prioritize safe sleep setup over any schedule.',
+      ],
+    },
+  },
+  {
+    weekRange: [0, 52],
+    tips: {
+      sleep: [
+        'Safe sleep setup: every sleep should start on the back, on a firm flat infant sleep surface, with no loose bedding or soft objects.',
+        'Avoid weighted swaddles, weighted sleep sacks, inclined sleepers, couches, armchairs, and routine sleep in sitting devices.',
+      ],
+    },
+  },
+  {
+    weekRange: [4, 13],
+    tips: {
+      sleep: [
+        'At 1-3 months, simple routines help, but normal night waking and active-sleep noises are still expected.',
+      ],
+      soothing: [
+        'At 1-3 months, peak crying gradually eases. Keep tummy time short, frequent, awake, and supervised.',
+      ],
+      health: [
+        'Bring up feeding difficulty, persistent vomiting, breathing symptoms, or caregiver exhaustion at visits.',
+      ],
+    },
+  },
+  {
+    weekRange: [14, 23],
+    tips: {
+      feeding: [
+        'Before solids, look for readiness signs: steady head control, supported sitting, food interest, and reduced tongue-thrust reflex.',
+        'Avoid starting solids before 4 months; most babies are ready around 6 months unless a clinician advises otherwise.',
+      ],
+      sleep: [
+        'Stop swaddling when baby shows signs of trying to roll.',
+      ],
+    },
+  },
+  {
+    weekRange: [17, 34],
+    tips: {
+      feeding: [
+        'Solids complement milk at first; breast milk or formula remains the main nutrition source while solids build skills and exposure.',
+        'Introduce common allergens in infant-safe forms, one at a time, when baby is developmentally ready.',
+        'Avoid choking hazards such as whole nuts, thick peanut butter, hard round foods, and chunks of meat.',
+      ],
+    },
+  },
+  {
+    weekRange: [24, 35],
+    tips: {
+      health: [
+        'Before pulling to stand, gate stairs, lock medicines and cleaners, secure blind cords, and anchor furniture.',
+      ],
+    },
+  },
+  {
+    weekRange: [44, 60],
+    tips: {
+      feeding: [
+        'Around 1 year, ask about milk transition, iron, lead screening, dental visit timing, and the vaccine schedule at the checkup.',
+        'Keep choking hazards strict: avoid whole nuts, hard round foods, popcorn, chunks of meat, and thick nut butter.',
+      ],
+      soothing: [
+        'Around 1 year, separation anxiety and uneven appetite are common; steady routines matter more than pressure.',
+      ],
+    },
+  },
+  {
+    weekRange: [61, 103],
+    tips: {
+      soothing: [
+        'Toddler boundaries: use short, consistent phrases and redirect toward what your child can do.',
+        'Read, narrate, sing, and name feelings to support communication and regulation.',
+      ],
+    },
+  },
+  {
+    weekRange: [104, 156],
+    tips: {
+      soothing: [
+        'Toilet training works best when readiness signs are present: staying dry longer, noticing wet or dirty diapers, and interest in the potty.',
+        'Offer choices within limits to reduce battles while keeping boundaries firm.',
+      ],
+    },
+  },
+  {
+    weekRange: [4, 156],
+    tips: {
+      health: [
+        'Illness red flags: seek urgent help for trouble breathing, blue or gray lips or skin, limpness, hard-to-wake behavior, seizure, severe allergic reaction, poisoning, or dehydration signs.',
+      ],
+    },
+  },
+  {
+    weekRange: [0, 156],
+    tips: {
+      health: [
+        'Before calling about illness, track temperature method, wet diapers, feeds or fluids, breathing pattern, rash, vomiting or diarrhea count, and behavior.',
+      ],
+    },
+  },
+];
+
 const careTipsMap = new Map(careTipsData.map(e => [e.week, e]));
+
+function mergeEnrichments(baseTips: CareTips, week: number): CareTips {
+  const enriched: CareTips = {
+    feeding: [...baseTips.feeding],
+    sleep: [...baseTips.sleep],
+    soothing: [...baseTips.soothing],
+    health: [...baseTips.health],
+  };
+
+  careTipsEnrichments
+    .filter(({ weekRange }) => week >= weekRange[0] && week <= weekRange[1])
+    .forEach(({ tips }) => {
+      enriched.feeding.push(...(tips.feeding ?? []));
+      enriched.sleep.push(...(tips.sleep ?? []));
+      enriched.soothing.push(...(tips.soothing ?? []));
+      enriched.health.push(...(tips.health ?? []));
+    });
+
+  return enriched;
+}
 
 export function getCareTips(week: number): CareTips {
   const clamped = Math.min(week, 156);
   if (careTipsMap.has(clamped)) {
     const { feeding, sleep, soothing, health } = careTipsMap.get(clamped)!;
-    return { feeding, sleep, soothing, health };
+    return mergeEnrichments({ feeding, sleep, soothing, health }, clamped);
   }
   for (let w = clamped - 1; w >= 0; w--) {
     if (careTipsMap.has(w)) {
       const { feeding, sleep, soothing, health } = careTipsMap.get(w)!;
-      return { feeding, sleep, soothing, health };
+      return mergeEnrichments({ feeding, sleep, soothing, health }, clamped);
     }
   }
   const { feeding, sleep, soothing, health } = careTipsData[0];
-  return { feeding, sleep, soothing, health };
+  return mergeEnrichments({ feeding, sleep, soothing, health }, clamped);
 }
 
 export function getSoothingLabel(week: number): string {

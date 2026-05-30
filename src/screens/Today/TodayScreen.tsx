@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Baby, Lightbulb } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { getWeekData } from '../../data/weeklyDevelopment';
 import { getCareTips, getSoothingLabel } from '../../data/careTips';

@@ -30,7 +30,7 @@ export function CareTipsSection({ tips, soothingLabel, parentTip }: CareTipsSect
   const items = tips[activeTab];
 
   return (
-    <div className="px-4 pb-4">
+    <section className="px-4 pb-4">
       <div className="flex items-center gap-2">
         <Heart size={16} strokeWidth={2} className="text-peachDark" />
         <p className="text-base font-extrabold text-app-text">Care guide</p>
@@ -76,6 +76,6 @@ export function CareTipsSection({ tips, soothingLabel, parentTip }: CareTipsSect
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }

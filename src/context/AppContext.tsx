@@ -1,5 +1,6 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
+import { useReducer, useEffect, type ReactNode } from 'react';
 import type { AppState, AppAction, BabyProfile, Page } from '../types';
+import { AppContext } from './appStateContext';
 
 const initialState: AppState = {
   babyProfile: null,
@@ -63,13 +64,6 @@ function loadState(): AppState {
   }
 }
 
-interface AppContextValue {
-  state: AppState;
-  dispatch: React.Dispatch<AppAction>;
-}
-
-const AppContext = createContext<AppContextValue | null>(null);
-
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, loadState);
 
@@ -92,10 +86,4 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [state.currentPage]);
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
-}
-
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be used within AppProvider');
-  return ctx;
 }

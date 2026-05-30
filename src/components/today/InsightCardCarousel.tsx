@@ -1,5 +1,5 @@
 import { Sparkles, ChevronRight } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import type { WeekData } from '../../types';
 import { InsightCard } from './InsightCard';
 

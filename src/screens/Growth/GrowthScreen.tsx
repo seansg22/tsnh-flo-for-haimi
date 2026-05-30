@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { format, parseISO, differenceInWeeks } from 'date-fns';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import { GrowthChart } from '../../components/growth/GrowthChart';
 import { GrowthEntryForm } from '../../components/growth/GrowthEntryForm';
 import { type GrowthMetric, metricConfig } from '../../data/whoGrowthData';

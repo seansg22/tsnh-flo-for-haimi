@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { milestones } from '../../data/weeklyDevelopment';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import { MilestoneItem } from '../../components/milestones/MilestoneItem';
 import type { Milestone } from '../../types';
 

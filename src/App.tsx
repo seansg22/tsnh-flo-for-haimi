@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { AppProvider, useApp } from './context/AppContext';
+import { AppProvider } from './context/AppContext.tsx';
+import { useApp } from './context/appStateContext';
 import { AppShell } from './components/layout/AppShell';
 import { OnboardingScreen } from './screens/Onboarding/OnboardingScreen';
 import { TodayScreen } from './screens/Today/TodayScreen';
@@ -15,7 +16,7 @@ function AppContent() {
     if (!state.babyProfile && state.currentPage !== 'onboarding') {
       dispatch({ type: 'SET_PAGE', payload: 'onboarding' });
     }
-  }, [state.babyProfile]);
+  }, [dispatch, state.babyProfile, state.currentPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

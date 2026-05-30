@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Baby, Cake } from 'lucide-react';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 
 export function OnboardingScreen() {
   const { dispatch } = useApp();

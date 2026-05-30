@@ -24,8 +24,9 @@ export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
             </div>
             <div className="text-sm text-textMuted space-y-1">
               <p>Total: <span className="text-app-text font-semibold">{data.sleep.totalHoursRange} hours/day</span></p>
-              <p>Night: <span className="text-app-text font-semibold">{data.sleep.nightSleepHours}</span></p>
-              <p>Naps: <span className="text-app-text font-semibold">{data.sleep.naps}</span></p>
+              <p>Longest overnight stretch: <span className="text-app-text font-semibold">{data.sleep.nightSleepHours}</span></p>
+              <p>Daytime naps: <span className="text-app-text font-semibold">{data.sleep.naps}</span></p>
+              <p className="italic">Ranges are typical for this age. Short wakes and day-to-day variation are normal.</p>
             </div>
           </div>
 

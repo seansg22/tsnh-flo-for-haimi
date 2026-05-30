@@ -1,5 +1,5 @@
 import { Home, Star, Sparkles, TrendingUp, Settings } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import type { Page } from '../../types';
 
 const tabs: { page: Page; icon: React.ElementType; label: string }[] = [

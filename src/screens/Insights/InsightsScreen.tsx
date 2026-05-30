@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Dumbbell, Brain, Heart, Eye } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
+import { getInsightExplanation } from '../../data/insightExplanations';
 import { getWeekData, definedWeeks } from '../../data/weeklyDevelopment';
 import { useBabyAge } from '../../hooks/useBabyAge';
 
@@ -78,7 +79,6 @@ export function InsightsScreen() {
         <p className="text-textMuted text-xs leading-relaxed">{data.summary}</p>
       </div>
 
-
       {/* Category tabs */}
       <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
         {categoryConfig.map(({ key, label, Icon, color }) => (
@@ -100,7 +100,12 @@ export function InsightsScreen() {
         {items.map((item, i) => (
           <div key={i} className="flex gap-3 items-start bg-white rounded-xl p-3 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-peach mt-2 flex-shrink-0" />
-            <p className="text-sm text-app-text font-medium leading-relaxed">{item}</p>
+            <div>
+              <p className="text-sm text-app-text font-bold leading-snug">{item}</p>
+              <p className="mt-1 text-xs text-textMuted font-medium leading-relaxed">
+                {getInsightExplanation({ category: activeCategory, item, week: selectedWeek })}
+              </p>
+            </div>
           </div>
         ))}
       </div>

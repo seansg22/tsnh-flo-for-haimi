@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useApp } from '../../context/AppContext';
+import { useApp } from '../../context/appStateContext';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
 

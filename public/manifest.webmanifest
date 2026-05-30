@@ -1,0 +1,18 @@
+{
+  "name": "Flo For Hai Mi",
+  "short_name": "Flo",
+  "description": "Baby care and growth companion for Hai Mi.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFF7F0",
+  "theme_color": "#FFAB76",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
