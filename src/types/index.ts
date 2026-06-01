@@ -77,5 +77,6 @@ export type AppAction =
   | { type: 'TOGGLE_MILESTONE'; payload: string }
   | { type: 'SET_SELECTED_WEEK'; payload: number }
   | { type: 'ADD_GROWTH_ENTRY'; payload: GrowthEntry }
+  | { type: 'UPDATE_GROWTH_ENTRY'; payload: GrowthEntry }
   | { type: 'DELETE_GROWTH_ENTRY'; payload: string }
   | { type: 'SET_PAGE'; payload: Page };

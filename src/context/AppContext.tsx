@@ -28,6 +28,12 @@ function reducer(state: AppState, action: AppAction): AppState {
         .sort((a, b) => a.date.localeCompare(b.date));
       return { ...state, growthEntries: updated };
     }
+    case 'UPDATE_GROWTH_ENTRY': {
+      const updatedEntries = state.growthEntries
+        .map(e => e.id === action.payload.id ? action.payload : e)
+        .sort((a, b) => a.date.localeCompare(b.date));
+      return { ...state, growthEntries: updatedEntries };
+    }
     case 'DELETE_GROWTH_ENTRY':
       return { ...state, growthEntries: state.growthEntries.filter(e => e.id !== action.payload) };
     case 'SET_PAGE':

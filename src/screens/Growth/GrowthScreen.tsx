@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Pencil } from 'lucide-react';
 import { format, parseISO, differenceInWeeks } from 'date-fns';
 import { useApp } from '../../context/appStateContext';
 import { GrowthChart } from '../../components/growth/GrowthChart';
@@ -13,14 +13,30 @@ export function GrowthScreen() {
   const { state, dispatch } = useApp();
   const [activeMetric, setActiveMetric] = useState<GrowthMetric>('weight');
   const [showForm, setShowForm] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<GrowthEntry | null>(null);
 
   const birthDate = state.babyProfile?.birthDate ?? '';
   const gender = state.babyProfile?.gender ?? 'girl';
   const entries = state.growthEntries;
 
   function handleSave(entry: GrowthEntry) {
-    dispatch({ type: 'ADD_GROWTH_ENTRY', payload: entry });
+    if (editingEntry) {
+      dispatch({ type: 'UPDATE_GROWTH_ENTRY', payload: entry });
+      setEditingEntry(null);
+    } else {
+      dispatch({ type: 'ADD_GROWTH_ENTRY', payload: entry });
+      setShowForm(false);
+    }
+  }
+
+  function handleCancel() {
     setShowForm(false);
+    setEditingEntry(null);
+  }
+
+  function handleEdit(entry: GrowthEntry) {
+    setShowForm(false);
+    setEditingEntry(entry);
   }
 
   function handleDelete(id: string) {
@@ -73,10 +89,17 @@ export function GrowthScreen() {
         </div>
       ) : null}
 
-      {/* Add form / button */}
+      {/* Add / Edit form */}
       <div className="px-4 mb-4">
-        {showForm ? (
-          <GrowthEntryForm onSave={handleSave} onCancel={() => setShowForm(false)} />
+        {editingEntry ? (
+          <GrowthEntryForm
+            key={editingEntry.id}
+            initialEntry={editingEntry}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        ) : showForm ? (
+          <GrowthEntryForm onSave={handleSave} onCancel={handleCancel} />
         ) : (
           <button
             onClick={() => setShowForm(true)}
@@ -96,8 +119,12 @@ export function GrowthScreen() {
             const ageWeeks = birthDate
               ? differenceInWeeks(parseISO(entry.date), parseISO(birthDate))
               : null;
+            const isEditing = editingEntry?.id === entry.id;
             return (
-              <div key={entry.id} className="bg-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-sm">
+              <div
+                key={entry.id}
+                className={`bg-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-sm transition-opacity ${isEditing ? 'opacity-50' : ''}`}
+              >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-app-text">
                     {format(parseISO(entry.date), 'dd MMM yyyy')}
@@ -123,6 +150,12 @@ export function GrowthScreen() {
                     )}
                   </div>
                 </div>
+                <button
+                  onClick={() => handleEdit(entry)}
+                  className="p-2 text-textMuted hover:text-peach transition-colors flex-shrink-0"
+                >
+                  <Pencil size={15} strokeWidth={2} />
+                </button>
                 <button
                   onClick={() => handleDelete(entry.id)}
                   className="p-2 text-textMuted hover:text-red-400 transition-colors flex-shrink-0"
