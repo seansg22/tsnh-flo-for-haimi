@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Search } from 'lucide-react';
 import { milestones } from '../../data/weeklyDevelopment';
 import { useApp } from '../../context/appStateContext';
 import { MilestoneItem } from '../../components/milestones/MilestoneItem';
@@ -20,9 +21,13 @@ type CategoryFilter = 'all' | Milestone['category'];
 export function MilestonesScreen() {
   const { state, dispatch } = useApp();
   const [filter, setFilter] = useState<CategoryFilter>('all');
+  const [search, setSearch] = useState('');
 
   const categories: CategoryFilter[] = ['all', 'motor', 'cognitive', 'social', 'sensory', 'vaccination'];
-  const filtered = filter === 'all' ? milestones : milestones.filter(m => m.category === filter);
+  const query = search.trim().toLowerCase();
+  const filtered = milestones
+    .filter(m => filter === 'all' || m.category === filter)
+    .filter(m => !query || m.label.toLowerCase().includes(query) || m.description?.toLowerCase().includes(query));
   const achieved = new Set(state.achievedMilestones);
   const achievedCount = milestones.filter(m => achieved.has(m.id)).length;
 
@@ -38,6 +43,23 @@ export function MilestonesScreen() {
             className="bg-peach h-2 rounded-full transition-all"
             style={{ width: `${(achievedCount / milestones.length) * 100}%` }}
           />
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="px-4 pb-3">
+        <div className="flex items-center gap-2 bg-warm rounded-xl px-3 py-2">
+          <Search size={16} className="text-textMuted flex-shrink-0" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search milestones…"
+            className="flex-1 bg-transparent text-sm text-app-text placeholder:text-textMuted outline-none"
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className="text-textMuted text-xs font-bold">✕</button>
+          )}
         </div>
       </div>
 
@@ -58,6 +80,9 @@ export function MilestonesScreen() {
 
       {/* Milestone groups */}
       <div className="px-4 space-y-6 pb-6">
+        {filtered.length === 0 && (
+          <p className="text-center text-textMuted text-sm py-8">No milestones found</p>
+        )}
         {groups.map(group => {
           const groupMilestones = filtered.filter(
             m => m.weekRange[0] >= group.range[0] && m.weekRange[0] < group.range[1]
