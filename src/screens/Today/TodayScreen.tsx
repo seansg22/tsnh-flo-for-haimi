@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Baby, BookOpenText, Lightbulb } from 'lucide-react';
+import { Baby, Lightbulb } from 'lucide-react';
 import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { getWeekData } from '../../data/weeklyDevelopment';
@@ -73,16 +73,6 @@ export function TodayScreen() {
 
       </div>
 
-      <div className="fixed bottom-40 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 pointer-events-none">
-        <button
-          type="button"
-          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'book' })}
-          className="absolute right-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/80 bg-peach text-white shadow-lg transition-transform active:scale-95 pointer-events-auto"
-          aria-label="Open baby guide"
-        >
-          <BookOpenText size={22} strokeWidth={2.2} />
-        </button>
-      </div>
     </>
   );
 }
