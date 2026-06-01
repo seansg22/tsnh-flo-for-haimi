@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../../context/appStateContext';
 import { Button } from '../../components/shared/Button';
 import { TextInput } from '../../components/shared/TextInput';
@@ -13,8 +13,16 @@ export function SettingsScreen() {
   const [gender, setGender] = useState<'girl' | 'boy'>(state.babyProfile?.gender ?? 'girl');
   const [saved, setSaved] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
+  const [hasNewVersion, setHasNewVersion] = useState(false);
 
   const today = new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    fetch(`/version.json?t=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data?.buildTime !== __BUILD_TIME__) setHasNewVersion(true); })
+      .catch(() => {});
+  }, []);
 
   function handleSave() {
     if (!name.trim() || !birthDate) return;
@@ -96,13 +104,34 @@ export function SettingsScreen() {
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm mb-4">
-        <p className="font-bold text-app-text mb-1">App</p>
-        <p className="text-sm text-textMuted mb-3">Get the latest version of the app</p>
+        <div className="flex items-center justify-between mb-1">
+          <p className="font-bold text-app-text">App</p>
+          {hasNewVersion && (
+            <span className="text-xs font-bold bg-peach text-white px-2 py-0.5 rounded-full">
+              New update
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-textMuted mb-3">
+          Last updated {new Date(__BUILD_TIME__).toLocaleString()}
+        </p>
+        {hasNewVersion && (
+          <div className="bg-orange-50 border border-peachLight rounded-xl px-3 py-2.5 mb-3">
+            <p className="text-sm text-app-text leading-snug">
+              A newer version of the app is ready.<br />
+              <span className="text-textMuted">Tap below to refresh and get it.</span>
+            </p>
+          </div>
+        )}
         <button
           id="update-app-btn"
           onClick={handleUpdate}
           disabled={updateStatus === 'checking' || updateStatus === 'updated'}
-          className="text-app-text text-sm font-bold border-2 border-peachLight rounded-xl px-4 py-2 active:bg-cream disabled:opacity-60 transition-all"
+          className={`text-sm font-bold rounded-xl px-4 py-2 transition-all disabled:opacity-60 ${
+            hasNewVersion
+              ? 'bg-peach text-white border-2 border-peach active:opacity-80'
+              : 'text-app-text border-2 border-peachLight active:bg-cream'
+          }`}
         >
           {updateStatus === 'checking' && 'Checking…'}
           {updateStatus === 'updated' && 'Updated! Reloading…'}

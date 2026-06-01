@@ -44,6 +44,11 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
+  // Always fetch version.json from the network so update checks are never stale
+  if (new URL(request.url).pathname === '/version.json') {
+    return
+  }
+
   if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request))
     return
