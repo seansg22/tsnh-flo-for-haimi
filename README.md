@@ -1,4 +1,4 @@
-# TSNH FLO FOR HAI MI
+# TSNH IMIAH
 
 A personal health & wellness tracking app built for Hai Mi. 💕
 
