@@ -1,6 +1,23 @@
 import { Moon, Milk, Zap, CirclePlay, Star, ExternalLink } from 'lucide-react';
 import type { Activity, WeekData } from '../../types';
 
+// Playlist: "Your Baby's Development, Week by Week" — week 43 is missing in the playlist
+const WEEK_VIDEO_IDS: Record<number, string> = {
+  1: 'EbH0D720Fb4', 2: 'UWLzYS57J_8', 3: 'VOn5NPMfQTo', 4: 'QyW-C_bRr98',
+  5: 'ejMyQzB454M', 6: 'nP2wofsZZ5Q', 7: 'W7Ei5-MOjNI', 8: '8PlblRCq4YI',
+  9: 'OSNsc6Vhmw4', 10: 'apYV11Shk2o', 11: '4XLPhYO93PQ', 12: 'fZ269FwNsEQ',
+  13: 'X2m2nDUDviA', 14: 'fUJ0l4nrV-w', 15: '8wMgzXNV4aM', 16: '-mR3BimBLn8',
+  17: 'mwGJNKJ60Cg', 18: 'f7ey0xjUdPw', 19: 'mAcOWmZQ2N4', 20: 'vioocKepq78',
+  21: 'ElBm6_t4l6Y', 22: 'ValCycmLl2w', 23: '7lavEOrPgO4', 24: '6W-LGTgzhjo',
+  25: 'HHuHjP_hAek', 26: 'rSmS384ri0k', 27: 'rp6UhQ6P0x0', 28: 'WAFnJY3q7vQ',
+  29: 'ofslcqFFxzY', 30: 'o3WiDAQFNTY', 31: 'KRS_pvq7Ej0', 32: '8pyDGsj9R-Q',
+  33: 'EPnytAzWARw', 34: '8ALKlF04RY8', 35: 'I2LgJFsjYgQ', 36: 'G66QTeHcORc',
+  37: '2KMsrEXFonA', 38: '5DpWcjlUVvA', 39: 'sEknfB-o_34', 40: '_PB1_c4-Ysk',
+  41: 'Fw4JkENRrQs', 42: 'MLiTc9p02rw', 44: '-fPNparhRCQ', 45: 'yPkftodD2vI',
+  46: 'sh-gJroMkEc', 47: 'HWQDOuKvRaQ', 48: 'JUgLrNd2peY', 49: 'xRpWikTaUFA',
+  50: 'SnOA1amFQ6k', 51: 'Ov-x3FbOW1M', 52: 'zyCp51AXeZo',
+};
+
 interface WhatToExpectSectionProps {
   week: number;
   data: WeekData;
@@ -76,6 +93,18 @@ export function WhatToExpectSection({ week, data }: WhatToExpectSectionProps) {
 
       <div className="mt-4 space-y-4">
           <p className="text-sm text-textMuted leading-relaxed">{data.summary}</p>
+
+          {WEEK_VIDEO_IDS[week] && (
+            <div className="rounded-2xl overflow-hidden shadow-sm aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${WEEK_VIDEO_IDS[week]}`}
+                title={`Week ${week} baby development`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+          )}
 
           <div className="bg-white rounded-2xl p-4 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
