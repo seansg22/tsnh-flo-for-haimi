@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Dumbbell, Brain, Heart, Eye } from 'lucide-react';
 import { useApp } from '../../context/appStateContext';
 import { getInsightExplanation } from '../../data/insightExplanations';
@@ -27,6 +27,17 @@ export function InsightsScreen() {
   const { state, dispatch } = useApp();
   const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
   const [activeCategory, setActiveCategory] = useState<Category>('motor');
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  function handleCategoryChange(cat: Category) {
+    setActiveCategory(cat);
+    if (contentRef.current) {
+      const top = contentRef.current.getBoundingClientRect().top + window.scrollY;
+      const offset = stickyRef.current?.offsetHeight ?? 0;
+      window.scrollTo({ top: top - offset, behavior: 'smooth' });
+    }
+  }
 
   const selectedWeek = state.selectedWeek;
   const data = getWeekData(selectedWeek);
@@ -80,11 +91,11 @@ export function InsightsScreen() {
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
+      <div ref={stickyRef} className="sticky top-0 z-10 bg-cream flex gap-2 px-4 py-3 overflow-x-auto no-scrollbar">
         {categoryConfig.map(({ key, label, Icon, color }) => (
           <button
             key={key}
-            onClick={() => setActiveCategory(key)}
+            onClick={() => handleCategoryChange(key)}
             className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${
               activeCategory === key ? color : 'bg-warm text-textMuted'
             }`}
@@ -96,7 +107,7 @@ export function InsightsScreen() {
       </div>
 
       {/* Detail cards */}
-      <div className="px-4 space-y-3">
+      <div ref={contentRef} className="px-4 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-3 items-start bg-white rounded-xl p-3 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-peach mt-2 flex-shrink-0" />

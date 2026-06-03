@@ -59,8 +59,6 @@ export function WeekStrip({ currentWeek, selectedWeek, onSelectWeek }: WeekStrip
     hasCaptured.current = false;
   };
 
-  const isOffCurrentWeek = selectedWeek !== currentWeek;
-
   return (
     <div>
       <div className="relative">
@@ -100,14 +98,6 @@ export function WeekStrip({ currentWeek, selectedWeek, onSelectWeek }: WeekStrip
         </div>
       </div>
 
-      <div className="flex justify-center mt-3 -mb-2">
-        <button
-          onClick={() => onSelectWeek(currentWeek)}
-          className={`bg-peach text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md transition-all active:scale-95 ${isOffCurrentWeek ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        >
-          ↩ Back to today
-        </button>
-      </div>
     </div>
   );
 }

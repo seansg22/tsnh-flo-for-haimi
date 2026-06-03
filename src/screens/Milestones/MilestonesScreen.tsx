@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { milestones } from '../../data/weeklyDevelopment';
 import { useApp } from '../../context/appStateContext';
@@ -22,6 +22,17 @@ export function MilestonesScreen() {
   const { state, dispatch } = useApp();
   const [filter, setFilter] = useState<CategoryFilter>('all');
   const [search, setSearch] = useState('');
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  function handleFilterChange(cat: CategoryFilter) {
+    setFilter(cat);
+    if (contentRef.current) {
+      const top = contentRef.current.getBoundingClientRect().top + window.scrollY;
+      const offset = stickyRef.current?.offsetHeight ?? 0;
+      window.scrollTo({ top: top - offset, behavior: 'smooth' });
+    }
+  }
 
   const categories: CategoryFilter[] = ['all', 'motor', 'cognitive', 'social', 'sensory', 'vaccination'];
   const query = search.trim().toLowerCase();
@@ -33,7 +44,7 @@ export function MilestonesScreen() {
 
   return (
     <div className="fade-in">
-      <div className="px-4 pt-6 pb-4">
+      <div className="px-4 pt-6">
         <h1 className="text-2xl font-extrabold text-app-text">Milestones</h1>
         <p className="text-textMuted text-sm font-medium mt-1">
           {achievedCount} of {milestones.length} achieved
@@ -46,8 +57,8 @@ export function MilestonesScreen() {
         </div>
       </div>
 
-      {/* Search */}
-      <div className="px-4 pb-3">
+      {/* Search + Category filter — sticky */}
+      <div ref={stickyRef} className="sticky top-0 z-10 bg-cream px-4 pb-3 pt-3">
         <div className="flex items-center gap-2 bg-warm rounded-xl px-3 py-2">
           <Search size={16} className="text-textMuted flex-shrink-0" />
           <input
@@ -61,25 +72,23 @@ export function MilestonesScreen() {
             <button onClick={() => setSearch('')} className="text-textMuted text-xs font-bold">✕</button>
           )}
         </div>
-      </div>
-
-      {/* Category filter */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-4 pb-4">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all ${
-              filter === cat ? 'bg-peach text-white' : 'bg-warm text-textMuted'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+        <div className="flex gap-2 overflow-x-auto no-scrollbar mt-3">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => handleFilterChange(cat)}
+              className={`flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold capitalize transition-all ${
+                filter === cat ? 'bg-peach text-white' : 'bg-warm text-textMuted'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Milestone groups */}
-      <div className="px-4 space-y-6 pb-6">
+      <div ref={contentRef} className="px-4 space-y-6 pb-6">
         {filtered.length === 0 && (
           <p className="text-center text-textMuted text-sm py-8">No milestones found</p>
         )}

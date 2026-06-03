@@ -37,7 +37,7 @@ export function CareTipsSection({ tips, soothingLabel, parentTip }: CareTipsSect
       </div>
 
       <div className="mt-4">
-        {/* Tab pills — 2×2 grid for 4 tabs */}
+        {/* Tab pills — 2×2 grid */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           {tabConfig.map(({ key, label, Icon, color, activeBg }) => (
             <button

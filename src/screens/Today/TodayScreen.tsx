@@ -31,17 +31,30 @@ export function TodayScreen() {
         <div>
           <h1 className="text-2xl font-extrabold text-app-text">{state.babyProfile?.name}</h1>
         </div>
-        <div className="w-10 h-10 rounded-full bg-peachLight flex items-center justify-center text-peachDark">
-          <Baby size={22} strokeWidth={1.8} />
+        <div className="flex items-center justify-end w-24">
+          {selectedWeek !== currentWeek ? (
+            <button
+              onClick={() => dispatch({ type: 'SET_SELECTED_WEEK', payload: currentWeek })}
+              className="flex items-center gap-1.5 bg-peach text-white text-xs font-bold px-3 h-10 rounded-full shadow-sm active:scale-95 transition-all"
+            >
+              ↩ Today
+            </button>
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-peachLight flex items-center justify-center text-peachDark">
+              <Baby size={22} strokeWidth={1.8} />
+            </div>
+          )}
         </div>
       </div>
 
       {/* Week strip */}
-      <WeekStrip
-        currentWeek={currentWeek}
-        selectedWeek={selectedWeek}
-        onSelectWeek={week => dispatch({ type: 'SET_SELECTED_WEEK', payload: week })}
-      />
+      <div className="sticky top-0 z-10 bg-cream/90 backdrop-blur-[2px] pb-1">
+        <WeekStrip
+          currentWeek={currentWeek}
+          selectedWeek={selectedWeek}
+          onSelectWeek={week => dispatch({ type: 'SET_SELECTED_WEEK', payload: week })}
+        />
+      </div>
 
       {/* Baby illustration */}
       <BabyIllustration week={selectedWeek} />
