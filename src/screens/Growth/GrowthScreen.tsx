@@ -115,7 +115,7 @@ export function GrowthScreen() {
       {entries.length > 0 && (
         <div className="px-4 space-y-2">
           <p className="text-xs font-bold text-textMuted uppercase tracking-wide mb-1">History</p>
-          {[...entries].reverse().map(entry => {
+          {[...entries].sort((a, b) => b.date.localeCompare(a.date)).map(entry => {
             const ageWeeks = birthDate
               ? differenceInWeeks(parseISO(entry.date), parseISO(birthDate))
               : null;
