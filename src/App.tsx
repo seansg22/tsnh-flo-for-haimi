@@ -8,6 +8,7 @@ import { MilestonesScreen } from './screens/Milestones/MilestonesScreen';
 import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
+import { AIScreen } from './screens/AI/AIScreen';
 
 const BookScreen = lazy(() =>
   import('./screens/Book/BookScreen').then((module) => ({ default: module.BookScreen })),
@@ -28,6 +29,10 @@ function AppContent() {
 
   if (!state.babyProfile || state.currentPage === 'onboarding') {
     return <OnboardingScreen />;
+  }
+
+  if (state.currentPage === 'ai') {
+    return <AIScreen />;
   }
 
   if (state.currentPage === 'book') {
