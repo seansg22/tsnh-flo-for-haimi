@@ -79,7 +79,7 @@ export function BottomNav() {
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="relative">
+      <div className="relative bg-white">
         {/* Nav bar */}
         <div className="relative bg-white border-t border-peachLight flex items-center h-16">
           {/* Left: Home + Progress */}
