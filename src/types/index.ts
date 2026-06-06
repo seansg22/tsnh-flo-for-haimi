@@ -1,7 +1,10 @@
+export type FeedingMethod = 'breast' | 'bottle' | 'formula';
+
 export interface BabyProfile {
   name: string;
   birthDate: string; // ISO "YYYY-MM-DD"
   gender: 'girl' | 'boy';
+  feedingMethod: FeedingMethod;
 }
 
 export interface Activity {

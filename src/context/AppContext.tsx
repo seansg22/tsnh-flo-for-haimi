@@ -1,5 +1,5 @@
 import { useReducer, useEffect, type ReactNode } from 'react';
-import type { AppState, AppAction, BabyProfile, Page } from '../types';
+import type { AppState, AppAction, BabyProfile, FeedingMethod, Page } from '../types';
 import { AppContext } from './appStateContext';
 
 const initialState: AppState = {
@@ -47,6 +47,7 @@ const defaultProfile: BabyProfile = {
   name: 'Hải Mi',
   birthDate: '2026-04-16',
   gender: 'girl',
+  feedingMethod: 'breast',
 };
 
 function loadState(): AppState {

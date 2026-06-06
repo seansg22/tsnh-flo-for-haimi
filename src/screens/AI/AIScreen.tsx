@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { milestones } from '../../data/weeklyDevelopment';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -17,12 +18,20 @@ export function AIScreen() {
   const [messages, setMessages] = useLocalStorage<Message[]>('ai-messages', []);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [streamingContent, setStreamingContent] = useState('');
+  const streamIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
+
+  useEffect(() => {
+    return () => {
+      if (streamIntervalRef.current) clearInterval(streamIntervalRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const vv = window.visualViewport;
@@ -43,8 +52,8 @@ export function AIScreen() {
     };
   }, []);
 
-  async function send() {
-    const text = input.trim();
+  async function send(override?: string) {
+    const text = (override ?? input).trim();
     if (!text || loading) return;
 
     setInput('');
@@ -68,23 +77,36 @@ export function AIScreen() {
           .join(', ')
       : null;
 
-    const prompt = `
-You are a careful baby development assistant.
+    const achievedSet = new Set(state.achievedMilestones);
+    const achievedLabels = milestones
+      .filter(m => achievedSet.has(m.id))
+      .map(m => `- [${m.category}] ${m.label}`);
+    const milestonesLine = achievedLabels.join(', ')
+
+    const feedingLabel: Record<string, string> = {
+      breast: 'breastfeeding',
+      bottle: 'bottle-feeding with expressed breast milk',
+      formula: 'formula feeding',
+    };
+
+    const systemInstruction = `You are a careful baby development assistant.
 
 Baby:
 - Name: ${baby.name}
 - Age: ${age.weeks} weeks
-- Gender: ${baby.gender}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}
-
-Question:
-${text}
+- Gender: ${baby.gender}
+- Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}
 
 Rules:
-- Address the user as "${baby.name}'s parent"
+- Address the user as "${baby.name}'s parent" in the language they used in their question.
 - Format answers as bullet points — one concise sentence per bullet
 - Use 3 to 5 bullets max unless user explicitly asks for more detail
-- Give practical, age-aware, gender-aware, measurement-aware guidance
-`;
+- Give practical, age-aware, gender-aware, measurement-aware guidance`;
+
+    const conversation = withUser.map(msg => ({
+      role: msg.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: msg.content }],
+    }));
 
     const MAX_RETRIES = 3;
     const RETRY_DELAY = 5000;
@@ -96,7 +118,10 @@ Rules:
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+            body: JSON.stringify({
+              system_instruction: { parts: [{ text: systemInstruction }] },
+              contents: conversation,
+            }),
           }
         );
 
@@ -105,8 +130,20 @@ Rules:
         const data = await res.json();
         const answer = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
 
-        setMessages([...withUser, { role: 'assistant', content: answer }]);
         setLoading(false);
+        let i = 0;
+        const CHUNK = 3;
+        streamIntervalRef.current = setInterval(() => {
+          i += CHUNK;
+          if (i >= answer.length) {
+            clearInterval(streamIntervalRef.current!);
+            streamIntervalRef.current = null;
+            setStreamingContent('');
+            setMessages([...withUser, { role: 'assistant', content: answer }]);
+          } else {
+            setStreamingContent(answer.slice(0, i));
+          }
+        }, 16);
         return;
       } catch {
         if (attempt < MAX_RETRIES) {
@@ -152,7 +189,14 @@ Rules:
         {messages.length > 0 && (
           <button
             type="button"
-            onClick={() => setMessages([])}
+            onClick={() => {
+              if (streamIntervalRef.current) {
+                clearInterval(streamIntervalRef.current);
+                streamIntervalRef.current = null;
+              }
+              setStreamingContent('');
+              setMessages([]);
+            }}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-black/5 text-textMuted"
             aria-label="Clear conversation"
           >
@@ -176,15 +220,17 @@ Rules:
 
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                msg.role === 'user'
-                  ? 'bg-peach text-white rounded-br-sm whitespace-pre-wrap'
-                  : 'bg-white text-app-text rounded-bl-sm shadow-sm prose prose-sm prose-neutral max-w-none'
-              }`}
-            >
-              {msg.role === 'user' ? msg.content : <ReactMarkdown>{msg.content}</ReactMarkdown>}
-            </div>
+            {msg.role === 'user' ? (
+              <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-br-sm text-sm leading-relaxed bg-peach text-black whitespace-pre-wrap">
+                {msg.content}
+              </div>
+            ) : (
+              <div className="text-sm leading-relaxed text-app-text">
+                <div className="prose prose-sm prose-neutral max-w-none">
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                </div>
+              </div>
+            )}
           </div>
         ))}
 
@@ -198,15 +244,45 @@ Rules:
           </div>
         )}
 
+        {streamingContent && (
+          <div className="flex justify-start">
+            <div className="text-sm leading-relaxed text-app-text">
+              <div className="prose prose-sm prose-neutral max-w-none">
+                <ReactMarkdown>{streamingContent}</ReactMarkdown>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
       {/* Input */}
       <div
-        className="flex-shrink-0 px-4 py-3 border-t border-black/5"
+        className="flex-shrink-0 border-t border-black/5"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
-        <div className="flex items-end gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto px-4 pt-3 pb-2 no-scrollbar">
+          <span className="flex-shrink-0 text-xs text-textMuted font-medium">Explore</span>
+          {([
+            ['Feeding', 'Give me a comprehensive guide on feeding for her current age — appropriate foods, feeding schedule, portion sizes, what to avoid, and any tips for making feeding easier. Please be thorough.'],
+            ['Sleep', 'Give me a comprehensive breakdown of her sleep needs at this age — total hours, nap schedule, nighttime sleep, common sleep challenges, and practical tips to improve sleep quality. Please be thorough.'],
+            ['Growth', 'Give me a comprehensive assessment of her growth based on her age, gender, and latest measurements — whether she is on track, what the healthy ranges are, signs to watch for, and when to consult a doctor. Please be thorough.'],
+            ['Vaccine', 'Give me a comprehensive vaccination guide for her age — what she should have received so far, what is coming up next, the schedule, possible side effects, and how to prepare. Please be thorough.'],
+            ['Milestones', 'Give me a comprehensive developmental overview based on her age and achieved milestones — what she should be doing now, what to focus on next, activities to encourage development, and any red flags to watch for. Please be thorough.'],
+            ['Crying', 'Give me a comprehensive guide on why babies her age cry and how to soothe them — common causes, how to identify each, the most effective soothing techniques, and when to seek medical advice. Please be thorough.'],
+          ] as [string, string][]).map(([label, prompt]) => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => send(prompt)}
+              className="flex-shrink-0 rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs text-app-text whitespace-nowrap active:bg-black/5"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-end gap-2 px-4 pb-3">
           <textarea
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -218,7 +294,7 @@ Rules:
           />
           <button
             type="button"
-            onClick={send}
+            onClick={() => send()}
             disabled={!input.trim() || loading}
             className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-peach text-white shadow-sm transition-opacity disabled:opacity-40 active:scale-95"
             aria-label="Send"

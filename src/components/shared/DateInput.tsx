@@ -35,13 +35,14 @@ interface DateInputProps {
   onChange: (v: string) => void;
   min?: string;
   max?: string;
+  compact?: boolean;
 }
 
 const selectClass =
-  'flex-1 min-w-0 rounded-xl border-2 border-peachLight bg-cream text-app-text text-sm font-semibold ' +
-  'px-2 py-3 outline-none transition-colors focus:border-peach appearance-none text-center';
+  'flex-1 min-w-0 rounded-xl border-2 border-peachLight bg-cream text-app-text font-semibold ' +
+  'px-2 outline-none transition-colors focus:border-peach appearance-none text-center';
 
-export function DateInput({ value, onChange, min, max }: DateInputProps) {
+export function DateInput({ value, onChange, min, max, compact }: DateInputProps) {
   const parsed = parseDate(value);
   const minParsed = parseDate(min ?? '');
   const maxParsed = parseDate(max ?? '');
@@ -69,13 +70,15 @@ export function DateInput({ value, onChange, min, max }: DateInputProps) {
     onChange(formatDate(year, month, Math.min(day, maxDay)));
   }
 
+  const sizeClass = compact ? 'py-2 text-sm' : 'py-3 text-sm';
+
   return (
     <div className="flex gap-2 w-full">
       {/* Month */}
       <select
         value={selectedMonth || ''}
         onChange={e => emit(selectedYear, Number(e.target.value), selectedDay)}
-        className={selectClass}
+        className={`${selectClass} ${sizeClass}`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Month</option>
@@ -88,7 +91,7 @@ export function DateInput({ value, onChange, min, max }: DateInputProps) {
       <select
         value={selectedDay || ''}
         onChange={e => emit(selectedYear, selectedMonth, Number(e.target.value))}
-        className={`${selectClass} max-w-[72px]`}
+        className={`${selectClass} ${sizeClass} max-w-[72px]`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Day</option>
@@ -101,7 +104,7 @@ export function DateInput({ value, onChange, min, max }: DateInputProps) {
       <select
         value={selectedYear || ''}
         onChange={e => emit(Number(e.target.value), selectedMonth, selectedDay)}
-        className={`${selectClass} max-w-[90px]`}
+        className={`${selectClass} ${sizeClass} max-w-[90px]`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Year</option>

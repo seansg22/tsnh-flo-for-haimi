@@ -85,7 +85,7 @@ export function InsightsScreen() {
       </div>
 
       {/* Summary */}
-      <div className="mx-4 bg-peachLight rounded-2xl p-4 mb-4">
+      <div className="mx-4 bg-peachLight rounded-2xl p-4">
         <p className="font-bold text-app-text text-sm mb-1">{data.title}</p>
         <p className="text-textMuted text-xs leading-relaxed">{data.summary}</p>
       </div>
