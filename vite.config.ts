@@ -27,6 +27,7 @@ function versionJsonPlugin(): Plugin {
 }
 
 export default defineConfig({
+  base: process.env.GITHUB_ACTIONS ? '/tsnh-flo-for-haimi/' : '/',
   define: {
     __BUILD_TIME__: JSON.stringify(buildTime),
   },
