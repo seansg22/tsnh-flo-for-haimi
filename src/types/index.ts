@@ -4,7 +4,7 @@ export interface BabyProfile {
   name: string;
   birthDate: string; // ISO "YYYY-MM-DD"
   gender: 'girl' | 'boy';
-  feedingMethod: FeedingMethod;
+  feedingMethod?: FeedingMethod;
 }
 
 export interface Activity {

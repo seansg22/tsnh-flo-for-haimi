@@ -1,5 +1,5 @@
 import { useReducer, useEffect, type ReactNode } from 'react';
-import type { AppState, AppAction, BabyProfile, FeedingMethod, Page } from '../types';
+import type { AppState, AppAction, BabyProfile, Page } from '../types';
 import { AppContext } from './appStateContext';
 
 const initialState: AppState = {
