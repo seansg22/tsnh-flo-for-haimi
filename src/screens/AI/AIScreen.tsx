@@ -24,6 +24,10 @@ export function AIScreen() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'instant' });
+  }, []);
+
+  useEffect(() => {
     const lastMsg = messages[messages.length - 1];
     if (loading || (lastMsg && lastMsg.role === 'user')) {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
