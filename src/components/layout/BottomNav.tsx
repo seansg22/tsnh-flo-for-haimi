@@ -66,6 +66,14 @@ export function BottomNav() {
         background: conic-gradient(from 0deg, #6366f1, #8b5cf6, #a78bfa, #7dd3fc, #818cf8, #6366f1);
         animation: ai-spin 15s linear infinite;
       }
+      @keyframes popup-appear {
+        from { opacity: 0; transform: translateY(8px) scale(0.95); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .popup-appear {
+        animation: popup-appear 0.18s ease-out forwards;
+        transform-origin: bottom center;
+      }
     `}</style>
     <div
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
@@ -75,10 +83,10 @@ export function BottomNav() {
         {/* Nav bar */}
         <div className="relative bg-white border-t border-peachLight flex items-center h-16">
           {/* Left: Home + Progress */}
-          <div className="flex flex-1 justify-start gap-6 pl-3 relative z-20">
+          <div className="flex flex-1 justify-start gap-3 pl-3 relative z-20">
             <div ref={homeMenuRef} className="relative flex flex-col items-center">
               {showHome && (
-                <div className="absolute bottom-full mb-2 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                <div className="popup-appear absolute bottom-full mb-2 left-0 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
                   {homeOptions.map(({ page, icon: Icon, label }) => {
                     const isActive = state.currentPage === page;
                     return (
@@ -109,7 +117,7 @@ export function BottomNav() {
 
             <div ref={menuRef} className="relative flex flex-col items-center">
               {showProgress && (
-                <div className="absolute bottom-full mb-2 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                <div className="popup-appear absolute bottom-full mb-2 right-0 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
                   {progressOptions.map(({ page, icon: Icon, label }) => {
                     const isActive = state.currentPage === page;
                     return (
@@ -143,7 +151,7 @@ export function BottomNav() {
           <div className="w-16 flex-shrink-0" />
 
           {/* Right tabs: Read + Settings */}
-          <div className="flex flex-1 justify-end gap-6 pr-3 relative z-20">
+          <div className="flex flex-1 justify-end gap-3 pr-3 relative z-20">
             <button
               onClick={() => navigate('book')}
               className={`flex flex-col items-center gap-0.5 py-2 px-3 text-xs font-semibold transition-colors ${
@@ -169,7 +177,7 @@ export function BottomNav() {
         {/* Center AI circle button — floats above the notch */}
         <button
           onClick={() => navigate('ai')}
-          className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[27%] w-16 h-16 rounded-full flex items-center justify-center shadow-lg z-30 overflow-hidden"
+          className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[35%] w-16 h-16 rounded-full flex items-center justify-center shadow-lg z-30 overflow-hidden"
         >
           <div className="ai-spin-gradient" />
           <Sparkles size={28} strokeWidth={2.2} className="text-white relative z-10" />

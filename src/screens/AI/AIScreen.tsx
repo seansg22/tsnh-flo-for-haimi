@@ -24,7 +24,10 @@ export function AIScreen() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const lastMsg = messages[messages.length - 1];
+    if (loading || (lastMsg && lastMsg.role === 'user')) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages, loading]);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ Baby:
 Rules:
 - Address the user as "${baby.name}'s parent" in the language they used in their question.
 - Format answers as bullet points — one concise sentence per bullet
-- Use 3 to 5 bullets max unless user explicitly asks for more detail
+- Use 3 to 5 bullets max unless user explicitly asks to be more comprehensive
 - Give practical, age-aware, gender-aware, measurement-aware guidance`;
 
     const conversation = withUser.map(msg => ({
@@ -108,52 +111,63 @@ Rules:
       parts: [{ text: msg.content }],
     }));
 
+    const MODELS = [
+      'gemini-3.5-flash',
+      'gemini-3-flash',
+      'gemini-3.1-flash-lite',
+      'gemma-4-31b',
+    ];
     const MAX_RETRIES = 3;
     const RETRY_DELAY = 5000;
 
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              system_instruction: { parts: [{ text: systemInstruction }] },
-              contents: conversation,
-            }),
-          }
-        );
+    for (const model of MODELS) {
+      let succeeded = false;
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                system_instruction: { parts: [{ text: systemInstruction }] },
+                contents: conversation,
+              }),
+            }
+          );
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const data = await res.json();
-        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
+          const data = await res.json();
+          const answer = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
 
-        setLoading(false);
-        let i = 0;
-        const CHUNK = 3;
-        streamIntervalRef.current = setInterval(() => {
-          i += CHUNK;
-          if (i >= answer.length) {
-            clearInterval(streamIntervalRef.current!);
-            streamIntervalRef.current = null;
-            setStreamingContent('');
-            setMessages([...withUser, { role: 'assistant', content: answer }]);
-          } else {
-            setStreamingContent(answer.slice(0, i));
-          }
-        }, 16);
-        return;
-      } catch {
-        if (attempt < MAX_RETRIES) {
-          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-        } else {
-          setMessages([...withUser, { role: 'assistant', content: 'Something went wrong after several attempts. Please try again later.' }]);
           setLoading(false);
+          let i = 0;
+          const CHUNK = 3;
+          streamIntervalRef.current = setInterval(() => {
+            i += CHUNK;
+            if (i >= answer.length) {
+              clearInterval(streamIntervalRef.current!);
+              streamIntervalRef.current = null;
+              setStreamingContent('');
+              setMessages([...withUser, { role: 'assistant', content: answer }]);
+            } else {
+              setStreamingContent(answer.slice(0, i));
+            }
+          }, 16);
+          succeeded = true;
+          return;
+        } catch {
+          if (attempt < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+          }
         }
       }
+      if (succeeded) return;
     }
+
+    setMessages([...withUser, { role: 'assistant', content: 'Something went wrong after several attempts. Please try again later.' }]);
+    setLoading(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

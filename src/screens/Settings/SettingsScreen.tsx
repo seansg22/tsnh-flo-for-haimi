@@ -79,44 +79,42 @@ export function SettingsScreen() {
           <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Birth date</p>
           <DateInput value={birthDate} max={today} onChange={setBirthDate} compact />
         </div>
-        <div className="flex gap-3">
-          <div className="flex-[2]">
-            <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Gender</p>
-            <div className="flex gap-1.5">
-              {(['girl', 'boy'] as const).map(g => (
-                <button
-                  key={g}
-                  onClick={() => setGender(g)}
-                  className={`flex-1 py-2 rounded-xl text-sm font-bold capitalize transition-all border-2 ${gender === g
-                    ? 'bg-peach text-white border-peach'
-                    : 'bg-cream text-textMuted border-peachLight'
-                  }`}
-                >
-                  {g === 'girl' ? '♀ Girl' : '♂ Boy'}
-                </button>
-              ))}
-            </div>
+        <div>
+          <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Gender</p>
+          <div className="flex gap-1.5">
+            {(['girl', 'boy'] as const).map(g => (
+              <button
+                key={g}
+                onClick={() => setGender(g)}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold capitalize transition-all border-2 ${gender === g
+                  ? 'bg-peach text-white border-peach'
+                  : 'bg-cream text-textMuted border-peachLight'
+                }`}
+              >
+                {g === 'girl' ? '♀ Girl' : '♂ Boy'}
+              </button>
+            ))}
           </div>
-          <div className="flex-[3]">
-            <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Feeding</p>
-            <div className="flex gap-1.5">
-              {([
-                ['breast', 'Breast'],
-                ['bottle', 'Bottle'],
-                ['formula', 'Formula'],
-              ] as [FeedingMethod, string][]).map(([value, label]) => (
-                <button
-                  key={value}
-                  onClick={() => setFeedingMethod(value)}
-                  className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all border-2 ${feedingMethod === value
-                    ? 'bg-peach text-white border-peach'
-                    : 'bg-cream text-textMuted border-peachLight'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Feeding</p>
+          <div className="flex gap-1.5">
+            {([
+              ['breast', 'Breast'],
+              ['bottle', 'Bottle'],
+              ['formula', 'Formula'],
+            ] as [FeedingMethod, string][]).map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => setFeedingMethod(value)}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all border-2 ${feedingMethod === value
+                  ? 'bg-peach text-white border-peach'
+                  : 'bg-cream text-textMuted border-peachLight'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
         <Button onClick={handleSave} disabled={!name.trim() || !birthDate} className="w-full">
