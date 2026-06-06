@@ -1,38 +1,181 @@
-import { Home, Star, Sparkles, TrendingUp, Settings } from 'lucide-react';
+import { Home, Star, Sparkles, TrendingUp, Settings, NotebookPen, BookOpenText, Baby } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/appStateContext';
 import type { Page } from '../../types';
 
-const tabs: { page: Page; icon: React.ElementType; label: string }[] = [
-  { page: 'today',      icon: Home,       label: 'Today'      },
-  { page: 'insights',   icon: Sparkles,   label: 'Insights'   },
+const homeOptions: { page: Page; icon: React.ElementType; label: string }[] = [
+  { page: 'today',    icon: Home,     label: 'Today'    },
+  { page: 'insights', icon: Sparkles, label: 'Insights' },
+];
+
+
+const progressOptions: { page: Page; icon: React.ElementType; label: string }[] = [
   { page: 'milestones', icon: Star,       label: 'Milestones' },
   { page: 'growth',     icon: TrendingUp, label: 'Growth'     },
-  { page: 'settings',   icon: Settings,   label: 'Settings'   },
 ];
 
 export function BottomNav() {
   const { state, dispatch } = useApp();
+  const [showProgress, setShowProgress] = useState(false);
+  const [showHome, setShowHome] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const homeMenuRef = useRef<HTMLDivElement>(null);
+
+  const isProgressActive = state.currentPage === 'milestones' || state.currentPage === 'growth';
+  const isHomeActive = state.currentPage === 'today' || state.currentPage === 'insights';
+
+  useEffect(() => {
+    if (!showProgress) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowProgress(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showProgress]);
+
+  useEffect(() => {
+    if (!showHome) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (homeMenuRef.current && !homeMenuRef.current.contains(e.target as Node)) {
+        setShowHome(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showHome]);
+
+  function navigate(page: Page) {
+    setShowProgress(false);
+    setShowHome(false);
+    dispatch({ type: 'SET_PAGE', payload: page });
+  }
 
   return (
-    <nav
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-peachLight flex z-50"
+    <>
+    <style>{`
+      @keyframes ai-spin {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to   { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+      .ai-spin-gradient {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 220%; height: 220%;
+        background: conic-gradient(from 0deg, #6366f1, #8b5cf6, #a78bfa, #7dd3fc, #818cf8, #6366f1);
+        animation: ai-spin 15s linear infinite;
+      }
+    `}</style>
+    <div
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      {tabs.map(({ page, icon: Icon, label }) => {
-        const isActive = state.currentPage === page;
-        return (
-          <button
-            key={page}
-            onClick={() => dispatch({ type: 'SET_PAGE', payload: page })}
-            className={`flex-1 flex flex-col items-center py-3 gap-0.5 text-xs font-semibold transition-colors ${
-              isActive ? 'text-peachDark' : 'text-textMuted'
-            }`}
-          >
-            <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-            <span>{label}</span>
-          </button>
-        );
-      })}
-    </nav>
+      <div className="relative">
+        {/* Nav bar */}
+        <div className="relative bg-white border-t border-peachLight flex items-center h-16">
+          {/* Left: Home + Progress */}
+          <div className="flex flex-1 justify-start gap-6 pl-3 relative z-20">
+            <div ref={homeMenuRef} className="relative flex flex-col items-center">
+              {showHome && (
+                <div className="absolute bottom-full mb-2 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                  {homeOptions.map(({ page, icon: Icon, label }) => {
+                    const isActive = state.currentPage === page;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => navigate(page)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors ${
+                          isActive ? 'text-peachDark bg-peachLight/40' : 'text-textMuted hover:text-peachDark'
+                        }`}
+                      >
+                        <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} />
+                        <span>{label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              <button
+                onClick={() => setShowHome(v => !v)}
+                className={`flex flex-col items-center gap-0.5 py-2 px-3 text-xs font-semibold transition-colors ${
+                  isHomeActive ? 'text-peachDark' : 'text-textMuted'
+                }`}
+              >
+                <Baby size={22} strokeWidth={isHomeActive ? 2.5 : 1.8} />
+                <span>Explore</span>
+              </button>
+            </div>
+
+            <div ref={menuRef} className="relative flex flex-col items-center">
+              {showProgress && (
+                <div className="absolute bottom-full mb-2 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                  {progressOptions.map(({ page, icon: Icon, label }) => {
+                    const isActive = state.currentPage === page;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => navigate(page)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors ${
+                          isActive ? 'text-peachDark bg-peachLight/40' : 'text-textMuted hover:text-peachDark'
+                        }`}
+                      >
+                        <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} />
+                        <span>{label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              <button
+                onClick={() => setShowProgress(v => !v)}
+                className={`flex flex-col items-center gap-0.5 py-2 px-3 text-xs font-semibold transition-colors ${
+                  isProgressActive ? 'text-peachDark' : 'text-textMuted'
+                }`}
+              >
+                <NotebookPen size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
+                <span>Track</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Center spacer for the button */}
+          <div className="w-16 flex-shrink-0" />
+
+          {/* Right tabs: Read + Settings */}
+          <div className="flex flex-1 justify-end gap-6 pr-3 relative z-20">
+            <button
+              onClick={() => navigate('book')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 text-xs font-semibold transition-colors ${
+                state.currentPage === 'book' ? 'text-peachDark' : 'text-textMuted'
+              }`}
+            >
+              <BookOpenText size={22} strokeWidth={state.currentPage === 'book' ? 2.5 : 1.8} />
+              <span>Read</span>
+            </button>
+
+            <button
+              onClick={() => navigate('settings')}
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 text-xs font-semibold transition-colors ${
+                state.currentPage === 'settings' ? 'text-peachDark' : 'text-textMuted'
+              }`}
+            >
+              <Settings size={22} strokeWidth={state.currentPage === 'settings' ? 2.5 : 1.8} />
+              <span>Settings</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Center AI circle button — floats above the notch */}
+        <button
+          onClick={() => navigate('ai')}
+          className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[27%] w-16 h-16 rounded-full flex items-center justify-center shadow-lg z-30 overflow-hidden"
+        >
+          <div className="ai-spin-gradient" />
+          <Sparkles size={28} strokeWidth={2.2} className="text-white relative z-10" />
+        </button>
+      </div>
+    </div>
+    </>
   );
 }
