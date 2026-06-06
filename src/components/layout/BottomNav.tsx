@@ -76,7 +76,7 @@ export function BottomNav() {
       }
     `}</style>
     <div
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-white"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="relative bg-white">
