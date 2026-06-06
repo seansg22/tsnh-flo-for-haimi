@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-if (window.location.pathname !== '/') {
+if (window.location.pathname !== '/' && !window.location.hostname.endsWith('.github.io')) {
   window.history.replaceState(null, '', '/');
 }
 
