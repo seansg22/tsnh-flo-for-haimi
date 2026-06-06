@@ -9,7 +9,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useGesture } from '@use-gesture/react';
 import { useSpring, animated, to } from '@react-spring/web';
 
-const bookUrl = '/book.pdf';
+const bookUrl = `${import.meta.env.BASE_URL}book.pdf`;
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
