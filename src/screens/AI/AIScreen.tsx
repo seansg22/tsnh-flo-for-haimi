@@ -276,7 +276,7 @@ Rules:
         className="flex-shrink-0 border-t border-black/5"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
-        <div className="flex items-center gap-2 overflow-x-auto px-4 pt-3 pb-2 no-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto px-4 pt-2 pb-2 no-scrollbar">
           <span className="flex-shrink-0 text-xs text-textMuted font-medium">Explore</span>
           {([
             ['Feeding', 'Give me a comprehensive guide on feeding for her current age — appropriate foods, feeding schedule, portion sizes, what to avoid, and any tips for making feeding easier. Please be thorough.'],
@@ -296,7 +296,7 @@ Rules:
             </button>
           ))}
         </div>
-        <div className="flex items-end gap-2 px-4 pb-3">
+        <div className="flex items-end gap-2 px-4">
           <textarea
             value={input}
             onChange={e => setInput(e.target.value)}
