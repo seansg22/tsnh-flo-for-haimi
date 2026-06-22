@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Dumbbell, Brain, Heart, Eye } from 'lucide-react';
 import { useApp } from '../../context/appStateContext';
 import { getInsightExplanation } from '../../data/insightExplanations';
@@ -39,7 +39,14 @@ export function InsightsScreen() {
     }
   }
 
-  const selectedWeek = state.selectedWeek;
+  // ponytail: seed selectedWeek to currentWeek on first load (state initializes to 0)
+  useEffect(() => {
+    if (state.selectedWeek === 0 && currentWeek > 0) {
+      dispatch({ type: 'SET_SELECTED_WEEK', payload: currentWeek });
+    }
+  }, [currentWeek]);
+
+  const selectedWeek = state.selectedWeek === 0 ? currentWeek : state.selectedWeek;
   const data = getWeekData(selectedWeek);
 
   function changeWeek(delta: number) {
