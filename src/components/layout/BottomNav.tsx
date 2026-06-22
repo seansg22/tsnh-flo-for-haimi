@@ -155,7 +155,7 @@ export function BottomNav() {
                 <div className="relative">
                   <NotebookPen size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
                   {unfinishedMilestones > 0 && (
-                    <span className="absolute -top-4 -right-4 min-w-[18px] h-[18px] px-1 bg-peachDark text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                    <span className="absolute -top-2 -right-4 min-w-[18px] h-[18px] px-1 bg-peachDark text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                       {unfinishedMilestones > 99 ? '99+' : unfinishedMilestones}
                     </span>
                   )}
