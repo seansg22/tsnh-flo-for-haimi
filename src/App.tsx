@@ -65,7 +65,7 @@ function AppContent() {
 
   return (
     <AppShell>
-      {state.currentPage === 'today' && (
+      {(state.currentPage === 'today' || state.currentPage === 'insights') && (
         <OverdueBanner
           count={overdueCount}
           babyName={state.babyProfile?.name ?? ''}
