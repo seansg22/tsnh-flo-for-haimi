@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Send, Sparkles, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
@@ -105,7 +105,8 @@ Baby:
 - Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}
 
 Rules:
-- Address the user as "${baby.name}'s parent" in the language they used in their question.
+- Address the user as "${baby.name}'s parent" in the language they used in their question, but only in the your first response of the conversation.
+- Answer in the language the user used in their question.
 - Format answers as bullet points — one concise sentence per bullet
 - Use 3 to 5 bullets max unless user explicitly asks to be more comprehensive
 - Give practical, age-aware, gender-aware, measurement-aware guidance`;
