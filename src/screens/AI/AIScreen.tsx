@@ -18,6 +18,7 @@ export function AIScreen() {
   const [messages, setMessages] = useLocalStorage<Message[]>('ai-messages', []);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [streamingContent, setStreamingContent] = useState('');
   const streamIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -248,6 +249,19 @@ Rules:
                 <div className="prose prose-sm prose-neutral max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(msg.content);
+                    setCopiedIndex(i);
+                    setTimeout(() => setCopiedIndex(null), 1500);
+                  }}
+                  className="mt-3 mb-2 flex items-center gap-1 text-sm text-textMuted active:text-app-text ml-6"
+                  aria-label="Copy message"
+                >
+                  {copiedIndex === i ? <Check size={12} strokeWidth={2.2} /> : <Copy size={12} strokeWidth={2.2} />}
+                  {copiedIndex === i ? 'Copied' : 'Copy'}
+                </button>
               </div>
             )}
           </div>
