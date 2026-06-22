@@ -1,6 +1,8 @@
 import { Home, Star, Sparkles, TrendingUp, Settings, NotebookPen, BookOpenText, Baby } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/appStateContext';
+import { milestones } from '../../data/weeklyDevelopment';
+import { useBabyAge } from '../../hooks/useBabyAge';
 import type { Page } from '../../types';
 
 const homeOptions: { page: Page; icon: React.ElementType; label: string }[] = [
@@ -23,6 +25,10 @@ export function BottomNav() {
 
   const isProgressActive = state.currentPage === 'milestones' || state.currentPage === 'growth';
   const isHomeActive = state.currentPage === 'today' || state.currentPage === 'insights';
+  const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
+  const unfinishedMilestones = milestones.filter(
+    m => m.weekRange[1] <= currentWeek && !state.achievedMilestones.includes(m.id)
+  ).length;
 
   useEffect(() => {
     if (!showProgress) return;
@@ -117,7 +123,7 @@ export function BottomNav() {
 
             <div ref={menuRef} className="relative flex flex-col items-center">
               {showProgress && (
-                <div className="popup-appear absolute bottom-full mb-2 right-0 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                <div className="popup-appear absolute bottom-full mb-2 -right-6 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
                   {progressOptions.map(({ page, icon: Icon, label }) => {
                     const isActive = state.currentPage === page;
                     return (
@@ -130,6 +136,11 @@ export function BottomNav() {
                       >
                         <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} />
                         <span>{label}</span>
+                        {page === 'milestones' && unfinishedMilestones > 0 && (
+                          <span className="ml-auto min-w-[20px] h-5 px-1.5 bg-peachLight text-peachDark text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                            {unfinishedMilestones > 99 ? '99+' : unfinishedMilestones}
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -141,7 +152,14 @@ export function BottomNav() {
                   isProgressActive ? 'text-peachDark' : 'text-textMuted'
                 }`}
               >
-                <NotebookPen size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
+                <div className="relative">
+                  <NotebookPen size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
+                  {unfinishedMilestones > 0 && (
+                    <span className="absolute -top-4 -right-4 min-w-[18px] h-[18px] px-1 bg-peachDark text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                      {unfinishedMilestones > 99 ? '99+' : unfinishedMilestones}
+                    </span>
+                  )}
+                </div>
                 <span>Track</span>
               </button>
             </div>

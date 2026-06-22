@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 import type { Milestone } from '../../types';
 
 function fmtWeek(w: number): string {
@@ -18,20 +18,21 @@ function fmtWeekRange(start: number, end: number): string {
 interface MilestoneItemProps {
   milestone: Milestone;
   achieved: boolean;
+  overdue?: boolean;
   onToggle: () => void;
 }
 
-export function MilestoneItem({ milestone, achieved, onToggle }: MilestoneItemProps) {
+export function MilestoneItem({ milestone, achieved, overdue, onToggle }: MilestoneItemProps) {
   const [expanded, setExpanded] = useState(false);
   const hasDescription = !!milestone.description;
 
   return (
-    <div className={`rounded-xl overflow-hidden transition-all ${achieved ? 'bg-green-50 opacity-80' : 'bg-white'}`}>
+    <div className={`rounded-xl overflow-hidden transition-all ${achieved ? 'bg-green-50 opacity-80 border border-green-200' : overdue ? 'bg-amber-50/60 border border-orange-300' : 'bg-white border border-gray-200'}`}>
       <div className="flex items-start gap-3 p-3">
         <button
           onClick={onToggle}
           className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all ${
-            achieved ? 'bg-success border-success' : 'border-peachLight'
+            achieved ? 'bg-success border-success' : overdue ? 'border-orange-300' : 'border-peachLight'
           }`}
         >
           {achieved && <Check size={14} strokeWidth={3} className="text-white" />}
@@ -44,6 +45,7 @@ export function MilestoneItem({ milestone, achieved, onToggle }: MilestoneItemPr
             <span className="text-xs text-textMuted">
               {fmtWeekRange(milestone.weekRange[0], milestone.weekRange[1])}
             </span>
+            {overdue && <span className="text-xs text-orange-400 font-semibold flex items-center gap-0.5"><AlertCircle size={11} /> Overdue</span>}
           </div>
         </div>
         {hasDescription && (

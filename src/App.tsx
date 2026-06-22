@@ -9,6 +9,9 @@ import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
 import { AIScreen } from './screens/AI/AIScreen';
+import { OverdueBanner } from './components/today/OverdueBanner';
+import { milestones } from './data/weeklyDevelopment';
+import { useBabyAge } from './hooks/useBabyAge';
 
 const BookScreen = lazy(() =>
   import('./screens/Book/BookScreen').then((module) => ({ default: module.BookScreen })),
@@ -16,6 +19,9 @@ const BookScreen = lazy(() =>
 
 function AppContent() {
   const { state, dispatch } = useApp();
+  const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
+  const achieved = new Set(state.achievedMilestones);
+  const overdueCount = milestones.filter(m => m.weekRange[1] <= currentWeek && !achieved.has(m.id)).length;
 
   useEffect(() => {
     if (!state.babyProfile && state.currentPage !== 'onboarding') {
@@ -59,6 +65,13 @@ function AppContent() {
 
   return (
     <AppShell>
+      {state.currentPage === 'today' && (
+        <OverdueBanner
+          count={overdueCount}
+          babyName={state.babyProfile?.name ?? ''}
+          onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'milestones' })}
+        />
+      )}
       {pages[state.currentPage] ?? <TodayScreen />}
     </AppShell>
   );

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { milestones } from '../../data/weeklyDevelopment';
 import { useApp } from '../../context/appStateContext';
+import { useBabyAge } from '../../hooks/useBabyAge';
 import { MilestoneItem } from '../../components/milestones/MilestoneItem';
 import type { Milestone } from '../../types';
 
@@ -20,6 +21,7 @@ type CategoryFilter = 'all' | Milestone['category'];
 
 export function MilestonesScreen() {
   const { state, dispatch } = useApp();
+  const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
   const [filter, setFilter] = useState<CategoryFilter>('all');
   const [search, setSearch] = useState('');
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -38,7 +40,8 @@ export function MilestonesScreen() {
   const query = search.trim().toLowerCase();
   const filtered = milestones
     .filter(m => filter === 'all' || m.category === filter)
-    .filter(m => !query || m.label.toLowerCase().includes(query) || m.description?.toLowerCase().includes(query));
+    .filter(m => !query || m.label.toLowerCase().includes(query) || m.description?.toLowerCase().includes(query))
+    .sort((a, b) => a.weekRange[0] - b.weekRange[0] || a.weekRange[1] - b.weekRange[1]);
   const achieved = new Set(state.achievedMilestones);
   const achievedCount = milestones.filter(m => achieved.has(m.id)).length;
 
@@ -106,6 +109,7 @@ export function MilestonesScreen() {
                     key={m.id}
                     milestone={m}
                     achieved={achieved.has(m.id)}
+                    overdue={m.weekRange[1] <= currentWeek && !achieved.has(m.id)}
                     onToggle={() => dispatch({ type: 'TOGGLE_MILESTONE', payload: m.id })}
                   />
                 ))}
