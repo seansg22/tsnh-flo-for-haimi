@@ -82,4 +82,5 @@ export type AppAction =
   | { type: 'ADD_GROWTH_ENTRY'; payload: GrowthEntry }
   | { type: 'UPDATE_GROWTH_ENTRY'; payload: GrowthEntry }
   | { type: 'DELETE_GROWTH_ENTRY'; payload: string }
-  | { type: 'SET_PAGE'; payload: Page };
+  | { type: 'SET_PAGE'; payload: Page }
+  | { type: 'IMPORT_DATA'; payload: { achievedMilestones: string[]; growthEntries: GrowthEntry[] } };

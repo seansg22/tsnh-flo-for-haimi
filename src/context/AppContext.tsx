@@ -38,6 +38,8 @@ function reducer(state: AppState, action: AppAction): AppState {
       return { ...state, growthEntries: state.growthEntries.filter(e => e.id !== action.payload) };
     case 'SET_PAGE':
       return { ...state, currentPage: action.payload };
+    case 'IMPORT_DATA':
+      return { ...state, achievedMilestones: action.payload.achievedMilestones, growthEntries: action.payload.growthEntries };
     default:
       return state;
   }
