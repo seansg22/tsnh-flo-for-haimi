@@ -68,7 +68,7 @@ export function WonderWeekCalendar({ birthDate }: Props) {
   }
 
   return (
-    <div className="px-4 pt-3 pb-2">
+    <div className="fade-in px-4 pt-6 pb-4">
       <style>{`
         @keyframes slide-up {
           from { transform: translateX(-50%) translateY(100%); opacity: 0; }
@@ -82,8 +82,8 @@ export function WonderWeekCalendar({ birthDate }: Props) {
         .slide-down { animation: slide-down 0.16s cubic-bezier(0.4,0,1,1)     forwards; }
       `}</style>
       {/* Title */}
-      <h1 className="text-xl font-bold text-app-text mb-1">Wonder Weeks</h1>
-      <p className="text-xs text-textMuted mb-3">Developmental leaps calendar</p>
+      <h1 className="text-2xl font-extrabold text-app-text">Wonder Weeks</h1>
+      <p className="text-sm text-textMuted mt-1 mb-4">Developmental leaps calendar</p>
 
       {/* Month nav */}
       <div className="flex items-center justify-between mb-3">
@@ -174,28 +174,28 @@ export function WonderWeekCalendar({ birthDate }: Props) {
             className={`${closing ? 'slide-down' : 'slide-up'} fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-white rounded-t-3xl shadow-2xl max-h-[55vh] flex flex-col`}
             onAnimationEnd={onSheetAnimEnd}
           >
-            <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-peachLight/60">
-              <span className="text-sm font-bold text-app-text">{format(selectedDay, 'EEEE, MMMM d')}</span>
+            <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-peachLight/60">
+              <span className="text-base font-bold text-app-text">{format(selectedDay, 'EEEE, MMMM d')}</span>
               <button onClick={closeSheet} className="p-1 text-textMuted">
                 <X size={18} />
               </button>
             </div>
-            <div className="overflow-y-auto px-5 pt-3 pb-24 flex-1">
+            <div className="overflow-y-auto px-5 pt-4 pb-24 flex-1">
             {selectedLeap && (
               <>
-                <div className="bg-red-100 rounded-2xl px-4 py-3 mb-2">
-                  <p className="text-sm font-bold text-red-800 mb-1">
+                <div className="bg-red-100 rounded-2xl px-4 py-4 mb-3">
+                  <p className="text-base font-bold text-red-800 mb-1.5">
                     Wonder Week {selectedLeap.number} · {selectedLeap.name}
                   </p>
                   <p className="text-sm text-red-700 leading-relaxed">{selectedLeap.description}</p>
                 </div>
-                <div className="bg-warm rounded-2xl px-4 py-3 mb-3">
-                  <p className="text-sm font-bold text-app-text mb-2">Tips for you</p>
-                  <div className="flex flex-col gap-2">
+                <div className="bg-warm rounded-2xl px-4 py-4 mb-4">
+                  <p className="text-base font-bold text-app-text mb-3">Tips for you</p>
+                  <div className="flex flex-col gap-3">
                     {selectedLeap.tips.map((tip, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-peachDark flex-shrink-0" />
-                        <p className="text-sm text-app-text leading-snug">{tip}</p>
+                      <div key={i} className="flex items-start gap-2.5">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-peachDark flex-shrink-0" />
+                        <p className="text-sm text-app-text leading-relaxed">{tip}</p>
                       </div>
                     ))}
                   </div>

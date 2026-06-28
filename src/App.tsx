@@ -63,9 +63,7 @@ function AppContent() {
     growth: <GrowthScreen />,
     settings: <SettingsScreen />,
     wonderweek: state.babyProfile ? (
-      <div className="px-4 pt-6 pb-6">
-        <WonderWeekCalendar birthDate={state.babyProfile.birthDate} />
-      </div>
+      <WonderWeekCalendar birthDate={state.babyProfile.birthDate} />
     ) : null,
   };
 
