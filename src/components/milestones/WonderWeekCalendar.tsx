@@ -22,7 +22,7 @@ const LEAP_BG: Record<1 | 2 | 3, string> = {
   3: 'bg-red-300',
 };
 
-export function MilestoneCalendar({ birthDate, milestones, achievedMilestones, onToggle }: Props) {
+export function WonderWeekCalendar({ birthDate, milestones, achievedMilestones, onToggle }: Props) {
   const [viewMonth, setViewMonth] = useState(() => new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [closing, setClosing] = useState(false);
@@ -104,8 +104,8 @@ export function MilestoneCalendar({ birthDate, milestones, achievedMilestones, o
         .slide-down { animation: slide-down 0.16s cubic-bezier(0.4,0,1,1)     forwards; }
       `}</style>
       {/* Title */}
-      <h1 className="text-xl font-bold text-app-text mb-1">Calendar</h1>
-      <p className="text-xs text-textMuted mb-3">Milestones & Wonder Weeks</p>
+      <h1 className="text-xl font-bold text-app-text mb-1">Wonder Weeks</h1>
+      <p className="text-xs text-textMuted mb-3">Developmental leaps calendar</p>
 
       {/* Month nav */}
       <div className="flex items-center justify-between mb-3">

@@ -8,7 +8,7 @@ import type { Page } from '../../types';
 const homeOptions: { page: Page; icon: React.ElementType; label: string }[] = [
   { page: 'today',    icon: Home,         label: 'Today'    },
   { page: 'insights', icon: Sparkles,     label: 'Insights' },
-  { page: 'calendar', icon: CalendarDays, label: 'Calendar' },
+  { page: 'wonderweek', icon: CalendarDays, label: 'Wonder Week' },
 ];
 
 
@@ -25,7 +25,7 @@ export function BottomNav() {
   const homeMenuRef = useRef<HTMLDivElement>(null);
 
   const isProgressActive = state.currentPage === 'milestones' || state.currentPage === 'growth';
-  const isHomeActive = state.currentPage === 'today' || state.currentPage === 'insights' || state.currentPage === 'calendar';
+  const isHomeActive = state.currentPage === 'today' || state.currentPage === 'insights' || state.currentPage === 'wonderweek';
   const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
   const unfinishedMilestones = milestones.filter(
     m => m.weekRange[1] <= currentWeek && !state.achievedMilestones.includes(m.id)
@@ -93,7 +93,7 @@ export function BottomNav() {
           <div className="flex flex-1 justify-start gap-3 pl-3 relative z-20">
             <div ref={homeMenuRef} className="relative flex flex-col items-center">
               {showHome && (
-                <div className="popup-appear absolute bottom-full mb-2 left-0 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                <div className="popup-appear absolute bottom-full mb-2 left-0 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[140px]">
                   {homeOptions.map(({ page, icon: Icon, label }) => {
                     const isActive = state.currentPage === page;
                     return (
@@ -124,7 +124,7 @@ export function BottomNav() {
 
             <div ref={menuRef} className="relative flex flex-col items-center">
               {showProgress && (
-                <div className="popup-appear absolute bottom-full mb-2 -right-6 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[110px]">
+                <div className="popup-appear absolute bottom-full mb-2 -right-6 flex flex-col items-center gap-1 bg-white border border-peachLight rounded-2xl shadow-lg py-2 px-1 min-w-[140px]">
                   {progressOptions.map(({ page, icon: Icon, label }) => {
                     const isActive = state.currentPage === page;
                     return (

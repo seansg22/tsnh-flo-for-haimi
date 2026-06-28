@@ -10,7 +10,7 @@ import { SettingsScreen } from './screens/Settings/SettingsScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
 import { AIScreen } from './screens/AI/AIScreen';
 import { OverdueBanner } from './components/today/OverdueBanner';
-import { MilestoneCalendar } from './components/milestones/MilestoneCalendar';
+import { WonderWeekCalendar } from './components/milestones/WonderWeekCalendar';
 import { milestones } from './data/weeklyDevelopment';
 import { useBabyAge } from './hooks/useBabyAge';
 
@@ -62,9 +62,9 @@ function AppContent() {
     insights: <InsightsScreen />,
     growth: <GrowthScreen />,
     settings: <SettingsScreen />,
-    calendar: state.babyProfile ? (
+    wonderweek: state.babyProfile ? (
       <div className="px-4 pt-6 pb-6">
-        <MilestoneCalendar
+        <WonderWeekCalendar
           birthDate={state.babyProfile.birthDate}
           milestones={milestones}
           achievedMilestones={achieved}
