@@ -4,14 +4,10 @@ import {
   startOfMonth, endOfMonth, eachDayOfInterval,
   isSameDay, isSameMonth, addDays, parseISO, format, getDay, differenceInWeeks,
 } from 'date-fns';
-import type { Milestone } from '../../types';
 import { leaps, type Leap } from '../../data/wonderWeeks';
 
 interface Props {
   birthDate: string;
-  milestones: Milestone[];
-  achievedMilestones: Set<string>;
-  onToggle: (id: string) => void;
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -22,7 +18,7 @@ const LEAP_BG: Record<1 | 2 | 3, string> = {
   3: 'bg-red-300',
 };
 
-export function WonderWeekCalendar({ birthDate, milestones, achievedMilestones, onToggle }: Props) {
+export function WonderWeekCalendar({ birthDate }: Props) {
   const [viewMonth, setViewMonth] = useState(() => new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [closing, setClosing] = useState(false);
@@ -36,15 +32,7 @@ export function WonderWeekCalendar({ birthDate, milestones, achievedMilestones, 
 
   const birth = useMemo(() => parseISO(birthDate), [birthDate]);
 
-  const { onsetMap, leapDays } = useMemo(() => {
-    const onset = new Map<string, Milestone[]>();
-    for (const m of milestones) {
-      const key = format(addDays(birth, m.weekRange[0] * 7), 'yyyy-MM-dd');
-      const list = onset.get(key) ?? [];
-      list.push(m);
-      onset.set(key, list);
-    }
-
+  const leapDays = useMemo(() => {
     const leapDaysMap = new Map<string, Leap>();
     for (const leap of leaps) {
       const start = addDays(birth, leap.startWeek * 7);
@@ -54,8 +42,8 @@ export function WonderWeekCalendar({ birthDate, milestones, achievedMilestones, 
         leapDaysMap.set(format(d, 'yyyy-MM-dd'), leap);
       }
     }
-    return { onsetMap: onset, leapDays: leapDaysMap };
-  }, [birth, milestones]);
+    return leapDaysMap;
+  }, [birth]);
 
   const days = useMemo(() => {
     const start = startOfMonth(viewMonth);
@@ -67,17 +55,7 @@ export function WonderWeekCalendar({ birthDate, milestones, achievedMilestones, 
 
   const today = new Date();
 
-  const ageRange = useMemo(() => {
-    const start = startOfMonth(viewMonth);
-    const end = endOfMonth(viewMonth);
-    const startWeek = Math.max(0, differenceInWeeks(start, birth));
-    const endWeek = differenceInWeeks(end, birth);
-    if (endWeek < 0) return null; // before birth
-    return { startWeek, endWeek };
-  }, [viewMonth, birth]);
-
   const selectedDayKey = selectedDay ? format(selectedDay, 'yyyy-MM-dd') : null;
-  const selectedMilestones = selectedDayKey ? (onsetMap.get(selectedDayKey) ?? []) : [];
   const selectedLeap = selectedDayKey ? (leapDays.get(selectedDayKey) ?? null) : null;
 
   function prevMonth() {

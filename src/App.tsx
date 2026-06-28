@@ -64,12 +64,7 @@ function AppContent() {
     settings: <SettingsScreen />,
     wonderweek: state.babyProfile ? (
       <div className="px-4 pt-6 pb-6">
-        <WonderWeekCalendar
-          birthDate={state.babyProfile.birthDate}
-          milestones={milestones}
-          achievedMilestones={achieved}
-          onToggle={id => dispatch({ type: 'TOGGLE_MILESTONE', payload: id })}
-        />
+        <WonderWeekCalendar birthDate={state.babyProfile.birthDate} />
       </div>
     ) : null,
   };
