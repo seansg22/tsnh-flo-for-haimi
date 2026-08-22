@@ -10,6 +10,7 @@ import { milestones } from '../../data/weeklyDevelopment';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  model?: string;
 }
 
 
@@ -172,7 +173,7 @@ Rules:
               clearInterval(streamIntervalRef.current!);
               streamIntervalRef.current = null;
               setStreamingContent('');
-              setMessages([...withUser, { role: 'assistant', content: answer }]);
+              setMessages([...withUser, { role: 'assistant', content: answer, model }]);
             } else {
               setStreamingContent(answer.slice(0, i));
             }
@@ -227,8 +228,7 @@ Rules:
           onClick={() => dispatch({ type: 'SET_PAGE', payload: 'babyprofile' })}
           className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold text-peachDark"
         >
-          <UserRound size={13} strokeWidth={2.3} />
-          Update profile for accuracy
+          Update profile for better answer
         </button>
         {messages.length > 0 && (
           <button
@@ -273,19 +273,24 @@ Rules:
                 <div className="prose prose-sm prose-neutral max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(msg.content);
-                    setCopiedIndex(i);
-                    setTimeout(() => setCopiedIndex(null), 1500);
-                  }}
-                  className="mt-3 mb-2 flex items-center gap-1 text-sm text-textMuted active:text-app-text ml-6"
-                  aria-label="Copy message"
-                >
-                  {copiedIndex === i ? <Check size={12} strokeWidth={2.2} /> : <Copy size={12} strokeWidth={2.2} />}
-                  {copiedIndex === i ? 'Copied' : 'Copy'}
-                </button>
+                <div className="mt-3 mb-2 flex items-center justify-between ml-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(msg.content);
+                      setCopiedIndex(i);
+                      setTimeout(() => setCopiedIndex(null), 1500);
+                    }}
+                    className="flex items-center gap-1 text-sm text-textMuted active:text-app-text"
+                    aria-label="Copy message"
+                  >
+                    {copiedIndex === i ? <Check size={12} strokeWidth={2.2} /> : <Copy size={12} strokeWidth={2.2} />}
+                    {copiedIndex === i ? 'Copied' : 'Copy'}
+                  </button>
+                  {msg.model && (
+                    <span className="flex items-center text-sm text-textMuted/70">answered by {msg.model}</span>
+                  )}
+                </div>
               </div>
             )}
           </div>
