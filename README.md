@@ -39,3 +39,19 @@ A personal health & wellness tracking app built for Hai Mi. 💕
 ### Settings
 
 ![Settings](docs/settings.png)
+
+---
+
+## Documents
+
+### Gemini Key
+
+https://aistudio.google.com/u/1/api-keys?pli=1&project=gen-lang-client-0041515414
+
+Login with: tson.regis@gmail.com
+
+### Deployment
+
+https://vercel.com/tungsonnguyen
+
+Login with Gitlab of seansg22
