@@ -39,8 +39,13 @@ interface DateInputProps {
 }
 
 const selectClass =
-  'flex-1 min-w-0 rounded-xl border-2 border-peachLight bg-cream text-app-text font-semibold ' +
+  'flex-1 min-w-0 rounded-xl border-2 border-peachLight bg-cream ' +
   'px-2 outline-none transition-colors focus:border-peach appearance-none text-center';
+
+// Placeholder ("Month"/"Day"/"Year") renders light grey; a real selection renders bold app-text.
+function valueClass(selected: number) {
+  return selected ? 'text-app-text font-semibold' : 'text-textMuted/50 font-normal';
+}
 
 export function DateInput({ value, onChange, min, max, compact }: DateInputProps) {
   const parsed = parseDate(value);
@@ -78,7 +83,7 @@ export function DateInput({ value, onChange, min, max, compact }: DateInputProps
       <select
         value={selectedMonth || ''}
         onChange={e => emit(selectedYear, Number(e.target.value), selectedDay)}
-        className={`${selectClass} ${sizeClass}`}
+        className={`${selectClass} ${sizeClass} ${valueClass(selectedMonth)}`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Month</option>
@@ -91,7 +96,7 @@ export function DateInput({ value, onChange, min, max, compact }: DateInputProps
       <select
         value={selectedDay || ''}
         onChange={e => emit(selectedYear, selectedMonth, Number(e.target.value))}
-        className={`${selectClass} ${sizeClass} max-w-[72px]`}
+        className={`${selectClass} ${sizeClass} max-w-[72px] ${valueClass(selectedDay)}`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Day</option>
@@ -104,7 +109,7 @@ export function DateInput({ value, onChange, min, max, compact }: DateInputProps
       <select
         value={selectedYear || ''}
         onChange={e => emit(Number(e.target.value), selectedMonth, selectedDay)}
-        className={`${selectClass} ${sizeClass} max-w-[90px]`}
+        className={`${selectClass} ${sizeClass} max-w-[90px] ${valueClass(selectedYear)}`}
         style={{ WebkitAppearance: 'none' }}
       >
         <option value="" disabled>Year</option>

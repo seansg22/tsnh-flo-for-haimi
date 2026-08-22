@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { differenceInWeeks, parseISO } from 'date-fns';
 import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -97,13 +98,22 @@ export function AIScreen() {
       formula: 'formula feeding',
     };
 
+    const solidsLine = baby.solidsStartDate
+      ? `Started solids ${differenceInWeeks(new Date(), parseISO(baby.solidsStartDate))} weeks ago (on ${baby.solidsStartDate})`
+      : 'Not started solids yet';
+
+    const formulaSwitchLine = baby.feedingMethod === 'formula' && baby.formulaSwitchDate
+      ? `\n- Switched from breast milk to formula ${differenceInWeeks(new Date(), parseISO(baby.formulaSwitchDate))} weeks ago (on ${baby.formulaSwitchDate})`
+      : '';
+
     const systemInstruction = `You are a careful baby development assistant.
 
 Baby:
 - Name: ${baby.name}
 - Age: ${age.weeks} weeks
 - Gender: ${baby.gender}
-- Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}
+- Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${formulaSwitchLine}
+- Solids: ${solidsLine}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}
 
 Rules:
 - Address the user as "${baby.name}'s parent" in the language they used in their question, but only in the your first response of the conversation.

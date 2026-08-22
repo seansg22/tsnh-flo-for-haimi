@@ -6,6 +6,8 @@ export interface BabyProfile {
   gender: 'girl' | 'boy';
   feedingMethod?: FeedingMethod;
   edd?: string; // ISO "YYYY-MM-DD" — estimated due date, used to calculate Wonder Weeks
+  solidsStartDate?: string; // ISO "YYYY-MM-DD" — when baby started solids/weaning; unset = not started yet
+  formulaSwitchDate?: string; // ISO "YYYY-MM-DD" — when baby switched from breast milk to formula; only relevant when feedingMethod is 'formula'
 }
 
 export interface Activity {

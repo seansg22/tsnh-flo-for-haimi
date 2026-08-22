@@ -15,6 +15,8 @@ export function SettingsScreen() {
   const [name, setName] = useState(state.babyProfile?.name ?? '');
   const [birthDate, setBirthDate] = useState(state.babyProfile?.birthDate ?? '');
   const [edd, setEdd] = useState(state.babyProfile?.edd ?? DEFAULT_EDD);
+  const [solidsStartDate, setSolidsStartDate] = useState(state.babyProfile?.solidsStartDate ?? '');
+  const [formulaSwitchDate, setFormulaSwitchDate] = useState(state.babyProfile?.formulaSwitchDate ?? '');
   const [gender, setGender] = useState<'girl' | 'boy'>(state.babyProfile?.gender ?? 'girl');
   const [feedingMethod, setFeedingMethod] = useState<FeedingMethod>(state.babyProfile?.feedingMethod ?? 'breast');
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
@@ -63,13 +65,19 @@ export function SettingsScreen() {
     const timeout = setTimeout(() => {
       dispatch({
         type: 'SET_BABY_PROFILE',
-        payload: { name: name.trim(), birthDate, gender, feedingMethod, edd: edd || DEFAULT_EDD },
+        payload: {
+          name: name.trim(),
+          birthDate,
+          gender,
+          feedingMethod,
+          edd: edd || DEFAULT_EDD,
+          solidsStartDate,
+          formulaSwitchDate: feedingMethod === 'formula' ? formulaSwitchDate : '',
+        },
       });
-      setToast('Saved');
-      setTimeout(() => setToast(''), 1500);
     }, 400);
     return () => clearTimeout(timeout);
-  }, [name, birthDate, edd, gender, feedingMethod, dispatch]);
+  }, [name, birthDate, edd, solidsStartDate, formulaSwitchDate, gender, feedingMethod, dispatch]);
 
   async function handleUpdate() {
     if (!('serviceWorker' in navigator)) return;
@@ -126,7 +134,10 @@ export function SettingsScreen() {
       <h1 className="text-2xl font-extrabold text-app-text mb-6">Settings</h1>
 
       <div className="bg-white rounded-2xl p-4 shadow-sm mb-4 space-y-3">
-        <p className="font-bold text-app-text">Baby profile</p>
+        <div>
+          <p className="font-bold text-app-text">Baby profile</p>
+          <p className="text-xs text-textMuted mt-0.5">Used to personalize guidance in Ask AI.</p>
+        </div>
         <div className="flex gap-2">
           <div className="flex-1">
             <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Name</p>
@@ -180,6 +191,36 @@ export function SettingsScreen() {
               </button>
             ))}
           </div>
+        </div>
+        {feedingMethod === 'formula' && (
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-xs font-semibold text-textMuted uppercase tracking-wide">Switched to formula</p>
+              {formulaSwitchDate && (
+                <button onClick={() => setFormulaSwitchDate('')} className="text-[11px] font-semibold text-peachDark">
+                  Clear
+                </button>
+              )}
+            </div>
+            <DateInput value={formulaSwitchDate} min={birthDate} max={today} onChange={setFormulaSwitchDate} compact />
+            <p className="text-[11px] text-textMuted mt-1">
+              When your baby switched from breast milk to formula.
+            </p>
+          </div>
+        )}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-xs font-semibold text-textMuted uppercase tracking-wide">Starting solids</p>
+            {solidsStartDate && (
+              <button onClick={() => setSolidsStartDate('')} className="text-[11px] font-semibold text-peachDark">
+                Clear
+              </button>
+            )}
+          </div>
+          <DateInput value={solidsStartDate} min={birthDate} max={today} onChange={setSolidsStartDate} compact />
+          <p className="text-[11px] text-textMuted mt-1">
+            When your baby started eating solid foods (weaning). Leave blank if not started yet — typically around 24 weeks.
+          </p>
         </div>
       </div>
 
