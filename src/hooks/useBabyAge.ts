@@ -1,27 +1,25 @@
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, differenceInWeeks, differenceInYears, addYears, parseISO } from 'date-fns';
 
 export interface BabyAge {
   weeks: number;
   days: number;
   totalDays: number;
-  totalMonths: number;
   years: number;
-  remainingMonths: number;
+  remainingWeeks: number;
   currentWeek: number;
 }
 
 export function useBabyAge(birthDate: string | null): BabyAge {
-  if (!birthDate) return { weeks: 0, days: 0, totalDays: 0, totalMonths: 0, years: 0, remainingMonths: 0, currentWeek: 0 };
+  if (!birthDate) return { weeks: 0, days: 0, totalDays: 0, years: 0, remainingWeeks: 0, currentWeek: 0 };
 
-  const birth = new Date(birthDate);
+  const birth = parseISO(birthDate);
   const today = new Date();
   const totalDays = Math.max(0, differenceInDays(today, birth));
   const weeks = Math.floor(totalDays / 7);
   const days = totalDays % 7;
-  const totalMonths = Math.floor(totalDays / 30.44);
-  const years = Math.floor(totalMonths / 12);
-  const remainingMonths = totalMonths % 12;
+  const years = Math.max(0, differenceInYears(today, birth));
+  const remainingWeeks = differenceInWeeks(today, addYears(birth, years));
   const currentWeek = Math.min(weeks, 156);
 
-  return { weeks, days, totalDays, totalMonths, years, remainingMonths, currentWeek };
+  return { weeks, days, totalDays, years, remainingWeeks, currentWeek };
 }

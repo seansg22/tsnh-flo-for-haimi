@@ -3,40 +3,35 @@ interface AgeDisplayProps {
   weeks: number;
   days: number;
   years: number;
-  remainingMonths: number;
-  totalMonths: number;
+  remainingWeeks: number;
   selectedWeek: number;
   currentWeek: number;
 }
 
-function formatCurrentAge(weeks: number, days: number, years: number, remainingMonths: number, totalMonths: number): string {
+function formatCurrentAge(weeks: number, days: number, years: number, remainingWeeks: number): string {
   if (weeks === 0 && days === 0) return 'just born!';
-  // Under 3 months — show weeks + days
-  if (totalMonths < 3) {
-    if (weeks === 0) return `${days} day${days !== 1 ? 's' : ''} old`;
-    if (days === 0)  return `${weeks} week${weeks !== 1 ? 's' : ''} old`;
+  // Under 1 year — show weeks (+ days while very young)
+  if (years === 0) {
+    if (days === 0) return `${weeks} week${weeks !== 1 ? 's' : ''} old`;
     return `${weeks} week${weeks !== 1 ? 's' : ''}, ${days} day${days !== 1 ? 's' : ''} old`;
   }
-  // 3 months–1 year — show months
-  if (years === 0) return `${totalMonths} month${totalMonths !== 1 ? 's' : ''} old`;
-  // 1+ year — show years + months
-  if (remainingMonths === 0) return `${years} year${years !== 1 ? 's' : ''} old`;
-  return `${years} yr${years !== 1 ? 's' : ''}, ${remainingMonths} mo${remainingMonths !== 1 ? 's' : ''} old`;
+  // 1+ year — show years + weeks
+  if (remainingWeeks === 0) return `${years} year${years !== 1 ? 's' : ''} old`;
+  return `${years} yr${years !== 1 ? 's' : ''}, ${remainingWeeks} wk${remainingWeeks !== 1 ? 's' : ''} old`;
 }
 
 function formatBrowseWeek(week: number): string {
-  const months = Math.round(week * 7 / 30.44);
   if (week <= 52) return `Week ${week}`;
-  const yrs = Math.floor(months / 12);
-  const mos = months % 12;
-  if (mos === 0) return `${yrs} year${yrs !== 1 ? 's' : ''}`;
-  return `${yrs} yr ${mos} mo`;
+  const yrs = Math.floor(week / 52);
+  const wks = week % 52;
+  if (wks === 0) return `${yrs} year${yrs !== 1 ? 's' : ''}`;
+  return `${yrs} yr ${wks} wk`;
 }
 
-export function AgeDisplay({ name, weeks, days, years, remainingMonths, totalMonths, selectedWeek, currentWeek }: AgeDisplayProps) {
+export function AgeDisplay({ name, weeks, days, years, remainingWeeks, selectedWeek, currentWeek }: AgeDisplayProps) {
   const isCurrent = selectedWeek === currentWeek;
   const ageText = isCurrent
-    ? formatCurrentAge(weeks, days, years, remainingMonths, totalMonths)
+    ? formatCurrentAge(weeks, days, years, remainingWeeks)
     : formatBrowseWeek(selectedWeek);
 
   return (

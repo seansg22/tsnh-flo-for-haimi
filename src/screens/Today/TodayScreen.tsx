@@ -13,7 +13,7 @@ import { CareTipsSection } from '../../components/today/CareTipsSection';
 
 export function TodayScreen() {
   const { state, dispatch } = useApp();
-  const { weeks, days, years, remainingMonths, totalMonths, currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
+  const { weeks, days, years, remainingWeeks, currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
   const selectedWeek = state.selectedWeek;
   const weekData = getWeekData(selectedWeek);
   const careTips = getCareTips(selectedWeek);
@@ -60,7 +60,7 @@ export function TodayScreen() {
       <BabyIllustration week={selectedWeek} />
 
       {/* Age display */}
-      <AgeDisplay name={state.babyProfile?.name ?? ''} weeks={weeks} days={days} years={years} remainingMonths={remainingMonths} totalMonths={totalMonths} selectedWeek={selectedWeek} currentWeek={currentWeek} />
+      <AgeDisplay name={state.babyProfile?.name ?? ''} weeks={weeks} days={days} years={years} remainingWeeks={remainingWeeks} selectedWeek={selectedWeek} currentWeek={currentWeek} />
 
       {/* Daily insights */}
       <div className="mt-4">

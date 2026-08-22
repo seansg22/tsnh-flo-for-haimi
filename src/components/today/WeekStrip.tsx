@@ -8,11 +8,10 @@ interface WeekStripProps {
 
 function weekLabel(w: number): string {
   if (w <= 52) return `W${w}`;
-  const months = Math.round(w * 7 / 30.44);
-  const yrs = Math.floor(months / 12);
-  const mos = months % 12;
-  if (mos === 0) return `${yrs}y`;
-  return `${yrs}y${mos}m`;
+  const yrs = Math.floor(w / 52);
+  const wks = w % 52;
+  if (wks === 0) return `${yrs}y`;
+  return `${yrs}y${wks}w`;
 }
 
 export function WeekStrip({ currentWeek, selectedWeek, onSelectWeek }: WeekStripProps) {

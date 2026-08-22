@@ -23,7 +23,7 @@ const careTipsData: CareTipsEntry[] = [
       'If you\'re stressed, baby senses it. Put them down safely and take 5 minutes to breathe — it will help both of you.',
     ],
     health: [
-      'Fever in a baby 3 months or younger (38°C / 100.4°F or higher, rectal) needs immediate pediatric guidance — call your doctor or urgent care right away.',
+      'Fever in a baby 12 weeks or younger (38°C / 100.4°F or higher, rectal) needs immediate pediatric guidance — call your doctor or urgent care right away.',
       'Jaundice (yellow skin/eyes) is common at days 2–5. Mild jaundice resolves on its own; severe jaundice needs treatment.',
       'Umbilical cord stump: keep dry, fold nappy below it, and let it fall off naturally (1–3 weeks). Never pull it.',
       'Watch for: fewer than 6 wet nappies per day, no stool in 48h, difficulty breathing, extreme lethargy — call your doctor.',
@@ -46,12 +46,12 @@ const careTipsData: CareTipsEntry[] = [
     soothing: [
       'Baby wearing in a carrier keeps baby calm and your hands free. The warmth and motion are very soothing.',
       'For a fussy baby who has fed and been changed: try a warm bath, skin-to-skin, or a gentle car ride.',
-      'It\'s safe to respond quickly to crying at this age. You cannot spoil a baby under 6 months.',
+      'It\'s safe to respond quickly to crying at this age. You cannot spoil a baby under 24 weeks.',
       'For gas pain: try the "tummy hold" — baby face-down along your forearm, cheek in your palm. Or gently bicycle baby\'s legs and massage the tummy in small clockwise circles. Steady motion (rocking, stroller, car) and white noise help most with colic.',
     ],
     health: [
       'First vaccines are typically given at 6–8 weeks. Check your local schedule and book the appointment now.',
-      'Fever rule: if baby is 3 months or younger and has a rectal temperature of 38°C / 100.4°F or higher, call a pediatric clinician immediately.',
+      'Fever rule: if baby is 12 weeks or younger and has a rectal temperature of 38°C / 100.4°F or higher, call a pediatric clinician immediately.',
       'Cradle cap (flaky scalp) is harmless. Massage with baby oil, leave 20 minutes, then brush gently with a soft brush.',
       'Normal stools vary widely at this age: breastfed babies may go after every feed or only every few days — both are normal. Mustard-yellow, seedy stools are healthy. Formula-fed babies tend to have firmer, more regular, yellow-green stools.',
     ],
@@ -86,7 +86,7 @@ const careTipsData: CareTipsEntry[] = [
     feeding: [
       'Feeds may space out to every 3–4 hours as baby\'s stomach grows. This is a normal developmental shift.',
       'Baby may become easily distracted during feeds. Try a quiet, dimmer room with fewer stimuli.',
-      'Breast milk or formula is all the nutrition needed. No water, juice, or solids until 6 months.',
+      'Breast milk or formula is all the nutrition needed. No water, juice, or solids until 24 weeks.',
     ],
     sleep: [
       'Consider a 3-nap schedule: morning nap, midday nap, late afternoon catnap. Watch wake windows of 90 min.',
@@ -97,24 +97,24 @@ const careTipsData: CareTipsEntry[] = [
     soothing: [
       'Baby is becoming more social and responsive. Sustained eye contact and talking are powerful calming tools.',
       'Gentle "shush-pat" while baby is in crib can help them resettle without being picked up every time.',
-      'Teething can start any time from 3 months. Cold teether, silicone finger brush, or gentle gum rub helps.',
+      'Teething can start any time from 12 weeks. Cold teether, silicone finger brush, or gentle gum rub helps.',
     ],
     health: [
-      '3-month checkup: weight, length, head circumference — ask any questions you\'ve been storing up.',
-      'Teething can start from 3 months but first teeth typically appear at 4–7 months. Drooling and chewing are early signs.',
-      'Postpartum depression can peak at 3 months, not just the first weeks. If you\'re struggling, please tell your doctor.',
-      'Sun protection: keep baby out of direct sun. After 6 months, SPF 30+ is safe. Before 6 months, use shade and clothing.',
+      '12-week checkup: weight, length, head circumference — ask any questions you\'ve been storing up.',
+      'Teething can start from 12 weeks but first teeth typically appear at 16–28 weeks. Drooling and chewing are early signs.',
+      'Postpartum depression can peak at 12 weeks, not just the first weeks. If you\'re struggling, please tell your doctor.',
+      'Sun protection: keep baby out of direct sun. After 24 weeks, SPF 30+ is safe. Before 24 weeks, use shade and clothing.',
     ],
   },
   {
     week: 16,
     feeding: [
-      '4-month sleep regression often causes more night waking and increased feeding — this is temporary.',
-      'Solid foods are NOT recommended yet. The World Health Organization recommends exclusive milk until 6 months.',
-      'If introducing a bottle, 4 months is a good window — earlier is easier than later for bottle acceptance.',
+      '16-week sleep regression often causes more night waking and increased feeding — this is temporary.',
+      'Solid foods are NOT recommended yet. The World Health Organization recommends exclusive milk until 24 weeks.',
+      'If introducing a bottle, 16 weeks is a good window — earlier is easier than later for bottle acceptance.',
     ],
     sleep: [
-      'The 4-month sleep regression is real. Baby\'s sleep cycles have permanently matured — they now wake fully between cycles like adults do.',
+      'The 16-week sleep regression is real. Baby\'s sleep cycles have permanently matured — they now wake fully between cycles like adults do.',
       'If baby wakes frequently, check: overtiredness, undertiredness, hungry, too hot/cold, or developmental leap.',
       'Avoid rocking or feeding to sleep every time — these become sleep associations baby needs to repeat at every wake-up.',
       'The fix for the regression is teaching independent sleep onset. After your bedtime routine, put baby down awake. If they cry, wait a few minutes before a brief check-in (soothing pat, calm voice — no picking up). Repeat, increasing the wait each time.',
@@ -125,7 +125,7 @@ const careTipsData: CareTipsEntry[] = [
       'If you\'re feeling burned out, ask for help. Parental wellbeing is not separate from baby\'s wellbeing.',
     ],
     health: [
-      '4-month vaccines due: booster doses of DTaP, polio, Hib, PCV. Book the appointment now.',
+      '16-week vaccines due: booster doses of DTaP, polio, Hib, PCV. Book the appointment now.',
       'Watch for ear infection signs: tugging ear, unusually fussy, fever, trouble sleeping — see your doctor.',
       'Flat spots on baby\'s head (positional plagiocephaly) can develop. Increase tummy time and alternate which end of the cot baby\'s head is.',
       'Respiratory syncytial virus (RSV) causes cold-like symptoms but can be serious in babies. Keep sick visitors away.',
@@ -134,12 +134,12 @@ const careTipsData: CareTipsEntry[] = [
   {
     week: 20,
     feeding: [
-      'Signs of solid food readiness (target 6 months): sitting with support, lost tongue-thrust reflex, interest in food.',
+      'Signs of solid food readiness (target 24 weeks): sitting with support, lost tongue-thrust reflex, interest in food.',
       'Continue breast milk or formula as the primary nutrition source — solids complement, not replace.',
       'If introducing solids early on medical advice, start with smooth single-ingredient purees.',
     ],
     sleep: [
-      'Most 5-month-olds do 2–3 naps. Transition to 2 naps usually happens between 6–9 months.',
+      'Most 20-week-olds do 2–3 naps. Transition to 2 naps usually happens between 24–36 weeks.',
       'If sleep has not improved since the regression, sleep training is now safe and appropriate. Graduated method: after routine, put baby down awake and leave. If crying, wait a few minutes, do a brief check-in (soothing pat, a few words — do not pick up), leave. Increase the wait each time. Most babies self-settle within 3–5 nights.',
       'Establish a wind-down ritual: dim lights 30 min before bed, quiet play, warm bath, feed, song.',
     ],
@@ -149,7 +149,7 @@ const careTipsData: CareTipsEntry[] = [
       'Distraction is highly effective now: a new toy, changing rooms, or going outside can quickly shift mood.',
     ],
     health: [
-      'No scheduled vaccines at 5 months in most countries — but check your local schedule.',
+      'No scheduled vaccines at 20 weeks in most countries — but check your local schedule.',
       'Baby-proofing: now is the time to start. Rolling leads to crawling faster than you think.',
       'Never leave baby unattended on a raised surface — rolling happens suddenly and without warning.',
       'If baby is drooling heavily, that\'s teething preparation. Keep skin dry to avoid drool rash.',
@@ -163,19 +163,19 @@ const careTipsData: CareTipsEntry[] = [
       'Never force feed. Turning away, closing mouth, or crying are clear "I\'m done" signals.',
     ],
     sleep: [
-      'Most 6-month-olds can sleep 5–8 hours without a feed. If baby still wakes to feed multiple times, try feeding 1 hour before bedtime rather than as the last step — this breaks the feed-to-sleep association.',
+      'Most 24-week-olds can sleep 5–8 hours without a feed. If baby still wakes to feed multiple times, try feeding 1 hour before bedtime rather than as the last step — this breaks the feed-to-sleep association.',
       'Graduated extinction (Ferber): put baby down awake after routine and leave. If crying, wait a few minutes, enter briefly (soothing pat, calm words — no picking up, stay under 1–2 min), leave. Increase the wait each time. Note your last wait; start there the next night. Repeat over several nights.',
-      'You can build a comfort-object association during awake cuddles, but keep stuffed toys, blankets, and loveys out of the sleep space until after 12 months.',
+      'You can build a comfort-object association during awake cuddles, but keep stuffed toys, blankets, and loveys out of the sleep space until after 52 weeks.',
     ],
     soothing: [
-      'Teething pain peaks around 6–8 months (lower front teeth). Chilled teether, cold washcloth, or teething gel helps.',
+      'Teething pain peaks around 24–32 weeks (lower front teeth). Chilled teether, cold washcloth, or teething gel helps.',
       'Separation anxiety is increasing. Peek-a-boo games directly teach "I leave, I come back" — play it often.',
       'Baby\'s growing independence means some frustration when they can\'t do things yet. Narrate their feelings.',
     ],
     health: [
-      '6-month checkup and vaccines due: boosters + flu vaccine (first time needs 2 doses, 4 weeks apart).',
+      '24-week checkup and vaccines due: boosters + flu vaccine (first time needs 2 doses, 4 weeks apart).',
       'First teeth arriving: start brushing twice daily with a smear of fluoride toothpaste as soon as the first tooth appears.',
-      'Introduce common allergens (peanut, egg, dairy, wheat) one at a time from 6 months — early introduction reduces allergy risk.',
+      'Introduce common allergens (peanut, egg, dairy, wheat) one at a time from 24 weeks — early introduction reduces allergy risk.',
       'Choking hazard review: any object smaller than a toilet paper roll is a choking risk. Check floors and low surfaces.',
     ],
   },
@@ -187,17 +187,17 @@ const careTipsData: CareTipsEntry[] = [
       'Baby may suddenly refuse a food they loved last week. Keep offering — it takes 10–15 exposures for acceptance.',
     ],
     sleep: [
-      'The 8-month sleep regression often disrupts sleep just when things were going well. It\'s temporary.',
+      'The 32-week sleep regression often disrupts sleep just when things were going well. It\'s temporary.',
       'If baby is crawling or pulling to stand in the crib, night waking to practice is common. Reassure briefly and leave.',
       'Avoid long stretches awake before bed — overtired babies fight sleep harder.',
     ],
     soothing: [
-      'Separation anxiety peaks around 8–10 months. Always say goodbye — sneaking out makes anxiety worse.',
+      'Separation anxiety peaks around 32–44 weeks. Always say goodbye — sneaking out makes anxiety worse.',
       'Predictable routines are your best tool. When baby knows what\'s next, they feel safe.',
       'Baby is testing cause-and-effect with everything including your reactions. Stay calm and consistent.',
     ],
     health: [
-      'No new vaccines at 7 months in most schedules — but flu vaccine second dose may be due.',
+      'No new vaccines at 28 weeks in most schedules — but flu vaccine second dose may be due.',
       'Baby-proof urgently if you haven\'t: crawling means access to everything at floor level.',
       'Water safety: never leave baby unattended near any water — baths, buckets, pools. Drowning is silent and fast.',
       'Signs of ear infection: fever, tugging ear, waking more at night, fussier than usual after a cold. See your doctor.',
@@ -211,7 +211,7 @@ const careTipsData: CareTipsEntry[] = [
       'Family mealtimes together are the single best predictor of lifelong healthy eating. Eat together when possible.',
     ],
     sleep: [
-      'Most 8-month-olds do 2 naps (morning + afternoon). Some nights may still have 1–2 wake-ups.',
+      'Most 32-week-olds do 2 naps (morning + afternoon). Some nights may still have 1–2 wake-ups.',
       'A consistent 7–8pm bedtime works well for most babies this age.',
       'If night waking is for feeding, consider a "dream feed" at 10–11pm to extend the longest stretch.',
     ],
@@ -221,7 +221,7 @@ const careTipsData: CareTipsEntry[] = [
       'When baby is frustrated, naming the emotion + offering an alternative is more effective than distraction alone.',
     ],
     health: [
-      '9-month checkup due: developmental screening, iron levels, and lead screening in some areas.',
+      '36-week checkup due: developmental screening, iron levels, and lead screening in some areas.',
       'Know infant choking first aid before you need it. Use certified first-aid training or pediatrician-recommended resources, and save local emergency numbers.',
       'Baby teeth: brush morning and night with a smear of fluoride toothpaste. Avoid sugary drinks, even juice.',
       'Cold and flu season: hand washing is the most effective prevention. Keep hand sanitiser at every entry point.',
@@ -231,13 +231,13 @@ const careTipsData: CareTipsEntry[] = [
     week: 36,
     feeding: [
       'Move toward 3 mini-meals with family foods plus snacks. Continue breast milk or formula 2–3 times daily.',
-      'Avoid added salt, sugar, and honey (honey not until 12 months due to botulism risk).',
+      'Avoid added salt, sugar, and honey (honey not until 52 weeks due to botulism risk).',
       'Let baby self-feed as much as possible — it\'s messy but critical for developing food competence.',
     ],
     sleep: [
-      '9-month sleep regression is common. It\'s developmental — their growing brain is working overtime.',
+      '36-week sleep regression is common. It\'s developmental — their growing brain is working overtime.',
       'Avoid letting baby fall asleep on breast/bottle every time if possible — it can become a sleep association.',
-      'If nap is being skipped, move bedtime earlier (6:30pm is not too early for a 9-month-old).',
+      'If nap is being skipped, move bedtime earlier (6:30pm is not too early for a 36-week-old).',
     ],
     soothing: [
       'Baby will look to you for emotional cues ("social referencing"). Model calm in uncertain situations.',
@@ -248,18 +248,18 @@ const careTipsData: CareTipsEntry[] = [
       'Update your baby-proofing: pulling to stand means tables, bookshelves, and TVs are now accessible.',
       'Anchor all tall furniture to the wall — tip-over accidents are a leading cause of infant injury.',
       'Vision check: baby should be tracking objects smoothly. Persistent squinting or eye turning needs assessment.',
-      'Dental first visit is recommended by 12 months or when the first tooth appears, whichever comes first.',
+      'Dental first visit is recommended by 52 weeks or when the first tooth appears, whichever comes first.',
     ],
   },
   {
     week: 44,
     feeding: [
       'Transition from purees completely to soft family foods. Baby can eat most of what you eat now.',
-      'Whole cow\'s milk can replace formula at 12 months. Introduce gradually — offer in a cup.',
+      'Whole cow\'s milk can replace formula at 52 weeks. Introduce gradually — offer in a cup.',
       'If baby refuses a meal, offer water and remove the plate. Don\'t replace with preferred food — that teaches refusal.',
     ],
     sleep: [
-      'Most 10-month-olds sleep 10–12 hours at night with 2 naps, transitioning to 1 nap around 12–15 months.',
+      'Most 44-week-olds sleep 10–12 hours at night with 2 naps, transitioning to 1 nap around 52–61 weeks.',
       'Some night crying is normal and doesn\'t always need a response. Wait 2–3 minutes before going in.',
       'Beware of overtiredness — a 7pm bedtime is better than 9pm for preventing night waking.',
     ],
@@ -269,22 +269,22 @@ const careTipsData: CareTipsEntry[] = [
       'Reading together every night is both soothing and one of the highest-ROI activities for development.',
     ],
     health: [
-      'Almost time for the 12-month checkup — it includes MMR, varicella, and Hep A vaccines in most schedules.',
+      'Almost time for the 52-week checkup — it includes MMR, varicella, and Hep A vaccines in most schedules.',
       'Walking practice: soft-soled shoes or bare feet are best for indoor walking. Hard soles reduce proprioceptive feedback.',
-      'Check car seat: at 12 months, most children should still be rear-facing. Check your country\'s guidelines.',
+      'Check car seat: at 52 weeks, most children should still be rear-facing. Check your country\'s guidelines.',
       'Avoid screen time before age 2 (except video calls). Even background TV affects language development.',
     ],
   },
   {
     week: 52,
     feeding: [
-      'Transition to whole cow\'s milk at 12 months if not breastfeeding. Limit to 16–24 oz per day.',
+      'Transition to whole cow\'s milk at 52 weeks if not breastfeeding. Limit to 16–24 oz per day.',
       'Baby can now eat almost all family foods. Avoid: hard round foods (choking hazard), honey, added salt/sugar.',
       'Let go of purees entirely — lumpy and textured foods encourage jaw development and reduce pickiness.',
     ],
     sleep: [
       'Most 1-year-olds sleep 10–12 hours at night plus 1–2 daytime naps totaling 2–3 hours.',
-      'Separation anxiety at bedtime is common at 12 months. A consistent, warm bedtime routine helps enormously.',
+      'Separation anxiety at bedtime is common at 52 weeks. A consistent, warm bedtime routine helps enormously.',
       'If sleep has regressed around the birthday, it\'s a developmental sleep regression — usually resolves in 2–4 weeks.',
     ],
     soothing: [
@@ -293,7 +293,7 @@ const careTipsData: CareTipsEntry[] = [
       'Physical activity during the day leads to better sleep at night. Daily outdoor time is highly recommended.',
     ],
     health: [
-      '12-month checkup: MMR, varicella, Hep A vaccines. Also iron screening, developmental check, and lead test.',
+      '52-week checkup: MMR, varicella, Hep A vaccines. Also iron screening, developmental check, and lead test.',
       'Dental: schedule the first dentist appointment if you haven\'t. Clean teeth twice daily with fluoride toothpaste (smear).',
       'Stair gates must be at top and bottom of all stairs. Walking toddlers fall — often.',
       'Pool and bath safety: never leave alone near water. Drowning can happen in 2 inches of water in under 30 seconds.',
@@ -307,8 +307,8 @@ const careTipsData: CareTipsEntry[] = [
       'Avoid using food as reward or punishment. "Eat your vegetables to get dessert" increases vegetable rejection.',
     ],
     sleep: [
-      'Toddlers 13–18 months need 11–14 hours total. A consistent 7–7:30pm bedtime is ideal.',
-      'Nap transition (2 to 1 nap) typically happens 13–18 months. Signs: nap refusal, trouble falling asleep at bedtime.',
+      'Toddlers 56–78 weeks need 11–14 hours total. A consistent 7–7:30pm bedtime is ideal.',
+      'Nap transition (2 to 1 nap) typically happens 56–78 weeks. Signs: nap refusal, trouble falling asleep at bedtime.',
       'Bedtime stalling is starting. Set a clear, short routine (20 min max) and stick to it without negotiation.',
     ],
     soothing: [
@@ -317,7 +317,7 @@ const careTipsData: CareTipsEntry[] = [
       'Physical activity is a natural mood regulator. If toddler is fussy, try 20 minutes of active outdoor play.',
     ],
     health: [
-      '15-month checkup due: DTaP booster, Hib booster, PCV booster, varicella booster, Hep A second dose.',
+      '61-week checkup due: DTaP booster, Hib booster, PCV booster, varicella booster, Hep A second dose.',
       'Toddler-proof the home: move cleaning products, medications, and sharp objects out of reach permanently.',
       'Screen time: World Health Organization recommends zero screens (except video calls) under 2 years old.',
       'Dental: toothbrushing can be a battle. Let them hold the brush first, then you do the actual cleaning.',
@@ -326,14 +326,14 @@ const careTipsData: CareTipsEntry[] = [
   {
     week: 78,
     feeding: [
-      'Food jags (eating only one food) peak around 18 months. Continue offering variety alongside the preferred food.',
-      '18-month vocabulary explosion includes food words. Name every food enthusiastically at every meal.',
+      'Food jags (eating only one food) peak around 78 weeks. Continue offering variety alongside the preferred food.',
+      '78-week vocabulary explosion includes food words. Name every food enthusiastically at every meal.',
       'Avoid screens during mealtimes — distracted eating disconnects toddlers from their hunger signals.',
     ],
     sleep: [
-      '18-month sleep regression is real and driven by developmental leaps. It typically lasts 2–6 weeks.',
-      'Most 18-month-olds are on 1 nap. Transition if: taking forever to fall asleep for nap, OR night sleep is affected.',
-      'Sleep training is still effective at 18 months. Consistency over 3–5 nights is usually enough.',
+      '78-week sleep regression is real and driven by developmental leaps. It typically lasts 2–6 weeks.',
+      'Most 78-week-olds are on 1 nap. Transition if: taking forever to fall asleep for nap, OR night sleep is affected.',
+      'Sleep training is still effective at 78 weeks. Consistency over 3–5 nights is usually enough.',
     ],
     soothing: [
       'The "terrible twos" start now for many toddlers. Language frustration (wanting to say more than they can) drives many tantrums.',
@@ -341,8 +341,8 @@ const careTipsData: CareTipsEntry[] = [
       'Validate first, redirect second: "I know you\'re angry. You can\'t hit. Would you like to stomp your feet instead?"',
     ],
     health: [
-      '18-month checkup: hepatitis A second dose, influenza vaccine, developmental and autism screening.',
-      'Language milestone: 18-month-olds should have at least 10–20 words. Fewer than 10 words warrants a speech referral.',
+      '78-week checkup: hepatitis A second dose, influenza vaccine, developmental and autism screening.',
+      'Language milestone: 78-week-olds should have at least 10–20 words. Fewer than 10 words warrants a speech referral.',
       'Iron-rich foods are important now: red meat, beans, fortified cereals. Toddlers are at risk of iron deficiency.',
       'Sun safety: SPF 30+ on all exposed skin, re-apply every 2 hours. A rash guard + hat is better than sunscreen alone.',
     ],
@@ -350,7 +350,7 @@ const careTipsData: CareTipsEntry[] = [
   {
     week: 95,
     feeding: [
-      'Most 22-month-olds can use a fork and spoon. Let them — even if it\'s slower and messier.',
+      'Most 95-week-olds can use a fork and spoon. Let them — even if it\'s slower and messier.',
       'Involve toddler in simple food prep: washing vegetables, stirring, tearing bread. They\'ll eat what they helped make.',
       'A predictable mealtime environment (same chairs, same time, no screens) significantly reduces mealtime battles.',
     ],
@@ -368,7 +368,7 @@ const careTipsData: CareTipsEntry[] = [
       '2-year checkup is coming up — a big developmental assessment. Note any speech, behavior, or physical concerns beforehand.',
       'Toilet training readiness signs: staying dry for 1–2 hours, interest in the toilet, able to pull pants up/down.',
       'Vision: if toddler frequently holds things close, squints, or avoids puzzles/books, ask for a vision screen.',
-      'Dental checkup every 6 months. Brush twice daily — make it fun with songs, timers, or a special toothbrush.',
+      'Dental checkup twice a year. Brush twice daily — make it fun with songs, timers, or a special toothbrush.',
     ],
   },
   {
@@ -403,7 +403,7 @@ const careTipsData: CareTipsEntry[] = [
       'If mealtimes are battles, try family-style serving (everyone serves themselves) — autonomy improves eating.',
     ],
     sleep: [
-      'Some 27-month-olds begin resisting naps. Offer "quiet time" (30–60 min in their room) whether they sleep or not.',
+      'Some 117-week-olds begin resisting naps. Offer "quiet time" (30–60 min in their room) whether they sleep or not.',
       'Night terrors can start around 2–3 years. Different from nightmares: child seems awake but isn\'t. Don\'t wake them — stay calm, keep them safe.',
       'Move bedtime earlier if nap was skipped — overtired toddlers fall asleep badly and wake more at night.',
     ],
@@ -437,7 +437,7 @@ const careTipsData: CareTipsEntry[] = [
       'Watch your own reaction to mistakes — toddlers model how you handle frustration.',
     ],
     health: [
-      'Dental checkup every 6 months. Some children need fissure sealants — ask your dentist.',
+      'Dental checkup twice a year. Some children need fissure sealants — ask your dentist.',
       'Sun protection year-round: UV damage accumulates. Hat + SPF 30+ on all exposed skin whenever outdoors.',
       'Handwashing: make it a non-negotiable before meals and after toileting. 20 seconds minimum.',
       'Sleep hygiene: bedroom should be for sleep only — remove toys and screens from the sleep environment.',
@@ -446,12 +446,12 @@ const careTipsData: CareTipsEntry[] = [
   {
     week: 143,
     feeding: [
-      'By 33 months, toddlers can use cutlery well. Let them serve themselves — it builds independence and appetite.',
+      'By 143 weeks, toddlers can use cutlery well. Let them serve themselves — it builds independence and appetite.',
       'Introduce new foods alongside familiar favorites. The new food has a better chance when stress is low.',
       'Smoothies and soups are effective ways to include vegetables if texture is still an issue.',
     ],
     sleep: [
-      'Many 33-month-olds drop the nap or take it irregularly. Move bedtime to 6:30–7pm on no-nap days.',
+      'Many 143-week-olds drop the nap or take it irregularly. Move bedtime to 6:30–7pm on no-nap days.',
       'Nighttime fears are common now. A consistent reassurance ritual ("I check on you, you\'re safe") is more effective than a long chat.',
       'Keep the bedroom calm, cool (18–20°C), and dark. A small nightlight is fine if it helps.',
     ],
@@ -463,7 +463,7 @@ const careTipsData: CareTipsEntry[] = [
     health: [
       '3-year checkup is coming up: vision screening, hearing screen, blood pressure, developmental assessment.',
       'Preschool vaccines: check your schedule for DTaP booster, polio, MMR, and varicella boosters around age 4–5.',
-      'Dental: twice daily brushing, 6-monthly checkups, limit sugary snacks and drinks.',
+      'Dental: twice daily brushing, twice-yearly checkups, limit sugary snacks and drinks.',
       'Physical activity: 180+ minutes per day including at least 60 minutes of energetic play. Limit sitting to under 1 hour at a stretch.',
     ],
   },
@@ -487,7 +487,7 @@ const careTipsData: CareTipsEntry[] = [
     health: [
       '3-year checkup: vision and hearing screening, developmental and behavioral assessment, blood pressure.',
       'Vision: 3 is the age for a formal eye exam before preschool. Amblyopia ("lazy eye") is treatable if caught early.',
-      'Dental: pea-sized fluoride toothpaste now (up from smear). 6-monthly checkups. Limit juice to 4 oz per day.',
+      'Dental: pea-sized fluoride toothpaste now (up from smear). Twice-yearly checkups. Limit juice to 4 oz per day.',
       'Preschool readiness: ensure vaccines are up to date before enrollment. Check your school\'s requirements.',
     ],
   },
@@ -523,10 +523,10 @@ const careTipsEnrichments: CareTipsEnrichment[] = [
     weekRange: [4, 13],
     tips: {
       sleep: [
-        'At 1-3 months, simple routines help, but normal night waking and active-sleep noises are still expected.',
+        'At 4–13 weeks, simple routines help, but normal night waking and active-sleep noises are still expected.',
       ],
       soothing: [
-        'At 1-3 months, peak crying gradually eases. Keep tummy time short, frequent, awake, and supervised.',
+        'At 4–13 weeks, peak crying gradually eases. Keep tummy time short, frequent, awake, and supervised.',
       ],
       health: [
         'Bring up feeding difficulty, persistent vomiting, breathing symptoms, or caregiver exhaustion at visits.',
@@ -538,7 +538,7 @@ const careTipsEnrichments: CareTipsEnrichment[] = [
     tips: {
       feeding: [
         'Before solids, look for readiness signs: steady head control, supported sitting, food interest, and reduced tongue-thrust reflex.',
-        'Avoid starting solids before 4 months; most babies are ready around 6 months unless a clinician advises otherwise.',
+        'Avoid starting solids before 16 weeks; most babies are ready around 24 weeks unless a clinician advises otherwise.',
       ],
       sleep: [
         'Stop swaddling when baby shows signs of trying to roll.',

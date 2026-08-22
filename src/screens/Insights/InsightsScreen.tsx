@@ -16,11 +16,10 @@ const categoryConfig: { key: Category; label: string; Icon: React.FC<{ size?: nu
 
 function formatWeekLabel(week: number): string {
   if (week <= 52) return `Week ${week}`;
-  const months = Math.round(week * 7 / 30.44);
-  const yrs = Math.floor(months / 12);
-  const mos = months % 12;
-  if (mos === 0) return `${yrs} year${yrs !== 1 ? 's' : ''}`;
-  return `${yrs} yr ${mos} mo`;
+  const yrs = Math.floor(week / 52);
+  const wks = week % 52;
+  if (wks === 0) return `${yrs} year${yrs !== 1 ? 's' : ''}`;
+  return `${yrs} yr ${wks} wk`;
 }
 
 export function InsightsScreen() {

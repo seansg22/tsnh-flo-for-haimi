@@ -43,7 +43,7 @@ export const leaps: Leap[] = [
   {
     number: 4, startWeek: 14, endWeek: 19, level: 2,
     name: 'Events',
-    description: 'Baby understands events — things have a beginning, middle, and end. This is also the 4-month sleep regression: sleep cycles permanently restructure to adult architecture.',
+    description: 'Baby understands events — things have a beginning, middle, and end. This is also the 14–19 week sleep regression: sleep cycles permanently restructure to adult architecture.',
     tips: [
       'Always say goodbye before leaving the room; never sneak away — it worsens separation anxiety.',
       'Complete the swaddle transition now (rolling starts — safety risk if still swaddled).',

@@ -8,12 +8,12 @@ import type { Milestone } from '../../types';
 
 const groups = [
   { label: '0–4 weeks',    range: [0,   4]   as [number, number] },
-  { label: '1–3 months',   range: [4,   12]  as [number, number] },
-  { label: '3–6 months',   range: [12,  24]  as [number, number] },
-  { label: '6–9 months',   range: [24,  36]  as [number, number] },
-  { label: '9–12 months',  range: [36,  52]  as [number, number] },
-  { label: '12–18 months', range: [52,  78]  as [number, number] },
-  { label: '18–24 months', range: [78,  104] as [number, number] },
+  { label: '4–12 weeks',   range: [4,   12]  as [number, number] },
+  { label: '12–24 weeks',  range: [12,  24]  as [number, number] },
+  { label: '24–36 weeks',  range: [24,  36]  as [number, number] },
+  { label: '36–52 weeks',  range: [36,  52]  as [number, number] },
+  { label: '1–1.5 years',  range: [52,  78]  as [number, number] },
+  { label: '1.5–2 years',  range: [78,  104] as [number, number] },
   { label: '2–3 years',    range: [104, 200] as [number, number] },
 ];
 

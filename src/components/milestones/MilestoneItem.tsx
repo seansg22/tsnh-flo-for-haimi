@@ -4,10 +4,9 @@ import type { Milestone } from '../../types';
 
 function fmtWeek(w: number): string {
   if (w <= 52) return `Week ${w}`;
-  const months = Math.round(w * 7 / 30.44);
-  const yrs = Math.floor(months / 12);
-  const mos = months % 12;
-  return mos === 0 ? `${yrs}y` : `${yrs}y${mos}m`;
+  const yrs = Math.floor(w / 52);
+  const wks = w % 52;
+  return wks === 0 ? `${yrs}y` : `${yrs}y${wks}w`;
 }
 
 function fmtWeekRange(start: number, end: number): string {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import {
   startOfMonth, endOfMonth, eachDayOfInterval,
@@ -58,13 +58,38 @@ export function WonderWeekCalendar({ birthDate }: Props) {
   const selectedDayKey = selectedDay ? format(selectedDay, 'yyyy-MM-dd') : null;
   const selectedLeap = selectedDayKey ? (leapDays.get(selectedDayKey) ?? null) : null;
 
-  function prevMonth() {
-    setViewMonth(m => new Date(m.getFullYear(), m.getMonth() - 1, 1));
+  const [slideDir, setSlideDir] = useState<'next' | 'prev' | null>(null);
+
+  function goToMonth(newMonth: Date) {
+    setSlideDir(newMonth > viewMonth ? 'next' : newMonth < viewMonth ? 'prev' : null);
+    setViewMonth(newMonth);
     setSelectedDay(null);
   }
+  function prevMonth() {
+    goToMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1));
+  }
   function nextMonth() {
-    setViewMonth(m => new Date(m.getFullYear(), m.getMonth() + 1, 1));
-    setSelectedDay(null);
+    goToMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1));
+  }
+
+  const dragStart = useRef<{ x: number; y: number } | null>(null);
+  const suppressClick = useRef(false);
+  const SWIPE_THRESHOLD = 40;
+
+  function onGridPointerDown(e: React.PointerEvent) {
+    dragStart.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+  function onGridPointerUp(e: React.PointerEvent) {
+    const start = dragStart.current;
+    dragStart.current = null;
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      suppressClick.current = true;
+      if (dx < 0) nextMonth(); else prevMonth();
+    }
   }
 
   return (
@@ -80,6 +105,16 @@ export function WonderWeekCalendar({ birthDate }: Props) {
         }
         .slide-up   { animation: slide-up   0.28s cubic-bezier(0.32,0.72,0,1) forwards; }
         .slide-down { animation: slide-down 0.16s cubic-bezier(0.4,0,1,1)     forwards; }
+        @keyframes month-in-next {
+          from { transform: translateX(100%); opacity: 0; }
+          to   { transform: translateX(0);    opacity: 1; }
+        }
+        @keyframes month-in-prev {
+          from { transform: translateX(-100%); opacity: 0; }
+          to   { transform: translateX(0);     opacity: 1; }
+        }
+        .month-in-next { animation: month-in-next 0.26s cubic-bezier(0.32,0.72,0,1) forwards; }
+        .month-in-prev { animation: month-in-prev 0.26s cubic-bezier(0.32,0.72,0,1) forwards; }
       `}</style>
       {/* Title */}
       <h1 className="text-2xl font-extrabold text-app-text">Wonder Weeks</h1>
@@ -94,7 +129,7 @@ export function WonderWeekCalendar({ birthDate }: Props) {
           <span className="text-sm font-bold text-app-text">{format(viewMonth, 'MMMM yyyy')}</span>
           {(viewMonth.getMonth() !== today.getMonth() || viewMonth.getFullYear() !== today.getFullYear()) && (
             <button
-              onClick={() => { setViewMonth(new Date()); setSelectedDay(null); }}
+              onClick={() => goToMonth(new Date())}
               className="text-[10px] font-semibold text-peachDark bg-peachLight/60 px-2 py-0.5 rounded-full hover:bg-peachLight"
             >
               Back to today
@@ -114,10 +149,18 @@ export function WonderWeekCalendar({ birthDate }: Props) {
       </div>
 
       {/* Day grid */}
-      <div className="grid grid-cols-7 gap-px bg-peachLight/40 rounded-2xl overflow-hidden border border-peachLight">
+      <div className="rounded-2xl overflow-hidden border border-peachLight">
+      <div
+        key={format(viewMonth, 'yyyy-MM')}
+        className={`grid grid-cols-7 gap-px bg-peachLight/40 touch-pan-y select-none ${
+          slideDir === 'next' ? 'month-in-next' : slideDir === 'prev' ? 'month-in-prev' : ''
+        }`}
+        onPointerDown={onGridPointerDown}
+        onPointerUp={onGridPointerUp}
+      >
         {days.map((day, i) => {
           if (!day) {
-            return <div key={`pad-${i}`} className="bg-cream min-h-[84px]" />;
+            return <div key={`pad-${i}`} className="bg-cream min-h-[60px]" />;
           }
           const key = format(day, 'yyyy-MM-dd');
           const isToday = isSameDay(day, today);
@@ -129,8 +172,12 @@ export function WonderWeekCalendar({ birthDate }: Props) {
           return (
             <button
               key={key}
-              onClick={() => { setClosing(false); setSelectedDay(isSelected ? null : day); }}
-              className={`min-h-[84px] p-1 text-left flex flex-col gap-0.5 transition-colors ${
+              onClick={() => {
+                if (suppressClick.current) { suppressClick.current = false; return; }
+                setClosing(false);
+                setSelectedDay(isSelected ? null : day);
+              }}
+              className={`min-h-[60px] p-1 text-left flex flex-col gap-0.5 transition-colors ${
                 leap ? LEAP_BG[leap.level] : 'bg-cream'
               } ${isSelected ? 'ring-2 ring-inset ring-peach' : ''} ${!isCurrentMonth ? 'opacity-40' : ''}`}
             >
@@ -147,6 +194,7 @@ export function WonderWeekCalendar({ birthDate }: Props) {
             </button>
           );
         })}
+      </div>
       </div>
 
       {/* Legend */}
