@@ -5,6 +5,7 @@ export interface BabyProfile {
   birthDate: string; // ISO "YYYY-MM-DD"
   gender: 'girl' | 'boy';
   feedingMethod?: FeedingMethod;
+  edd?: string; // ISO "YYYY-MM-DD" — estimated due date, used to calculate Wonder Weeks
 }
 
 export interface Activity {

@@ -1,6 +1,7 @@
 import { useReducer, useEffect, type ReactNode } from 'react';
 import type { AppState, AppAction, BabyProfile, Page } from '../types';
 import { AppContext } from './appStateContext';
+import { DEFAULT_EDD } from '../constants/babyDefaults';
 
 const initialState: AppState = {
   babyProfile: null,
@@ -50,6 +51,7 @@ const defaultProfile: BabyProfile = {
   birthDate: '2026-04-16',
   gender: 'girl',
   feedingMethod: 'breast',
+  edd: DEFAULT_EDD,
 };
 
 function loadState(): AppState {

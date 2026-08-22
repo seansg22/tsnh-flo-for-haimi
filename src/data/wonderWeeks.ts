@@ -1,4 +1,5 @@
-// ponytail: onset weeks measured from birth date, not EDD — add preterm offset if needed
+// Onset weeks are measured from the estimated due date (EDD), not birth date —
+// leap timing tracks gestational/adjusted age.
 export interface Leap {
   number: number;
   startWeek: number;

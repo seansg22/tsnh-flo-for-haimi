@@ -7,7 +7,8 @@ import {
 import { leaps, type Leap } from '../../data/wonderWeeks';
 
 interface Props {
-  birthDate: string;
+  /** Estimated due date (ISO "YYYY-MM-DD") — Wonder Week leaps are counted from here, not birth date. */
+  eddDate: string;
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -18,7 +19,7 @@ const LEAP_BG: Record<1 | 2 | 3, string> = {
   3: 'bg-red-300',
 };
 
-export function WonderWeekCalendar({ birthDate }: Props) {
+export function WonderWeekCalendar({ eddDate }: Props) {
   const [viewMonth, setViewMonth] = useState(() => new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [closing, setClosing] = useState(false);
@@ -30,20 +31,22 @@ export function WonderWeekCalendar({ birthDate }: Props) {
     if (closing) { setSelectedDay(null); setClosing(false); }
   }
 
-  const birth = useMemo(() => parseISO(birthDate), [birthDate]);
+  // Wonder Week leaps are driven by the estimated due date (EDD), not the
+  // birth date — leap timing tracks gestational/adjusted age.
+  const edd = useMemo(() => parseISO(eddDate), [eddDate]);
 
   const leapDays = useMemo(() => {
     const leapDaysMap = new Map<string, Leap>();
     for (const leap of leaps) {
-      const start = addDays(birth, leap.startWeek * 7);
-      const end = addDays(birth, leap.endWeek * 7 + 6);
+      const start = addDays(edd, leap.startWeek * 7);
+      const end = addDays(edd, leap.endWeek * 7 + 6);
       const days = eachDayOfInterval({ start, end });
       for (const d of days) {
         leapDaysMap.set(format(d, 'yyyy-MM-dd'), leap);
       }
     }
     return leapDaysMap;
-  }, [birth]);
+  }, [edd]);
 
   const days = useMemo(() => {
     const start = startOfMonth(viewMonth);
@@ -167,7 +170,7 @@ export function WonderWeekCalendar({ birthDate }: Props) {
           const isSelected = selectedDay ? isSameDay(day, selectedDay) : false;
           const isCurrentMonth = isSameMonth(day, viewMonth);
           const leap = leapDays.get(key);
-          const babyWeek = differenceInWeeks(day, birth);
+          const wonderWeek = differenceInWeeks(day, edd);
 
           return (
             <button
@@ -187,8 +190,8 @@ export function WonderWeekCalendar({ birthDate }: Props) {
                 }`}>
                   {format(day, 'd')}
                 </span>
-                {babyWeek >= 0 && (
-                  <span className="text-[8px] text-textMuted leading-none font-medium">w{babyWeek}</span>
+                {wonderWeek >= 0 && (
+                  <span className="text-[8px] text-textMuted leading-none font-medium">w{wonderWeek}</span>
                 )}
               </div>
             </button>

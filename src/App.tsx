@@ -13,6 +13,7 @@ import { OverdueBanner } from './components/today/OverdueBanner';
 import { WonderWeekCalendar } from './components/milestones/WonderWeekCalendar';
 import { milestones } from './data/weeklyDevelopment';
 import { useBabyAge } from './hooks/useBabyAge';
+import { DEFAULT_EDD } from './constants/babyDefaults';
 
 const BookScreen = lazy(() =>
   import('./screens/Book/BookScreen').then((module) => ({ default: module.BookScreen })),
@@ -63,7 +64,7 @@ function AppContent() {
     growth: <GrowthScreen />,
     settings: <SettingsScreen />,
     wonderweek: state.babyProfile ? (
-      <WonderWeekCalendar birthDate={state.babyProfile.birthDate} />
+      <WonderWeekCalendar eddDate={state.babyProfile.edd ?? DEFAULT_EDD} />
     ) : null,
   };
 
