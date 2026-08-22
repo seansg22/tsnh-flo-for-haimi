@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2, UserRound } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { differenceInWeeks, parseISO } from 'date-fns';
 import { useApp } from '../../context/appStateContext';
