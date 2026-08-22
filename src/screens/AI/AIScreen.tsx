@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2, UserRound } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { differenceInWeeks, parseISO } from 'date-fns';
 import { useApp } from '../../context/appStateContext';
@@ -129,7 +129,11 @@ Rules:
       parts: [{ text: msg.content }],
     }));
 
+    // https://aistudio.google.com/u/1/api-keys?pli=1&project=gen-lang-client-0041515414
+    // tson.regis@gmail.com
     const MODELS = [
+      'gemini-3.7-flash',
+      'gemini-3.6-flash',
       'gemini-3.5-flash',
       'gemini-3-flash',
       'gemini-3.1-flash-lite',
@@ -218,6 +222,14 @@ Rules:
           <Sparkles size={18} className="text-peach" />
           <span className="text-lg font-extrabold text-app-text">Ask AI</span>
         </div>
+        <button
+          type="button"
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'babyprofile' })}
+          className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold text-peachDark"
+        >
+          <UserRound size={13} strokeWidth={2.3} />
+          Update profile for accuracy
+        </button>
         {messages.length > 0 && (
           <button
             type="button"

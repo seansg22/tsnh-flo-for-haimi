@@ -5,6 +5,7 @@ import {
   isSameDay, isSameMonth, addDays, parseISO, format, getDay, differenceInWeeks,
 } from 'date-fns';
 import { leaps, type Leap } from '../../data/wonderWeeks';
+import { useApp } from '../../context/appStateContext';
 
 interface Props {
   /** Estimated due date (ISO "YYYY-MM-DD") — Wonder Week leaps are counted from here, not birth date. */
@@ -20,6 +21,7 @@ const LEAP_BG: Record<1 | 2 | 3, string> = {
 };
 
 export function WonderWeekCalendar({ eddDate }: Props) {
+  const { dispatch } = useApp();
   const [viewMonth, setViewMonth] = useState(() => new Date());
 
   // Wonder Week leaps are driven by the estimated due date (EDD), not the
@@ -105,7 +107,16 @@ export function WonderWeekCalendar({ eddDate }: Props) {
       `}</style>
       {/* Title */}
       <h1 className="text-2xl font-extrabold text-app-text">Wonder Weeks</h1>
-      <p className="text-sm text-textMuted mt-1 mb-4">Developmental leaps calendar</p>
+      <p className="text-sm text-textMuted mt-1 mb-4 flex flex-wrap items-center gap-1">
+        Calculated based on EDD
+        <button
+          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'babyprofile' })}
+          className="inline-flex items-center gap-0.5 font-bold text-peachDark active:opacity-70 transition-opacity"
+        >
+          ({format(edd, 'MMM d, yyyy')})
+          <ChevronRight size={14} strokeWidth={2.5} />
+        </button>
+      </p>
 
       {/* Month nav */}
       <div className="flex items-center justify-between mb-3">
