@@ -223,13 +223,6 @@ Rules:
           <Sparkles size={18} className="text-peach" />
           <span className="text-lg font-extrabold text-app-text">Ask AI</span>
         </div>
-        <button
-          type="button"
-          onClick={() => dispatch({ type: 'SET_PAGE', payload: 'babyprofile' })}
-          className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold text-peachDark"
-        >
-          Update profile for better answer
-        </button>
         {messages.length > 0 && (
           <button
             type="button"
