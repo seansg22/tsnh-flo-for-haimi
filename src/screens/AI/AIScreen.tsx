@@ -106,6 +106,8 @@ export function AIScreen() {
       ? `\n- Switched from breast milk to formula ${differenceInWeeks(new Date(), parseISO(baby.formulaSwitchDate))} weeks ago (on ${baby.formulaSwitchDate})`
       : '';
 
+    const notesLine = baby.notes?.trim() ? `\n- Parent's notes: ${baby.notes.trim()}` : '';
+
     const systemInstruction = `You are a careful baby development assistant.
 
 Baby:
@@ -113,7 +115,7 @@ Baby:
 - Age: ${age.weeks} weeks
 - Gender: ${baby.gender}
 - Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${formulaSwitchLine}
-- Solids: ${solidsLine}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}
+- Solids: ${solidsLine}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}${notesLine}
 
 Rules:
 - Address the user as "${baby.name}'s parent" in the language they used in their question, but only in the your first response of the conversation.

@@ -19,6 +19,7 @@ export function SettingsScreen() {
   const [formulaSwitchDate, setFormulaSwitchDate] = useState(state.babyProfile?.formulaSwitchDate ?? '');
   const [gender, setGender] = useState<'girl' | 'boy'>(state.babyProfile?.gender ?? 'girl');
   const [feedingMethod, setFeedingMethod] = useState<FeedingMethod>(state.babyProfile?.feedingMethod ?? 'breast');
+  const [notes, setNotes] = useState(state.babyProfile?.notes ?? '');
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>('idle');
   const [hasNewVersion, setHasNewVersion] = useState(false);
   const [transferView, setTransferView] = useState<TransferView>('none');
@@ -73,11 +74,12 @@ export function SettingsScreen() {
           edd: edd || DEFAULT_EDD,
           solidsStartDate,
           formulaSwitchDate: feedingMethod === 'formula' ? formulaSwitchDate : '',
+          notes,
         },
       });
     }, 400);
     return () => clearTimeout(timeout);
-  }, [name, birthDate, edd, solidsStartDate, formulaSwitchDate, gender, feedingMethod, dispatch]);
+  }, [name, birthDate, edd, solidsStartDate, formulaSwitchDate, gender, feedingMethod, notes, dispatch]);
 
   async function handleUpdate() {
     if (!('serviceWorker' in navigator)) return;
@@ -221,6 +223,17 @@ export function SettingsScreen() {
           <p className="text-[11px] text-textMuted mt-1">
             When your baby started eating solid foods (weaning). Leave blank if not started yet — typically around 24 weeks.
           </p>
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-textMuted mb-1 uppercase tracking-wide">Notes</p>
+          <textarea
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            rows={8}
+            placeholder="E.g. allergies, sleep habits, favorite toys, things that upset her, or anything else worth remembering…"
+            className="w-full text-sm bg-cream rounded-xl px-4 py-3 resize-none text-app-text border-2 border-peachLight focus:border-peach outline-none transition-colors placeholder:text-textMuted/50"
+          />
+          <p className="text-[11px] text-textMuted mt-px">We'll share this with Ask AI to help it give better answers.</p>
         </div>
       </div>
 

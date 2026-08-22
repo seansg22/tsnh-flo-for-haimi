@@ -9,7 +9,8 @@ import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
 import { AIScreen } from './screens/AI/AIScreen';
-import { OverdueBanner } from './components/today/OverdueBanner';
+import { OverdueBanner } from './components/banners/OverdueBanner';
+import { ProfileUpdateBanner } from './components/banners/ProfileUpdateBanner';
 import { WonderWeekCalendar } from './components/milestones/WonderWeekCalendar';
 import { milestones } from './data/weeklyDevelopment';
 import { useBabyAge } from './hooks/useBabyAge';
@@ -70,13 +71,22 @@ function AppContent() {
 
   return (
     <AppShell>
-      {(state.currentPage === 'today' || state.currentPage === 'insights') && (
-        <OverdueBanner
-          count={overdueCount}
-          babyName={state.babyProfile?.name ?? ''}
-          onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'milestones' })}
-        />
-      )}
+      <div className="absolute top-4 left-4 right-4 z-40 flex flex-col gap-2">
+        {state.currentPage !== 'milestones' && (
+          <OverdueBanner
+            count={overdueCount}
+            babyName={state.babyProfile?.name ?? ''}
+            onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'milestones' })}
+          />
+        )}
+        {state.currentPage !== 'settings' && (
+          <ProfileUpdateBanner
+            birthDate={state.babyProfile.birthDate}
+            babyName={state.babyProfile?.name ?? ''}
+            onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'settings' })}
+          />
+        )}
+      </div>
       {pages[state.currentPage] ?? <TodayScreen />}
     </AppShell>
   );

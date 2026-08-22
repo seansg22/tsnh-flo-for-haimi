@@ -1,5 +1,9 @@
 # Project instructions
 
+## Icons
+
+Never use emoji (e.g. 🎉) for icons in UI copy or anywhere else. Always use an SVG icon instead (e.g. from `lucide-react`, already used throughout the app).
+
 ## After every code change
 
 Run lint fix then build to verify no errors before reporting done:
