@@ -7,6 +7,7 @@ import { TodayScreen } from './screens/Today/TodayScreen';
 import { MilestonesScreen } from './screens/Milestones/MilestonesScreen';
 import { InsightsScreen } from './screens/Insights/InsightsScreen';
 import { SettingsScreen } from './screens/Settings/SettingsScreen';
+import { BabyProfileScreen } from './screens/BabyProfile/BabyProfileScreen';
 import { GrowthScreen } from './screens/Growth/GrowthScreen';
 import { AIScreen } from './screens/AI/AIScreen';
 import { OverdueBanner } from './components/banners/OverdueBanner';
@@ -64,6 +65,7 @@ function AppContent() {
     insights: <InsightsScreen />,
     growth: <GrowthScreen />,
     settings: <SettingsScreen />,
+    babyprofile: <BabyProfileScreen />,
     wonderweek: state.babyProfile ? (
       <WonderWeekCalendar eddDate={state.babyProfile.edd ?? DEFAULT_EDD} />
     ) : null,
@@ -79,11 +81,11 @@ function AppContent() {
             onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'milestones' })}
           />
         )}
-        {state.currentPage !== 'settings' && (
+        {state.currentPage !== 'babyprofile' && (
           <ProfileUpdateBanner
             birthDate={state.babyProfile.birthDate}
             babyName={state.babyProfile?.name ?? ''}
-            onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'settings' })}
+            onNavigate={() => dispatch({ type: 'SET_PAGE', payload: 'babyprofile' })}
           />
         )}
       </div>

@@ -69,7 +69,7 @@ export interface GrowthEntry {
   head?: number;   // cm
 }
 
-export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings' | 'book' | 'ai' | 'wonderweek';
+export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings' | 'book' | 'ai' | 'wonderweek' | 'babyprofile';
 
 export interface AppState {
   babyProfile: BabyProfile | null;

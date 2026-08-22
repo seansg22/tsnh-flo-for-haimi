@@ -1,4 +1,4 @@
-import { Home, Star, Sparkles, TrendingUp, Settings, NotebookPen, BookOpenText, Baby, CalendarDays } from 'lucide-react';
+import { Home, Star, Sparkles, TrendingUp, Settings, BookOpenText, Baby, CalendarDays, Compass, UserRound } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/appStateContext';
 import { milestones } from '../../data/weeklyDevelopment';
@@ -13,8 +13,9 @@ const homeOptions: { page: Page; icon: React.ElementType; label: string }[] = [
 
 
 const progressOptions: { page: Page; icon: React.ElementType; label: string }[] = [
-  { page: 'milestones', icon: Star,       label: 'Milestones' },
-  { page: 'growth',     icon: TrendingUp, label: 'Growth'     },
+  { page: 'babyprofile', icon: UserRound,  label: 'Baby Profile' },
+  { page: 'milestones',  icon: Star,       label: 'Milestones'   },
+  { page: 'growth',      icon: TrendingUp, label: 'Growth'       },
 ];
 
 export function BottomNav() {
@@ -24,7 +25,7 @@ export function BottomNav() {
   const menuRef = useRef<HTMLDivElement>(null);
   const homeMenuRef = useRef<HTMLDivElement>(null);
 
-  const isProgressActive = state.currentPage === 'milestones' || state.currentPage === 'growth';
+  const isProgressActive = state.currentPage === 'milestones' || state.currentPage === 'growth' || state.currentPage === 'babyprofile';
   const isHomeActive = state.currentPage === 'today' || state.currentPage === 'insights' || state.currentPage === 'wonderweek';
   const { currentWeek } = useBabyAge(state.babyProfile?.birthDate ?? null);
   const unfinishedMilestones = milestones.filter(
@@ -117,7 +118,7 @@ export function BottomNav() {
                   isHomeActive ? 'text-peachDark' : 'text-textMuted'
                 }`}
               >
-                <Baby size={22} strokeWidth={isHomeActive ? 2.5 : 1.8} />
+                <Compass size={22} strokeWidth={isHomeActive ? 2.5 : 1.8} />
                 <span>Explore</span>
               </button>
             </div>
@@ -154,14 +155,14 @@ export function BottomNav() {
                 }`}
               >
                 <div className="relative">
-                  <NotebookPen size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
+                  <Baby size={22} strokeWidth={isProgressActive ? 2.5 : 1.8} />
                   {unfinishedMilestones > 0 && (
                     <span className="absolute -top-2 -right-4 min-w-[18px] h-[18px] px-1 bg-peachDark text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                       {unfinishedMilestones > 99 ? '99+' : unfinishedMilestones}
                     </span>
                   )}
                 </div>
-                <span>Track</span>
+                <span>Baby</span>
               </button>
             </div>
           </div>
