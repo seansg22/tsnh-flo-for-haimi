@@ -8,6 +8,7 @@ const initialState: AppState = {
   achievedMilestones: [],
   selectedWeek: 0,
   growthEntries: [],
+  knowledgeBase: [],
   currentPage: 'onboarding',
 };
 
@@ -37,6 +38,12 @@ function reducer(state: AppState, action: AppAction): AppState {
     }
     case 'DELETE_GROWTH_ENTRY':
       return { ...state, growthEntries: state.growthEntries.filter(e => e.id !== action.payload) };
+    case 'ADD_KNOWLEDGE_ENTRY':
+      return { ...state, knowledgeBase: [...state.knowledgeBase, action.payload] };
+    case 'UPDATE_KNOWLEDGE_ENTRY':
+      return { ...state, knowledgeBase: state.knowledgeBase.map(e => e.id === action.payload.id ? action.payload : e) };
+    case 'DELETE_KNOWLEDGE_ENTRY':
+      return { ...state, knowledgeBase: state.knowledgeBase.filter(e => e.id !== action.payload) };
     case 'SET_PAGE':
       return { ...state, currentPage: action.payload };
     case 'IMPORT_DATA':
@@ -59,6 +66,7 @@ function loadState(): AppState {
     const profile = localStorage.getItem('baby-day:profile');
     const milestones = localStorage.getItem('baby-day:achieved-milestones');
     const growth = localStorage.getItem('baby-day:growth-entries');
+    const knowledgeBase = localStorage.getItem('baby-day:knowledge-base');
     const savedPage = localStorage.getItem('baby-day:current-page') as Page | null;
     const babyProfile = profile
       ? { ...defaultProfile, ...(JSON.parse(profile) as BabyProfile) }
@@ -68,6 +76,7 @@ function loadState(): AppState {
       achievedMilestones: milestones ? (JSON.parse(milestones) as string[]) : [],
       selectedWeek: 0,
       growthEntries: growth ? (JSON.parse(growth) as import('../types').GrowthEntry[]) : [],
+      knowledgeBase: knowledgeBase ? (JSON.parse(knowledgeBase) as import('../types').KnowledgeEntry[]) : [],
       currentPage: savedPage && babyProfile ? savedPage : (babyProfile ? 'today' : 'onboarding'),
     };
   } catch {
@@ -91,6 +100,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('baby-day:growth-entries', JSON.stringify(state.growthEntries));
   }, [state.growthEntries]);
+
+  useEffect(() => {
+    localStorage.setItem('baby-day:knowledge-base', JSON.stringify(state.knowledgeBase));
+  }, [state.knowledgeBase]);
 
   useEffect(() => {
     localStorage.setItem('baby-day:current-page', state.currentPage);

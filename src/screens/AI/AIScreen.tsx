@@ -6,11 +6,15 @@ import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { milestones } from '../../data/weeklyDevelopment';
+import { callGemini } from '../../lib/gemini';
+import { summarizeConversation } from '../../lib/knowledgeSummary';
+import { nowTimestamp } from '../../lib/timestamp';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
   model?: string;
+  timestamp?: number; // Date.now() when the message was created; optional for backward-compat with already-stored messages
 }
 
 
@@ -67,7 +71,7 @@ export function AIScreen() {
     if (!text || loading) return;
 
     setInput('');
-    const withUser: Message[] = [...messages, { role: 'user', content: text }];
+    const withUser: Message[] = [...messages, { role: 'user', content: text, timestamp: nowTimestamp() }];
     setMessages(withUser);
     setLoading(true);
 
@@ -109,6 +113,11 @@ export function AIScreen() {
 
     const notesLine = baby.notes?.trim() ? `\n- Parent's notes: ${baby.notes.trim()}` : '';
 
+    const historyLine = state.knowledgeBase
+      .slice(-10)
+      .map(e => e.content)
+      .join('\n');
+
     const systemInstruction = `You are a careful baby development assistant.
 
 Baby:
@@ -116,7 +125,7 @@ Baby:
 - Age: ${age.weeks} weeks
 - Gender: ${baby.gender}
 - Feeding method: ${feedingLabel[baby.feedingMethod ?? 'breast']}${formulaSwitchLine}
-- Solids: ${solidsLine}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}${notesLine}
+- Solids: ${solidsLine}${measurementsLine ? `\n- Latest measurements: ${measurementsLine}` : ''}${milestonesLine ? `\n- Achieved milestones: ${milestonesLine}` : ''}${notesLine}${historyLine ? `\n\nKnown history about ${baby.name} from past conversations:\n${historyLine}` : ''}
 
 Rules:
 - Address the user as "${baby.name}'s parent" in the language they used in their question, but only in the your first response of the conversation.
@@ -130,67 +139,29 @@ Rules:
       parts: [{ text: msg.content }],
     }));
 
-    // https://aistudio.google.com/u/1/api-keys?pli=1&project=gen-lang-client-0041515414
-    // tson.regis@gmail.com
-    const MODELS = [
-      'gemini-3.7-flash',
-      'gemini-3.6-flash',
-      'gemini-3.5-flash',
-      'gemini-3-flash',
-      'gemini-3.1-flash-lite',
-      'gemma-4-31b',
-    ];
-    const MAX_RETRIES = 3;
-    const RETRY_DELAY = 5000;
+    const result = await callGemini(systemInstruction, conversation);
 
-    for (const model of MODELS) {
-      let succeeded = false;
-      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-        try {
-          const res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                system_instruction: { parts: [{ text: systemInstruction }] },
-                contents: conversation,
-              }),
-            }
-          );
-
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-          const data = await res.json();
-          const answer = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
-
-          setLoading(false);
-          let i = 0;
-          const CHUNK = 3;
-          streamIntervalRef.current = setInterval(() => {
-            i += CHUNK;
-            if (i >= answer.length) {
-              clearInterval(streamIntervalRef.current!);
-              streamIntervalRef.current = null;
-              setStreamingContent('');
-              setMessages([...withUser, { role: 'assistant', content: answer, model }]);
-            } else {
-              setStreamingContent(answer.slice(0, i));
-            }
-          }, 16);
-          succeeded = true;
-          return;
-        } catch {
-          if (attempt < MAX_RETRIES) {
-            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-          }
-        }
-      }
-      if (succeeded) return;
+    if (!result) {
+      setMessages([...withUser, { role: 'assistant', content: 'Something went wrong after several attempts. Please try again later.', timestamp: nowTimestamp() }]);
+      setLoading(false);
+      return;
     }
 
-    setMessages([...withUser, { role: 'assistant', content: 'Something went wrong after several attempts. Please try again later.' }]);
+    const { text: answer, model } = result;
     setLoading(false);
+    let i = 0;
+    const CHUNK = 3;
+    streamIntervalRef.current = setInterval(() => {
+      i += CHUNK;
+      if (i >= answer.length) {
+        clearInterval(streamIntervalRef.current!);
+        streamIntervalRef.current = null;
+        setStreamingContent('');
+        setMessages([...withUser, { role: 'assistant', content: answer, model, timestamp: nowTimestamp() }]);
+      } else {
+        setStreamingContent(answer.slice(0, i));
+      }
+    }, 16);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -232,7 +203,21 @@ Rules:
                 streamIntervalRef.current = null;
               }
               setStreamingContent('');
+              const clearedMessages = messages;
               setMessages([]);
+
+              if (clearedMessages.length > 0) {
+                summarizeConversation(clearedMessages, state.babyProfile?.name ?? 'the baby')
+                  .then(summary => {
+                    if (summary) {
+                      dispatch({
+                        type: 'ADD_KNOWLEDGE_ENTRY',
+                        payload: { id: crypto.randomUUID(), createdAt: new Date().toISOString(), content: summary },
+                      });
+                    }
+                  })
+                  .catch(err => console.error('Knowledge summarization failed', err));
+              }
             }}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-black/5 text-textMuted"
             aria-label="Clear conversation"

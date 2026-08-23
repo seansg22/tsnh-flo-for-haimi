@@ -69,6 +69,12 @@ export interface GrowthEntry {
   head?: number;   // cm
 }
 
+export interface KnowledgeEntry {
+  id: string;
+  createdAt: string; // ISO datetime — when this entry was generated (i.e. when the chat was cleared)
+  content: string;   // Gemini-authored, dated summary of what happened/was discussed in a cleared Ask AI conversation
+}
+
 export type Page = 'onboarding' | 'today' | 'milestones' | 'insights' | 'growth' | 'settings' | 'book' | 'ai' | 'wonderweek' | 'babyprofile';
 
 export interface AppState {
@@ -76,6 +82,7 @@ export interface AppState {
   achievedMilestones: string[];
   selectedWeek: number;
   growthEntries: GrowthEntry[];
+  knowledgeBase: KnowledgeEntry[];
   currentPage: Page;
 }
 
@@ -86,5 +93,8 @@ export type AppAction =
   | { type: 'ADD_GROWTH_ENTRY'; payload: GrowthEntry }
   | { type: 'UPDATE_GROWTH_ENTRY'; payload: GrowthEntry }
   | { type: 'DELETE_GROWTH_ENTRY'; payload: string }
+  | { type: 'ADD_KNOWLEDGE_ENTRY'; payload: KnowledgeEntry }
+  | { type: 'UPDATE_KNOWLEDGE_ENTRY'; payload: KnowledgeEntry }
+  | { type: 'DELETE_KNOWLEDGE_ENTRY'; payload: string }
   | { type: 'SET_PAGE'; payload: Page }
   | { type: 'IMPORT_DATA'; payload: { achievedMilestones: string[]; growthEntries: GrowthEntry[] } };
