@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Check, Copy, Send, Sparkles, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Copy, RefreshCw, Send, Sparkles, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { differenceInWeeks, parseISO } from 'date-fns';
 import { useApp } from '../../context/appStateContext';
 import { useBabyAge } from '../../hooks/useBabyAge';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { milestones } from '../../data/weeklyDevelopment';
-import { callGemini } from '../../lib/gemini';
+import { callAI } from '../../lib/ai';
 import { summarizeConversation } from '../../lib/knowledgeSummary';
 import { nowTimestamp } from '../../lib/timestamp';
 
@@ -24,6 +24,9 @@ export function AIScreen() {
   const [messages, setMessages] = useLocalStorage<Message[]>('ai-messages', []);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  // Transient "retrying..." status shown next to the loading indicator. Never added to
+  // `messages` — it must not be persisted or sent back to the AI as conversation history.
+  const [statusMessage, setStatusMessage] = useState('');
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [streamingContent, setStreamingContent] = useState('');
   const streamIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -74,6 +77,7 @@ export function AIScreen() {
     const withUser: Message[] = [...messages, { role: 'user', content: text, timestamp: nowTimestamp() }];
     setMessages(withUser);
     setLoading(true);
+    setStatusMessage('');
 
     const baby = state.babyProfile!;
 
@@ -135,11 +139,12 @@ Rules:
 - Give practical, age-aware, gender-aware, measurement-aware guidance`;
 
     const conversation = withUser.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.content }],
+      role: msg.role,
+      content: msg.content,
     }));
 
-    const result = await callGemini(systemInstruction, conversation);
+    const result = await callAI(systemInstruction, conversation, setStatusMessage);
+    setStatusMessage('');
 
     if (!result) {
       setMessages([...withUser, { role: 'assistant', content: 'Something went wrong after several attempts. Please try again later.', timestamp: nowTimestamp() }]);
@@ -251,7 +256,7 @@ Rules:
                 <div className="prose prose-sm prose-neutral max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
-                <div className="mt-3 mb-2 flex items-center justify-between ml-6">
+                <div className="mt-3 mb-2 flex items-center ml-6">
                   <button
                     type="button"
                     onClick={() => {
@@ -265,9 +270,6 @@ Rules:
                     {copiedIndex === i ? <Check size={12} strokeWidth={2.2} /> : <Copy size={12} strokeWidth={2.2} />}
                     {copiedIndex === i ? 'Copied' : 'Copy'}
                   </button>
-                  {msg.model && (
-                    <span className="flex items-center text-sm text-textMuted/70">answered by {msg.model}</span>
-                  )}
                 </div>
               </div>
             )}
@@ -275,7 +277,13 @@ Rules:
         ))}
 
         {loading && (
-          <div className="flex justify-start">
+          <div className="flex flex-col items-start gap-1.5">
+            {statusMessage && (
+              <div className="flex items-center gap-1.5 pl-1 text-xs text-textMuted">
+                <RefreshCw size={12} strokeWidth={2.2} className="animate-spin" />
+                {statusMessage}
+              </div>
+            )}
             <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex gap-1 items-center">
               <span className="w-1.5 h-1.5 bg-textMuted rounded-full animate-bounce [animation-delay:0ms]" />
               <span className="w-1.5 h-1.5 bg-textMuted rounded-full animate-bounce [animation-delay:150ms]" />

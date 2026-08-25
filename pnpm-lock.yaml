@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@openrouter/sdk':
+        specifier: ^1.2.66
+        version: 1.2.66
       '@react-spring/web':
         specifier: ^10.1.0
         version: 10.1.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -338,6 +341,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openrouter/sdk@1.2.66':
+    resolution: {integrity: sha512-r5WtTmb00k/7YBOqp1PY4X1J0ZmZv3NkyZ46o2J+WUqV4NjPItOG39HclUy3jrKxmE3bggHWWKU+mV7o8Rfe0Q==}
 
   '@oxc-project/types@0.132.0':
     resolution: {integrity: sha512-FESMOxil5Se014ui/Eq8fT5uHJo6nIRwH0PfJrZJXs6Gek3ZVFOrpUv3YIZT20m+extU98Hg1Ym72U58rlsxUQ==}
@@ -1930,6 +1936,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@openrouter/sdk@1.2.66':
+    dependencies:
+      zod: 4.4.3
 
   '@oxc-project/types@0.132.0': {}
 

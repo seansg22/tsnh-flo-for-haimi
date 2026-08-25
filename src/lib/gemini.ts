@@ -39,15 +39,23 @@ export interface GeminiResult {
  * model succeeds, subsequent calls start there instead of re-trying earlier models
  * that just failed. If the current model and every model after it fail, the search
  * wraps around to the start of MODELS (e.g. sticky on C, C fails → D, E, ... wraps to A, B).
+ *
+ * `onStatus`, if given, is called with a user-facing message before every retry (same
+ * model, next attempt, or next model) — but never on the very first attempt. Callers
+ * should treat these as transient UI-only status text, not part of the conversation.
  */
 export async function callGemini(
   systemInstruction: string,
-  contents: GeminiContent[]
+  contents: GeminiContent[],
+  onStatus?: (message: string) => void
 ): Promise<GeminiResult | null> {
   for (let n = 0; n < MODELS.length; n++) {
     const i = (modelIndex + n) % MODELS.length;
     const model = MODELS[i];
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      if (n > 0 || attempt > 1) {
+        onStatus?.('Having trouble getting a response, retrying...');
+      }
       try {
         const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,

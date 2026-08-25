@@ -1,4 +1,4 @@
-import { callGemini } from './gemini';
+import { callAI } from './ai';
 
 interface TranscriptMessage {
   role: 'user' | 'assistant';
@@ -9,7 +9,7 @@ interface TranscriptMessage {
 const NOTHING_NOTABLE = 'NOTHING_NOTABLE';
 
 /**
- * Reads a (timestamped) Ask AI conversation and asks Gemini to distill it into
+ * Reads a (timestamped) Ask AI conversation and asks the AI to distill it into
  * durable, dated knowledge about the baby worth remembering for future conversations.
  * Returns null if the call fails or nothing notable was discussed.
  */
@@ -40,7 +40,7 @@ timestamps, or from a date mentioned in the text if more specific), e.g.:
 
 If nothing meaningful/durable about ${babyName} was discussed, respond with exactly: ${NOTHING_NOTABLE}`;
 
-  const result = await callGemini(systemInstruction, [{ role: 'user', parts: [{ text: transcript }] }]);
+  const result = await callAI(systemInstruction, [{ role: 'user', content: transcript }]);
   if (!result) return null;
 
   const text = result.text.trim();
