@@ -50,6 +50,12 @@ https://aistudio.google.com/u/1/api-keys?pli=1&project=gen-lang-client-004151541
 
 Login with: tson.regis@gmail.com
 
+### Open Router
+
+https://openrouter.ai/workspaces/default/keys
+
+Login with: tson.regis@gmail.com
+
 ### Deployment
 
 https://vercel.com/tungsonnguyen
