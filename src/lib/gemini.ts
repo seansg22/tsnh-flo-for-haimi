@@ -10,7 +10,11 @@ const MODELS = [
   'gemini-2.5-flash-lite',
 ];
 const MAX_RETRIES = 3;
-const RETRY_DELAY = 5000;
+const RETRY_DELAY = 2000;
+
+// Index into MODELS to start from. Sticky across calls: once a model succeeds,
+// later calls start there instead of retrying already-known-bad models from the top.
+let modelIndex = 0;
 
 export interface GeminiContent {
   role: string;
@@ -29,12 +33,19 @@ export interface GeminiResult {
  * A 503 ("model overloaded") skips the remaining retries for that model and moves
  * straight to the next one — retrying an overloaded model rarely helps and only
  * burns the fixed RETRY_DELAY.
+ *
+ * The starting model is sticky across calls (see `modelIndex`): once a fallback
+ * model succeeds, subsequent calls start there instead of re-trying earlier models
+ * that just failed. If the current model and every model after it fail, the search
+ * wraps around to the start of MODELS (e.g. sticky on C, C fails → D, E, ... wraps to A, B).
  */
 export async function callGemini(
   systemInstruction: string,
   contents: GeminiContent[]
 ): Promise<GeminiResult | null> {
-  for (const model of MODELS) {
+  for (let n = 0; n < MODELS.length; n++) {
+    const i = (modelIndex + n) % MODELS.length;
+    const model = MODELS[i];
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const res = await fetch(
@@ -53,6 +64,7 @@ export async function callGemini(
 
         const data = await res.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
+        modelIndex = i;
         return { text, model };
       } catch (err) {
         if (err instanceof Error && err.cause === 503) break;
