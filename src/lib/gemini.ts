@@ -24,6 +24,10 @@ export interface GeminiResult {
 /**
  * Calls the Gemini generateContent API, falling back through MODELS (each retried
  * MAX_RETRIES times) until one succeeds. Returns null if every model/attempt fails.
+ *
+ * A 503 ("model overloaded") skips the remaining retries for that model and moves
+ * straight to the next one — retrying an overloaded model rarely helps and only
+ * burns the fixed RETRY_DELAY.
  */
 export async function callGemini(
   systemInstruction: string,
@@ -44,12 +48,13 @@ export async function callGemini(
           }
         );
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`, { cause: res.status });
 
         const data = await res.json();
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response received.';
         return { text, model };
-      } catch {
+      } catch (err) {
+        if (err instanceof Error && err.cause === 503) break;
         if (attempt < MAX_RETRIES) {
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
